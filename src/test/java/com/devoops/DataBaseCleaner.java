@@ -32,7 +32,6 @@ public class DataBaseCleaner implements BeforeEachCallback {
         for (String tableName : findTableNames(em)) {
             em.createNativeQuery("TRUNCATE TABLE %s RESTART IDENTITY".formatted(tableName)).executeUpdate();
         }
-        em.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();
     }
 
     @SuppressWarnings("unchecked")
