@@ -15,6 +15,3 @@ spring:
     hibernate:
       ddl-auto: validate
     defer-datasource-initialization: false
-
-#test:
-#  answer: ${dbInstanceIdentifier}
