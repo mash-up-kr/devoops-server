@@ -1,7 +1,0 @@
-#aws:
-#  secretsmanager:
-#    name: devoops
-#cloud:
-#  aws:
-#    region:
-#      static: ap-northeast-2

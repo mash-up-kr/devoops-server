@@ -1,16 +1,20 @@
-#spring:
-#  datasource:
-#    driver-class-name: com.amazonaws.secretsmanager.sql.AWSSecretsManagerMySQLDriver
-#    url: jdbc-secretsmanager:mysql://gss-rds-an2.c7g2k44mupla.ap-northeast-2.rds.amazonaws.com:3306?secretArn=${secrets.rds.arn}
-#  jpa:
-#    show-sql: true
-#    properties:
-#      hibernate:
-#        format_sql: true
-#        dialect: org.hibernate.dialect.MySQLDialect
-#    hibernate:
-#      ddl-auto: validate
-#    defer-datasource-initialization: false
-#
+spring:
+  config:
+    import: 'aws-secretsmanager:dev/devoops/rds'
+  datasource:
+    driver-class-name: com.amazonaws.secretsmanager.sql.AWSSecretsManagerMySQLDriver
+    url: jdbc-secretsmanager:mysql://gss-rds-an2.c7g2k44mupla.ap-northeast-2.rds.amazonaws.com:3306
+    username: ${username}
+    password: ${password}
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: validate
+    defer-datasource-initialization: false
+
 #test:
-#  answer: coli
+#  answer: ${dbInstanceIdentifier}
