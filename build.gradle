@@ -1,5 +1,6 @@
 plugins {
 	id 'java'
+	id 'jacoco' //jacoco 추가
 	id 'org.springframework.boot' version '3.4.5'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
@@ -11,6 +12,10 @@ java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(23)
 	}
+}
+
+jacoco {
+	toolVersion = '0.8.9'
 }
 
 configurations {
@@ -45,4 +50,29 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+	dependsOn test
+
+	reports {
+		xml.required.set(true)
+		html.required.set(false)
+		csv.required.set(false)
+	}
+
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: [
+					"com/devoops/**/dto/**"
+			])
+		}))
+	}
+
+	onlyIf {
+		//TEST_REPORT가 설정되지 않은 local 환경에선 돌아가지 않음
+		// TEST_REPORT가 설정된 ci 스크립트 내에서만 jacoco report 실행
+		return System.getenv('TEST_REPORT') == 'true'
+	}
 }
