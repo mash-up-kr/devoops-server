@@ -51,6 +51,11 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 	finalizedBy jacocoTestReport
+
+	jacoco {
+		includes = ['com.devoops.*']
+		excludes = ['jdk.*', 'sun.*']
+	}
 }
 
 jacocoTestReport {
