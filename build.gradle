@@ -45,7 +45,6 @@ dependencies {
 
 	//Secret-Manager
 	implementation 'io.awspring.cloud:spring-cloud-starter-aws-secrets-manager-config:2.4.4'
-	implementation 'com.amazonaws.secretsmanager:aws-secretsmanager-jdbc:1.0.8'
 
 	//TEST
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
