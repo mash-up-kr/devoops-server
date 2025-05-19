@@ -1,11 +1,6 @@
 spring:
   config:
-    import: 'aws-secretsmanager:dev/devoops/rds'
-  datasource:
-    driver-class-name: com.amazonaws.secretsmanager.sql.AWSSecretsManagerMySQLDriver
-    url: jdbc-secretsmanager:mysql://gss-rds-an2.c7g2k44mupla.ap-northeast-2.rds.amazonaws.com:3306
-    username: ${username}
-    password: ${password}
+    import: 'aws-secretsmanager:dev/devoops/secrets'
   jpa:
     show-sql: true
     properties:
