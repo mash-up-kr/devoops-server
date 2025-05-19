@@ -4,7 +4,6 @@ on:
   pull_request:
     branches:
       - develop
-      - feat/#ci-script #test를 위해
 
 permissions:
   contents: read
