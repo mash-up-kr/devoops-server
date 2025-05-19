@@ -1,0 +1,12 @@
+spring:
+  config:
+    import: 'aws-secretsmanager:dev/devoops/secrets'
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: validate
+    defer-datasource-initialization: false
