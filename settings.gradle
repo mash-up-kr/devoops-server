@@ -1,1 +1,10 @@
 rootProject.name = 'devoops'
+
+include 'gss-api-app'
+include 'gss-mcp-app'
+include 'gss-common'
+include 'gss-domain'
+include 'gss-persistence:gss-persistence-jpa'
+include 'gss-client:gss-mcp-client'
+include 'gss-infra:gss-secretmanager'
+include 'gss-infra'
