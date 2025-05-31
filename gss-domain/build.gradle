@@ -1,0 +1,20 @@
+plugins {
+	id 'java-library'
+	id 'java-test-fixtures'
+}
+
+dependencies {
+	implementation project(":gss-infra:gss-secretmanager")
+
+	// jpa
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// testFixtures
+	testFixturesImplementation 'org.springframework.boot:spring-boot-starter-data-jpa' // includes EntityManager, TX
+	testFixturesImplementation 'org.springframework.boot:spring-boot-starter-test' // includes SpringExtension, DataJpaTest, etc.
+	testFixturesImplementation 'org.junit.jupiter:junit-jupiter'
+
+	// DB
+	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+}

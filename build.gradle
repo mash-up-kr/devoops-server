@@ -1,92 +1,107 @@
 plugins {
-	id 'java'
-	id 'jacoco' //jacoco 추가
-	id 'org.springframework.boot' version '3.4.5'
-	id 'io.spring.dependency-management' version '1.1.7'
+    id 'java'
+    id 'jacoco' //jacoco 추가
+    id 'org.springframework.boot' version "${springBootVersion}" apply(false)
+    id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
 }
 
-group = 'com'
-version = '0.0.1-SNAPSHOT'
-
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(23)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(23)
+    }
 }
 
 jacoco {
-	toolVersion = '0.8.13'
+    toolVersion = '0.8.13'
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
-repositories {
-	mavenCentral()
+allprojects {
+    group = "${projectGroup}"
+    version = "${applicationVersion}"
+
+    repositories {
+        mavenCentral()
+    }
 }
 
-dependencyManagement {
-	imports {
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:2024.0.1"
-	}
-}
+subprojects {
+    apply {
+        plugin 'java'
+        plugin 'io.spring.dependency-management'
+        plugin 'jacoco'
+    }
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
 
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudDependenciesVersion}"
+        }
+    }
 
-	//Swagger
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+    sourceCompatibility = JavaVersion.VERSION_23
+    targetCompatibility = JavaVersion.VERSION_23
 
-	//DB
-	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'com.mysql:mysql-connector-j'
+    dependencies {
+        // lombok
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
 
-	//Secret-Manager
-	implementation 'io.awspring.cloud:spring-cloud-starter-aws-secrets-manager-config:2.4.4'
+        // test
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+        testImplementation 'io.rest-assured:rest-assured:5.4.0'
+    }
 
-	//TEST
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	testImplementation 'io.rest-assured:rest-assured:5.4.0'
+    tasks.withType(Test).configureEach {
+        useJUnitPlatform()
+        finalizedBy 'jacocoTestReport'
+
+        jacoco {
+            includes = ['com.devoops.*']
+            excludes = ['jdk.*', 'sun.*']
+        }
+    }
+
+    tasks.named('jacocoTestReport', JacocoReport).configure {
+        dependsOn test
+
+        reports {
+            xml.required.set(true)
+            html.required.set(false)
+            csv.required.set(false)
+        }
+
+        def excludedPatterns = ["com/devoops/**/dto/**"]
+
+        // 기존 classDirectories의 FileCollection을 직접 다룬다
+        def originalClassDirs = files(classDirectories)
+
+        classDirectories.setFrom(
+                originalClassDirs.collect {
+                    fileTree(dir: it, exclude: excludedPatterns)
+                }
+        )
+
+        onlyIf {
+            // TEST_REPORT가 설정되지 않은 local 환경에선 돌아가지 않음
+            // TEST_REPORT가 설정된 ci 스크립트 내에서만 jacoco report 실행
+            System.getenv('TEST_REPORT') == 'true'
+        }
+    }
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
-	finalizedBy jacocoTestReport
-
-	jacoco {
-		includes = ['com.devoops.*']
-		excludes = ['jdk.*', 'sun.*']
-	}
-}
-
-jacocoTestReport {
-	dependsOn test
-
-	reports {
-		xml.required.set(true)
-		html.required.set(false)
-		csv.required.set(false)
-	}
-
-	afterEvaluate {
-		classDirectories.setFrom(files(classDirectories.files.collect {
-			fileTree(dir: it, exclude: [
-					"com/devoops/**/dto/**"
-			])
-		}))
-	}
-
-	onlyIf {
-		//TEST_REPORT가 설정되지 않은 local 환경에선 돌아가지 않음
-		// TEST_REPORT가 설정된 ci 스크립트 내에서만 jacoco report 실행
-		return System.getenv('TEST_REPORT') == 'true'
-	}
+    useJUnitPlatform()
 }

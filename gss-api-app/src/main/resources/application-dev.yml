@@ -1,6 +1,4 @@
 spring:
-  config:
-    import: 'aws-secretsmanager:dev/devoops/secrets'
   jpa:
     show-sql: true
     properties:

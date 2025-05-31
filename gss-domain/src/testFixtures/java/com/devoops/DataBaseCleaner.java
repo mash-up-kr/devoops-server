@@ -1,12 +1,13 @@
 package com.devoops;
 
 import jakarta.persistence.EntityManager;
-import java.util.List;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.support.TransactionTemplate;
+
+import java.util.List;
 
 public class DataBaseCleaner implements BeforeEachCallback {
 
