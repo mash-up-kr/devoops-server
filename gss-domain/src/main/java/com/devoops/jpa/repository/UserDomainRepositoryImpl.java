@@ -1,7 +1,7 @@
-package jpa.repository;
+package com.devoops.jpa.repository;
 
-import domain.entity.User;
-import domain.repository.UserDomainRepository;
+import com.devoops.domain.entity.User;
+import com.devoops.domain.repository.UserDomainRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

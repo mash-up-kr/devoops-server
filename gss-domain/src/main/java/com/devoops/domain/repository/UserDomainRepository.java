@@ -1,6 +1,7 @@
-package domain.repository;
+package com.devoops.domain.repository;
 
-import domain.entity.User;
+
+import com.devoops.domain.entity.User;
 
 public interface UserDomainRepository {
 

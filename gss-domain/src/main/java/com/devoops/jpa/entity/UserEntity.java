@@ -1,6 +1,6 @@
-package jpa.entity;
+package com.devoops.jpa.entity;
 
-import domain.entity.User;
+import com.devoops.domain.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -13,6 +13,8 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String externalId;
 
     public User toDomainEntity() {
         return new User();
