@@ -66,34 +66,35 @@ subprojects {
 }
 
 tasks.named('test') {
-	  useJUnitPlatform()
+    useJUnitPlatform()
     finalizedBy jacocoTestReport
 
-	  jacoco {
+    jacoco {
         includes = ['com.devoops.*']
         excludes = ['jdk.*', 'sun.*']
-}
+    }
 
-jacocoTestReport {
-	dependsOn test
+    jacocoTestReport {
+        dependsOn test
 
-  reports {
-		xml.required.set(true)
-		html.required.set(false)
-		csv.required.set(false)
-  }
+        reports {
+            xml.required.set(true)
+            html.required.set(false)
+            csv.required.set(false)
+        }
 
-	afterEvaluate {
-		classDirectories.setFrom(files(classDirectories.files.collect {
-			fileTree(dir: it, exclude: [
-					"com/devoops/**/dto/**"
-			])
-		}))
-	}
+        afterEvaluate {
+            classDirectories.setFrom(files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: [
+                        "com/devoops/**/dto/**"
+                ])
+            }))
+        }
 
-	onlyIf {
-		//TEST_REPORT가 설정되지 않은 local 환경에선 돌아가지 않음
-		// TEST_REPORT가 설정된 ci 스크립트 내에서만 jacoco report 실행
-		return System.getenv('TEST_REPORT') == 'true'
-	}
+        onlyIf {
+            //TEST_REPORT가 설정되지 않은 local 환경에선 돌아가지 않음
+            // TEST_REPORT가 설정된 ci 스크립트 내에서만 jacoco report 실행
+            return System.getenv('TEST_REPORT') == 'true'
+        }
+    }
 }
