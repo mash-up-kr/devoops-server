@@ -12,13 +12,13 @@ java {
 }
 
 jacoco {
-	toolVersion = '0.8.13'
+    toolVersion = '0.8.13'
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 allprojects {
@@ -34,8 +34,8 @@ subprojects {
     apply {
         plugin 'java'
         plugin 'io.spring.dependency-management'
+        plugin 'jacoco'
     }
-
 
     configurations {
         compileOnly {
@@ -63,18 +63,18 @@ subprojects {
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
         testImplementation 'io.rest-assured:rest-assured:5.4.0'
     }
-}
 
-tasks.named('test') {
-    useJUnitPlatform()
-    finalizedBy jacocoTestReport
+    tasks.withType(Test).configureEach {
+        useJUnitPlatform()
+        finalizedBy 'jacocoTestReport'
 
-    jacoco {
-        includes = ['com.devoops.*']
-        excludes = ['jdk.*', 'sun.*']
+        jacoco {
+            includes = ['com.devoops.*']
+            excludes = ['jdk.*', 'sun.*']
+        }
     }
 
-    jacocoTestReport {
+    tasks.named('jacocoTestReport', JacocoReport).configure {
         dependsOn test
 
         reports {
@@ -83,18 +83,25 @@ tasks.named('test') {
             csv.required.set(false)
         }
 
-        afterEvaluate {
-            classDirectories.setFrom(files(classDirectories.files.collect {
-                fileTree(dir: it, exclude: [
-                        "com/devoops/**/dto/**"
-                ])
-            }))
-        }
+        def excludedPatterns = ["com/devoops/**/dto/**"]
+
+        // 기존 classDirectories의 FileCollection을 직접 다룬다
+        def originalClassDirs = files(classDirectories)
+
+        classDirectories.setFrom(
+                originalClassDirs.collect {
+                    fileTree(dir: it, exclude: excludedPatterns)
+                }
+        )
 
         onlyIf {
-            //TEST_REPORT가 설정되지 않은 local 환경에선 돌아가지 않음
+            // TEST_REPORT가 설정되지 않은 local 환경에선 돌아가지 않음
             // TEST_REPORT가 설정된 ci 스크립트 내에서만 jacoco report 실행
-            return System.getenv('TEST_REPORT') == 'true'
+            System.getenv('TEST_REPORT') == 'true'
         }
     }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
 }

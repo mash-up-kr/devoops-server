@@ -20,12 +20,11 @@ public class UserDomainRepositoryImpl implements UserDomainRepository {
                 .toDomainEntity();
     }
 
+    @Transactional
     @Override
     public User saveUser(User user) {
         return userJpaRepository.save(
                 UserEntity.from(user)
         ).toDomainEntity();
     }
-
-
 }
