@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'jacoco' //jacoco 추가
     id 'org.springframework.boot' version "${springBootVersion}" apply(false)
     id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
 }
@@ -8,6 +9,16 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(23)
     }
+}
+
+jacoco {
+	toolVersion = '0.8.13'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
 }
 
 allprojects {
@@ -52,8 +63,37 @@ subprojects {
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
         testImplementation 'io.rest-assured:rest-assured:5.4.0'
     }
+}
 
-    tasks.named("test") {
-        useJUnitPlatform()
-    }
+tasks.named('test') {
+	  useJUnitPlatform()
+    finalizedBy jacocoTestReport
+
+	  jacoco {
+        includes = ['com.devoops.*']
+        excludes = ['jdk.*', 'sun.*']
+}
+
+jacocoTestReport {
+	dependsOn test
+
+  reports {
+		xml.required.set(true)
+		html.required.set(false)
+		csv.required.set(false)
+  }
+
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: [
+					"com/devoops/**/dto/**"
+			])
+		}))
+	}
+
+	onlyIf {
+		//TEST_REPORT가 설정되지 않은 local 환경에선 돌아가지 않음
+		// TEST_REPORT가 설정된 ci 스크립트 내에서만 jacoco report 실행
+		return System.getenv('TEST_REPORT') == 'true'
+	}
 }
