@@ -17,7 +17,9 @@ public class UserEntity {
     private String externalId;
 
     public User toDomainEntity() {
-        return new User();
+        return new User(
+                this.externalId
+        );
     }
 
     public static UserEntity from(User domainEntity) {

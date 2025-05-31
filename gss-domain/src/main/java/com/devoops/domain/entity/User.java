@@ -8,7 +8,11 @@ public class User {
 
     private String externalId;
 
-    private String getExternalId() {
+    public String getExternalId() {
         return externalId;
+    }
+
+    public User(String externalId) {
+        this.externalId = externalId;
     }
 }

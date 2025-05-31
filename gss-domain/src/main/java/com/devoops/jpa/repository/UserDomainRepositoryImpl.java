@@ -2,6 +2,7 @@ package com.devoops.jpa.repository;
 
 import com.devoops.domain.entity.User;
 import com.devoops.domain.repository.UserDomainRepository;
+import com.devoops.jpa.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,11 +10,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @RequiredArgsConstructor
 public class UserDomainRepositoryImpl implements UserDomainRepository {
-    private UserJpaRepository userJpaRepository;
+    private final UserJpaRepository userJpaRepository;
 
     @Transactional(readOnly = true)
     @Override
-    public User find(String externalId) {
-        return userJpaRepository.findByExternalId(externalId).toDomainEntity();
+    public User findByExternalId(String externalId) {
+        return userJpaRepository.findByExternalId(externalId)
+                .orElseThrow(() -> new RuntimeException("EntityNotFound 공통 예외 처리 필요"))
+                .toDomainEntity();
     }
+
+    @Override
+    public User saveUser(User user) {
+        return userJpaRepository.save(
+                UserEntity.from(user)
+        ).toDomainEntity();
+    }
+
+
 }

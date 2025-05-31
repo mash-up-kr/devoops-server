@@ -5,5 +5,7 @@ import com.devoops.domain.entity.User;
 
 public interface UserDomainRepository {
 
-    User find(String externalId);
+    User findByExternalId(String externalId);
+
+    User saveUser(User user);
 }
