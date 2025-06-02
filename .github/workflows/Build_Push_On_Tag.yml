@@ -46,9 +46,6 @@ jobs:
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: gss-server
         run: |
           docker build -t ${REGISTRY_URL}/${APP_DIR}:${GITHUB_REF_NAME} ${APP_DIR}/.
           docker push ${REGISTRY_URL}/${APP_DIR}:${GITHUB_REF_NAME}
