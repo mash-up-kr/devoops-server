@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-class UserService {
+public class UserService {
 
     private final UserDomainRepository userDomainRepository;
 
