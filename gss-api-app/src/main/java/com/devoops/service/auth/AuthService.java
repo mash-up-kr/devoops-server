@@ -1,5 +1,6 @@
 package com.devoops.service.auth;
 
+import com.devoops.client.auth.AuthClient;
 import com.devoops.domain.entity.auth.GithubToken;
 import com.devoops.domain.entity.auth.UserInfo;
 import com.devoops.dto.request.UserSaveRequest;

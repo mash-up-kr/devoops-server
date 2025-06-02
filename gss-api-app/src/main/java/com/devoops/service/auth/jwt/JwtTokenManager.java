@@ -1,6 +1,5 @@
 package com.devoops.service.auth.jwt;
 
-import com.devoops.domain.entity.user.User;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
