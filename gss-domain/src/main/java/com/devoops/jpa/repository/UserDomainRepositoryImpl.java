@@ -20,6 +20,15 @@ public class UserDomainRepositoryImpl implements UserDomainRepository {
                 .toDomainEntity();
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public boolean existsByExternalId(String externalId) {
+        return userJpaRepository.existsByExternalId(externalId);
+
+
+    }
+
+
     @Transactional
     @Override
     public User saveUser(User user) {

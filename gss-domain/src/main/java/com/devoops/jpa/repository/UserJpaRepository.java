@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByExternalId(String externalId);
+
+    boolean existsByExternalId(String externalId);
 }
