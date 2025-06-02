@@ -5,7 +5,7 @@ import com.devoops.domain.entity.auth.UserInfo;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface GithubClient {
+public interface AuthClient {
 
     GithubToken getToken(String code, String redirectUrl);
 

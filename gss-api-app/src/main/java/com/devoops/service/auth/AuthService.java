@@ -19,12 +19,12 @@ import org.springframework.stereotype.Service;
 @EnableConfigurationProperties(JwtProperties.class)
 public class AuthService {
 
-    private final GithubClient githubClient;
+    private final AuthClient authClient;
     private final JwtTokenManager jwtTokenManager;
 
     public AuthResponse getUserInfo(UserSaveRequest request) {
-        GithubToken token = githubClient.getToken(request.code(), request.redirectUrl());
-        UserInfo userInfo = githubClient.getUserInfo(token);
+        GithubToken token = authClient.getToken(request.code(), request.redirectUrl());
+        UserInfo userInfo = authClient.getUserInfo(token);
         return new AuthResponse(token, userInfo);
     }
 
