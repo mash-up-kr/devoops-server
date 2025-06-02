@@ -12,4 +12,5 @@ import lombok.RequiredArgsConstructor;
 public class User {
 
     private final String email;
+    private final String token;
 }
