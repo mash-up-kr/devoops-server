@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
 public class JwtToken {
 
     private static final String TOKEN_TYPE_CLAIMS_NAME = "type";
