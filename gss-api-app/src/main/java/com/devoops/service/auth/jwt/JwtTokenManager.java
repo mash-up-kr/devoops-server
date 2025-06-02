@@ -16,6 +16,10 @@ public class JwtTokenManager {
         return JwtToken.from(user, expiration, type, jwtProperties.getSecretKey());
     }
 
+    public Duration getTokenExpiration(TokenType type) {
+        return jwtProperties.getExpirationByTokenType(type);
+    }
+
     public String resolveToken(JwtToken token, TokenType type) {
         return token.resolveToken(jwtProperties.getSecretKey(), type);
     }
