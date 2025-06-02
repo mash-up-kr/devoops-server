@@ -1,8 +1,8 @@
 package com.devoops.controller;
 
-import com.devoops.domain.entity.auth.UserInfo;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.UserSaveRequest;
+import com.devoops.dto.response.AuthResponse;
 import com.devoops.dto.response.UserSaveResponse;
 import com.devoops.dto.response.UserTokenResponse;
 import com.devoops.service.auth.AuthService;
@@ -33,9 +33,9 @@ public class UserController {
 
     @PostMapping("/api/auth/github")
     public ResponseEntity<UserSaveResponse> issueToken(@RequestBody @Valid UserSaveRequest userSaveRequest) {
-        UserInfo userInfo = authService.getUserInfo(userSaveRequest);
-        User savedUser = userService.save(new User(userInfo.email()));
-        UserTokenResponse userTokens = authService.issueToken(savedUser);
+        AuthResponse authResponse = authService.getUserInfo(userSaveRequest);
+        User savedUser = userService.save(new User(authResponse.email(), authResponse.githubToken()));
+        UserTokenResponse userTokens = authService.issueToken(savedUser.getEmail());
         ResponseCookie cookie = cookieManager.createCookie(REFRESH_TOKEN, userTokens.refreshToken(),
                 userTokens.refreshTokenExpiration());
 

@@ -2,8 +2,8 @@ package com.devoops.service.auth;
 
 import com.devoops.domain.entity.auth.GithubToken;
 import com.devoops.domain.entity.auth.UserInfo;
-import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.UserSaveRequest;
+import com.devoops.dto.response.AuthResponse;
 import com.devoops.dto.response.UserTokenResponse;
 import com.devoops.service.auth.jwt.JwtProperties;
 import com.devoops.service.auth.jwt.JwtToken;
@@ -22,22 +22,22 @@ public class AuthService {
     private final GithubClient githubClient;
     private final JwtTokenManager jwtTokenManager;
 
-    public UserInfo getUserInfo(UserSaveRequest request) {
+    public AuthResponse getUserInfo(UserSaveRequest request) {
         GithubToken token = githubClient.getToken(request.code(), request.redirectUrl());
-        return githubClient.getMemberInfo(token);
+        UserInfo userInfo = githubClient.getUserInfo(token);
+        return new AuthResponse(token, userInfo);
     }
 
-    public UserTokenResponse issueToken(User user) {
-        JwtToken accessToken = jwtTokenManager.createToken(user, TokenType.ACCESS_TOKEN);
-        JwtToken refreshToken = jwtTokenManager.createToken(user, TokenType.REFRESH_TOKEN);
+    public UserTokenResponse issueToken(String value) {
+        JwtToken accessToken = jwtTokenManager.createToken(value, TokenType.ACCESS_TOKEN);
+        JwtToken refreshToken = jwtTokenManager.createToken(value, TokenType.REFRESH_TOKEN);
         Duration refreshTokenExpiration = jwtTokenManager.getTokenExpiration(TokenType.REFRESH_TOKEN);
         return new UserTokenResponse(accessToken, refreshToken, refreshTokenExpiration);
     }
 
     public UserTokenResponse reissueToken(JwtToken refreshToken) {
-        String userExternalId = jwtTokenManager.resolveToken(refreshToken, TokenType.REFRESH_TOKEN);
-        User user = new User(userExternalId);
-        return issueToken(user);
+        String resolvedValue = jwtTokenManager.resolveToken(refreshToken, TokenType.REFRESH_TOKEN);
+        return issueToken(resolvedValue);
     }
 
     public String resolveToken(JwtToken token, TokenType tokenType) {

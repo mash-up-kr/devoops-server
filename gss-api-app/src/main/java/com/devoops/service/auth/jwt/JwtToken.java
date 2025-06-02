@@ -22,7 +22,7 @@ public class JwtToken {
     private final TokenType tokenType;
 
     public static JwtToken from(
-            User user,
+            String value,
             Duration expiration,
             TokenType type,
             SecretKey secretKey
@@ -30,7 +30,7 @@ public class JwtToken {
         Date now = new Date();
         Date expiredDate = new Date(now.getTime() + expiration.toMillis());
         String token = Jwts.builder()
-                .setSubject(user.getEmail())
+                .setSubject(value)
                 .setIssuedAt(now)
                 .setExpiration(expiredDate)
                 .claim(TOKEN_TYPE_CLAIMS_NAME, type.name())

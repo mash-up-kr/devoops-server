@@ -9,5 +9,5 @@ public interface GithubClient {
 
     GithubToken getToken(String code, String redirectUrl);
 
-    UserInfo getMemberInfo(GithubToken token);
+    UserInfo getUserInfo(GithubToken token);
 }

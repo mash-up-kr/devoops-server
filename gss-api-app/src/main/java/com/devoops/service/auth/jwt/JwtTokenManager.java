@@ -11,9 +11,9 @@ public class JwtTokenManager {
 
     private final JwtProperties jwtProperties;
 
-    public JwtToken createToken(User user, TokenType type) {
+    public JwtToken createToken(String value, TokenType type) {
         Duration expiration = jwtProperties.getExpirationByTokenType(type);
-        return JwtToken.from(user, expiration, type, jwtProperties.getSecretKey());
+        return JwtToken.from(value, expiration, type, jwtProperties.getSecretKey());
     }
 
     public Duration getTokenExpiration(TokenType type) {
