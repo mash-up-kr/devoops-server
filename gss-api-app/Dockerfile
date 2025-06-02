@@ -8,6 +8,8 @@ RUN java -Djarmode=layertools -jar application.jar extract
 
 FROM eclipse-temurin:23-jdk-alpine
 
+WORKDIR /application
+
 # 각 레이어를 복사
 COPY --from=builder application/dependencies/ ./dependencies/
 COPY --from=builder application/spring-boot-loader/ ./spring-boot-loader/
@@ -15,4 +17,4 @@ COPY --from=builder application/snapshot-dependencies/ ./snapshot-dependencies/
 COPY --from=builder application/application/ ./application/
 
 # 엔트리포인트 설정
-ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS org.springframework.boot.loader.launch.JarLauncher"]
