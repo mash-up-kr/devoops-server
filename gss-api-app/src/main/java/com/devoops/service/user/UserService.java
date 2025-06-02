@@ -12,9 +12,9 @@ public class UserService {
     private final UserDomainRepository userDomainRepository;
 
     public User save(User user) {
-        String userExternalId = user.getExternalId();
-        if (userDomainRepository.existsByExternalId(userExternalId)) {
-            return userDomainRepository.findByExternalId(userExternalId);
+        String email = user.getEmail();
+        if (userDomainRepository.existsByEmail(email)) {
+            return userDomainRepository.findByEmail(email);
         }
 
         return userDomainRepository.saveUser(user);

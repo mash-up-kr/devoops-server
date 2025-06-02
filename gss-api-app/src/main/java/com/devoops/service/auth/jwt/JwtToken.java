@@ -30,7 +30,7 @@ public class JwtToken {
         Date now = new Date();
         Date expiredDate = new Date(now.getTime() + expiration.toMillis());
         String token = Jwts.builder()
-                .setSubject(user.getExternalId())
+                .setSubject(user.getEmail())
                 .setIssuedAt(now)
                 .setExpiration(expiredDate)
                 .claim(TOKEN_TYPE_CLAIMS_NAME, type.name())

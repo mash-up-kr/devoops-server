@@ -31,7 +31,7 @@ public class UserController {
     @PostMapping("/api/auth/github")
     public ResponseEntity<UserSaveResponse> issueToken(@RequestBody @Valid UserSaveRequest userSaveRequest) {
         UserInfo userInfo = authService.getUserInfo(userSaveRequest);
-        User savedUser = userService.save(new User(userInfo.externalId()));
+        User savedUser = userService.save(new User(userInfo.email()));
         UserTokenResponse userTokens = authService.issueToken(savedUser);
         ResponseCookie cookie = cookieManager.createCookie(REFRESH_TOKEN, userTokens.refreshToken(),
                 userTokens.refreshTokenExpiration());

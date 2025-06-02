@@ -14,7 +14,7 @@ public class UserDomainRepositoryImpl implements UserDomainRepository {
 
     @Transactional(readOnly = true)
     @Override
-    public User findByExternalId(String externalId) {
+    public User findByEmail(String externalId) {
         return userJpaRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new RuntimeException("EntityNotFound 공통 예외 처리 필요"))
                 .toDomainEntity();
@@ -22,7 +22,7 @@ public class UserDomainRepositoryImpl implements UserDomainRepository {
 
     @Transactional(readOnly = true)
     @Override
-    public boolean existsByExternalId(String externalId) {
+    public boolean existsByEmail(String externalId) {
         return userJpaRepository.existsByExternalId(externalId);
 
 

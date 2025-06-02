@@ -1,7 +1,7 @@
 package com.devoops.domain.entity.auth;
 
 public record UserInfo(
-        String externalId
+        String email
 ) {
 
 }
