@@ -1,6 +1,6 @@
-package com.devoops.jpa.entity;
+package com.devoops.jpa.entity.user;
 
-import com.devoops.domain.entity.User;
+import com.devoops.domain.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
