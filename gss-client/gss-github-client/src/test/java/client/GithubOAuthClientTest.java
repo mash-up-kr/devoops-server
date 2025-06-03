@@ -1,8 +1,13 @@
 package client;
 
-import dto.request.GithubTokenRequest;
-import dto.response.GithubTokenResponse;
-import dto.response.UserInfoResponse;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.devoops.client.GithubOAuthClient;
+import com.devoops.client.GithubOAuthClientImpl;
+import com.devoops.client.GithubOAuthProperties;
+import com.devoops.dto.request.GithubTokenRequest;
+import com.devoops.dto.response.GithubTokenResponse;
+import com.devoops.dto.response.UserInfoResponse;
 import java.io.IOException;
 import java.nio.file.Files;
 import org.apache.http.HttpHeaders;
@@ -17,7 +22,6 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.ExchangeFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import reactor.test.StepVerifier;
 
 class GithubOAuthClientTest {
 
@@ -30,7 +34,7 @@ class GithubOAuthClientTest {
         mockExchangeFunction = Mockito.mock(ExchangeFunction.class);
         WebClient.Builder webClientBuilder = WebClient.builder()
                 .exchangeFunction(mockExchangeFunction);
-        githubOAuthClient = new GithubOAuthClient(webClientBuilder, authProperties);
+        githubOAuthClient = new GithubOAuthClientImpl(webClientBuilder, authProperties);
     }
 
     @Nested
@@ -42,11 +46,9 @@ class GithubOAuthClientTest {
             String expectedAccessToken = "example_access_token";
             mockClient(HttpStatus.OK, "github-api-response/tokenSuccess.json");
 
-            Mono<GithubTokenResponse> tokenResponse = githubOAuthClient.getAccessToken(githubTokenRequest);
+            GithubTokenResponse tokenResponse = githubOAuthClient.getToken(githubTokenRequest);
 
-            StepVerifier.create(tokenResponse)
-                    .expectNextMatches(response -> response.accessToken().equals(expectedAccessToken))
-                    .verifyComplete();
+            assertThat(tokenResponse.accessToken()).isEqualTo(expectedAccessToken);
         }
 
         @Test
@@ -54,11 +56,9 @@ class GithubOAuthClientTest {
             String expectedEmail = "kkwoo001021@naver.com";
             mockClient(HttpStatus.OK, "github-api-response/userInfoSuccess.json");
 
-            Mono<UserInfoResponse> userInfoResponseMono = githubOAuthClient.getUserInfo("testAccessToken");
+            UserInfoResponse userInfoResponseMono = githubOAuthClient.getUserInfo("testAccessToken");
 
-            StepVerifier.create(userInfoResponseMono)
-                    .expectNextMatches(response -> response.email().equals(expectedEmail))
-                    .verifyComplete();
+            assertThat(userInfoResponseMono.email()).isEqualTo(expectedEmail);
         }
 
         private void mockClient(HttpStatus status, String responsePath) throws IOException {

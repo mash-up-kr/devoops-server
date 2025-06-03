@@ -1,4 +1,4 @@
-package client;
+package com.devoops.client;
 
 import io.netty.channel.ChannelOption;
 import java.time.Duration;

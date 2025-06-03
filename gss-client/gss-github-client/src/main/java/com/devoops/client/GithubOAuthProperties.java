@@ -1,4 +1,4 @@
-package client;
+package com.devoops.client;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
