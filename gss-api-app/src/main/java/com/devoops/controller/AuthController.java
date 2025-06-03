@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class UserController {
+public class AuthController {
 
     private static final String REFRESH_TOKEN = "refreshToken";
 
