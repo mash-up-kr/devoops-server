@@ -1,9 +1,11 @@
-name: gss-api-server-dev-cd
+name: gss-api-app-dev-cd
 
 on:
-  pull_request:
-    branches:
-      - develop
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: '배포할 api app 서비스 버전을 입력합니다.'
+        required: true
 
 jobs:
   trigger:
