@@ -25,7 +25,7 @@ public class GithubClientConfig {
     @Bean
     public GitHubClient gitHubApiClient() {
         WebClient webClient = WebClient.builder()
-            .baseUrl("https://api.github.com")
+            .baseUrl(properties.url())
             .clientConnector(new ReactorClientHttpConnector(
                 HttpClient.create()
                     .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, properties.connectTimeout())

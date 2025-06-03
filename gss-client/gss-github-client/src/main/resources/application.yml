@@ -1,6 +1,0 @@
-dev-oops:
-  webclient:
-    github:
-      url: https://api.github.com
-      connect-timeout: 3000
-      read-timeout: 3000
