@@ -24,6 +24,7 @@ public class GithubExchangeFilterFunction {
                             "status", response.statusCode(),
                             "response", body
                         ));
+                        // TODO: 커스텀한 예외로 변경 필요
                         return Mono.error(new RuntimeException("GitHub API error: " + body));
                     });
                 }

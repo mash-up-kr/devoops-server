@@ -17,13 +17,13 @@ public record GitHubWebhookRequest(
     ) {
     }
 
-    public static GitHubWebhookRequest ofPullRequestEvent(String slackWebhookUrl) {
+    public static GitHubWebhookRequest ofPullRequestEvent(String webhookUrl) {
         return new GitHubWebhookRequest(
             "web",
             true,
             List.of("pull_request"),
             new GitHubWebhookConfig(
-                slackWebhookUrl,
+                webhookUrl,
                 "json"
             )
         );
