@@ -1,6 +1,6 @@
 spring:
   application:
-    name: 'gss-mcp-server'
+    name: 'gss-mcp-app'
   profiles:
     default: local
 

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: 'gss-api-server'
+    name: 'gss-api-app'
   profiles:
     default: local
 
