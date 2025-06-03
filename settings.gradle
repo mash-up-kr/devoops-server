@@ -7,5 +7,3 @@ include 'gss-domain'
 include 'gss-client:gss-mcp-client'
 include 'gss-client:gss-github-client'
 include 'gss-infra:gss-secretmanager'
-
-include 'gss-client:gss-github-client'

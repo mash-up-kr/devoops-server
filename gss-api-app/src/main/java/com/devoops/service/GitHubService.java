@@ -24,7 +24,7 @@ public class GitHubService {
         // TODO: repository에 연결된 GitHub access token 조회
         String accessToken = "mock-github-token";
 
-        GitHubWebhookRequest request = GitHubWebhookRequest.createDefault(mcpWebhookUrl);
+        GitHubWebhookRequest request = GitHubWebhookRequest.ofPullRequestEvent(mcpWebhookUrl);
         gitHubClient.createWebhook(accessToken, owner, repo, request);
     }
 }

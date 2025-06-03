@@ -20,7 +20,7 @@ public class GithubController {
     ) {
 
         // TODO: 인증 정보를 기반으로 userId 추출 (ex: SecurityContext, JWT 등)
-        var userId = 1L;
+        long userId = 1L;
         gitHubService.registerWebhook(userId, repositoryId);
     }
 }

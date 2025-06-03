@@ -17,7 +17,7 @@ public record GitHubWebhookRequest(
     ) {
     }
 
-    public static GitHubWebhookRequest createDefault(String slackWebhookUrl) {
+    public static GitHubWebhookRequest ofPullRequestEvent(String slackWebhookUrl) {
         return new GitHubWebhookRequest(
             "web",
             true,
