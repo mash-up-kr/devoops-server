@@ -4,3 +4,6 @@ dev-oops:
       url: https://api.github.com
       connect-timeout: 3000
       read-timeout: 3000
+      oauth:
+        client-id: your-client-id
+        client-secret: your-client-secret
