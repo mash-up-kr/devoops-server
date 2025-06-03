@@ -39,7 +39,7 @@ public class JwtToken {
         return new JwtToken(token, type);
     }
 
-    public String resolveToken(SecretKey secretKey, TokenType type) throws JwtException, ExpiredJwtException {
+    public String resolveToken(SecretKey secretKey, TokenType type) throws JwtException {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
