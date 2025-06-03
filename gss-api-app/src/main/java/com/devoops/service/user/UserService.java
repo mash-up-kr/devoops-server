@@ -16,7 +16,6 @@ public class UserService {
         if (userDomainRepository.existsByEmail(email)) {
             return userDomainRepository.findByEmail(email);
         }
-
         return userDomainRepository.saveUser(user);
     }
 }
