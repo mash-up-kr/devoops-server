@@ -6,6 +6,7 @@ import com.devoops.fake.FakeOAuthClient;
 import com.devoops.fake.FakeUserRepository;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
 @Profile("test")
@@ -13,12 +14,15 @@ import org.springframework.context.annotation.Profile;
 public class TestConfig {
 
     @Bean
+    @Primary
     public UserDomainRepository userDomainRepository() {
         return new FakeUserRepository();
     }
 
     @Bean
+    @Primary
     public GithubOAuthClient githubOAuthClient() {
+        System.out.println("test 주입됨");
         return new FakeOAuthClient();
     }
 }
