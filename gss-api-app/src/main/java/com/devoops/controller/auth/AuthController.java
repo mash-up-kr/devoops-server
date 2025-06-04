@@ -1,4 +1,4 @@
-package com.devoops.controller;
+package com.devoops.controller.auth;
 
 import com.devoops.controller.docs.AuthControllerSwagger;
 import com.devoops.domain.entity.user.User;

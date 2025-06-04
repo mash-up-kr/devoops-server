@@ -23,6 +23,7 @@ class AuthServiceTest extends BaseServiceTest {
 
     //TODO 유효기간을 secretManager에 작성하기
     //TODO 엘라스틱 캐시로 refresh 관리, 블랙리스트 관리
+    //TODO 로그아웃 구현하기
 
     @Nested
     class IssueTokens {

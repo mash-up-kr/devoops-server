@@ -18,4 +18,8 @@ public class UserService {
         }
         return userDomainRepository.saveUser(user);
     }
+
+    public User findByEmail(String email) {
+        return userDomainRepository.findByEmail(email);
+    }
 }
