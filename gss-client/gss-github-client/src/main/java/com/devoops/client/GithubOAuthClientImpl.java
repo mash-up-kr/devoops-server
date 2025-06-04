@@ -45,7 +45,7 @@ public class GithubOAuthClientImpl implements GithubOAuthClient {
     public UserInfoResponse getUserInfo(String accessToken) {
         return webClient.get()
                 .uri("https://api.github.com/user")
-                .header(HttpHeaders.ACCEPT, " application/vnd.github+json")
+                .header(HttpHeaders.ACCEPT, "application/vnd.github+json")
                 .headers(headers -> headers.setBearerAuth(accessToken))
                 .retrieve()
                 .bodyToMono(UserInfoResponse.class)
