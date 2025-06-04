@@ -60,4 +60,18 @@ public class AuthController implements AuthControllerSwagger {
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .build();
     }
+
+    @PostMapping("/api/auth/logout")
+    public ResponseEntity<Void> logout(
+            @AuthUser User user,
+            @CookieValue(REFRESH_TOKEN) String token
+    ) {
+        String email = authService.resolveToken(token, TokenType.REFRESH_TOKEN);
+        authService.logout(user, email);
+        ResponseCookie expiredRefreshTokenCookie = cookieManager.createExpiredCookie(REFRESH_TOKEN);
+
+        return ResponseEntity.noContent()
+                .header(HttpHeaders.SET_COOKIE, expiredRefreshTokenCookie.toString())
+                .build();
+    }
 }

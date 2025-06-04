@@ -1,6 +1,7 @@
 package com.devoops.service.auth;
 
 import com.devoops.client.GithubOAuthClient;
+import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.UserSaveRequest;
 import com.devoops.dto.response.AuthResponse;
 import com.devoops.dto.response.UserTokenResponse;
@@ -43,7 +44,14 @@ public class AuthService {
         return issueToken(resolvedValue);
     }
 
-    public String resolveToken(JwtToken token, TokenType tokenType) {
+    public String resolveToken(String rawToken, TokenType tokenType) {
+        JwtToken token = new JwtToken(rawToken, tokenType);
         return jwtTokenManager.resolveToken(token, tokenType);
+    }
+
+    public void logout(User user, String email) {
+        if (!user.isSameUser(email)) {
+            throw new RuntimeException("401 인증 에러");
+        }
     }
 }

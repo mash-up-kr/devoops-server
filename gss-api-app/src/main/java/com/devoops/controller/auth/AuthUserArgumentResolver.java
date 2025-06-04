@@ -32,16 +32,11 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
             NativeWebRequest webRequest,
             WebDataBinderFactory binderFactory
     ) {
-        JwtToken accessToken = getAccessToken(webRequest);
-        String email = authService.resolveToken(accessToken, TokenType.ACCESS_TOKEN);
-        return userService.findByEmail(email);
-    }
-
-    private JwtToken getAccessToken(NativeWebRequest webRequest) {
         String accessToken = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
         if (accessToken == null) {
             throw new RuntimeException("401 인증 에러"); //TODO 추후 커스텀 에러로 수정
         }
-        return new JwtToken(accessToken, TokenType.ACCESS_TOKEN);
+        String email = authService.resolveToken(accessToken, TokenType.ACCESS_TOKEN);
+        return userService.findByEmail(email);
     }
 }
