@@ -1,5 +1,6 @@
 package com.devoops.controller;
 
+import com.devoops.controller.docs.AuthControllerSwagger;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.UserSaveRequest;
 import com.devoops.dto.response.AuthResponse;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController implements AuthControllerSwagger {
 
     private static final String REFRESH_TOKEN = "refreshToken";
 
@@ -31,6 +32,7 @@ public class AuthController {
     private final AuthService authService;
     private final UserService userService;
 
+    @Override
     @PostMapping("/api/auth/github")
     public ResponseEntity<UserSaveResponse> issueToken(@RequestBody @Valid UserSaveRequest userSaveRequest) {
         AuthResponse authResponse = authService.getUserInfo(userSaveRequest);
@@ -45,6 +47,7 @@ public class AuthController {
                 .body(new UserSaveResponse(savedUser));
     }
 
+    @Override
     @PostMapping("/api/auth/github/reissue")
     public ResponseEntity<Void> reIssueToken(@CookieValue(REFRESH_TOKEN) String token) {
         JwtToken refreshToken = new JwtToken(token, TokenType.REFRESH_TOKEN);
