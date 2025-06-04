@@ -69,6 +69,7 @@ public class AuthController implements AuthControllerSwagger {
         String email = authService.resolveToken(token, TokenType.REFRESH_TOKEN);
         authService.logout(user, email);
         ResponseCookie expiredRefreshTokenCookie = cookieManager.createExpiredCookie(REFRESH_TOKEN);
+        System.out.println(expiredRefreshTokenCookie.toString());
 
         return ResponseEntity.noContent()
                 .header(HttpHeaders.SET_COOKIE, expiredRefreshTokenCookie.toString())

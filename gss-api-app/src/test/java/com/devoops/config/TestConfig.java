@@ -22,7 +22,6 @@ public class TestConfig {
     @Bean
     @Primary
     public GithubOAuthClient githubOAuthClient() {
-        System.out.println("test 주입됨");
         return new FakeOAuthClient();
     }
 }
