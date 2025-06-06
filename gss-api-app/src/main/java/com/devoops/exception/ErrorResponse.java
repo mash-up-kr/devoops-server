@@ -1,13 +1,12 @@
 package com.devoops.exception;
 
 import com.devoops.exception.errorcode.ErrorCode;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.annotation.Nonnull;
 
 public record ErrorResponse(
-        @NotNull String code,
-        @NotNull String status,
-        @NotNull String message
+        @Nonnull String code,
+        @Nonnull String status,
+        @Nonnull String message
 ) {
 
     public ErrorResponse(ErrorCode errorCode) {
