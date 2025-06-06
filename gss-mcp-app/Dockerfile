@@ -17,4 +17,4 @@ COPY --from=builder application/snapshot-dependencies/ ./snapshot-dependencies/
 COPY --from=builder application/application/ ./application/
 
 # 엔트리포인트 설정
-ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS org.springframework.boot.loader.launch.JarLauncher"]
+ENTRYPOINT ["sh", "-c", "exec java ${RUN_JAVA_ENV} org.springframework.boot.loader.launch.JarLauncher"]
