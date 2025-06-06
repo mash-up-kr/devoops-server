@@ -3,6 +3,8 @@ spring:
     name: 'gss-api-app'
   profiles:
     default: local
+    include:
+      - db
 
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
@@ -16,3 +18,4 @@ springdoc:
     operations-sorter: alpha
     persist-authorization: true
     filter: true
+
