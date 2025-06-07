@@ -1,6 +1,7 @@
 package com.devoops.controller.auth;
 
 import com.devoops.controller.docs.AuthControllerSwagger;
+import com.devoops.domain.entity.github.GithubToken;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.UserSaveRequest;
 import com.devoops.dto.response.AuthResponse;
@@ -13,6 +14,7 @@ import com.devoops.service.auth.jwt.TokenType;
 import com.devoops.service.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.info.ProjectInfoProperties.Git;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -36,7 +38,9 @@ public class AuthController implements AuthControllerSwagger {
     @PostMapping("/api/auth/github")
     public ResponseEntity<UserSaveResponse> issueToken(@RequestBody @Valid UserSaveRequest userSaveRequest) {
         AuthResponse authResponse = authService.getUserInfo(userSaveRequest);
-        User savedUser = userService.save(new User(authResponse.providerId(), authResponse.nickname(), authResponse.profileImageUrl()));
+        GithubToken accessToken = new GithubToken(authResponse.githubToken());
+        User user = new User(authResponse.providerId(), authResponse.nickname(), authResponse.profileImageUrl());
+        User savedUser = userService.save(user, accessToken);
         UserTokenResponse userTokens = authService.issueToken(String.valueOf(savedUser.getProviderId()));
         ResponseCookie cookie = cookieManager.createCookie(REFRESH_TOKEN, userTokens.refreshToken(),
                 userTokens.refreshTokenExpiration());
