@@ -1,8 +1,8 @@
 package com.devoops.jpa.entity.github;
 
 import com.devoops.domain.entity.github.GithubToken;
-import com.devoops.domain.entity.user.User;
 import com.devoops.jpa.entity.user.UserEntity;
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
@@ -17,7 +17,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.NonNull;
 
 @Entity
 @Getter
@@ -34,14 +33,12 @@ public class GithubTokenEntity {
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private UserEntity user;
 
-    @NonNull
+    @Nonnull
     @Column(length = 50)
     private String token;
 
     public GithubToken toDomainEntity() {
-        return new GithubToken(
-                this.token
-        );
+        return new GithubToken(this.token);
     }
 
     public static GithubTokenEntity from(UserEntity user, GithubToken githubToken) {
