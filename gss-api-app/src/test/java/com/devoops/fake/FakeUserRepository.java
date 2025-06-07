@@ -11,17 +11,17 @@ public class FakeUserRepository implements UserDomainRepository {
     private final List<User> users = new ArrayList<>();
 
     @Override
-    public User findByEmail(String email) {
+    public User findByProviderId(long providerId) {
         return users.stream()
-                .filter(user -> user.getEmail().equals(email))
+                .filter(user -> user.getProviderId() == providerId)
                 .findAny()
-                .orElseThrow(() -> new NoSuchElementException("User with email " + email + " not found"));
+                .orElseThrow(() -> new NoSuchElementException("User with providerId " + providerId + " not found"));
     }
 
     @Override
-    public boolean existsByEmail(String email) {
+    public boolean existsByProviderId(long providerId) {
         return users.stream()
-                .anyMatch(user -> user.getEmail().equals(email));
+                .anyMatch(user -> user.getProviderId() == providerId);
     }
 
     @Override

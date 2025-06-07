@@ -11,10 +11,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class User {
 
-    private final String email;
-    private final String token;
+    private final long providerId;
 
-    public boolean isSameUser(String email) {
-        return this.email.equals(email);
+    private final String nickname;
+
+    private final String profileImageUrl;
+
+    public boolean isSameUser(long providerId) {
+        return this.providerId == providerId;
     }
 }

@@ -36,8 +36,8 @@ public class AuthController implements AuthControllerSwagger {
     @PostMapping("/api/auth/github")
     public ResponseEntity<UserSaveResponse> issueToken(@RequestBody @Valid UserSaveRequest userSaveRequest) {
         AuthResponse authResponse = authService.getUserInfo(userSaveRequest);
-        User savedUser = userService.save(new User(authResponse.email(), authResponse.githubToken()));
-        UserTokenResponse userTokens = authService.issueToken(savedUser.getEmail());
+        User savedUser = userService.save(new User(authResponse.providerId(), authResponse.nickname(), authResponse.profileImageUrl()));
+        UserTokenResponse userTokens = authService.issueToken(String.valueOf(savedUser.getProviderId()));
         ResponseCookie cookie = cookieManager.createCookie(REFRESH_TOKEN, userTokens.refreshToken(),
                 userTokens.refreshTokenExpiration());
 
@@ -66,10 +66,9 @@ public class AuthController implements AuthControllerSwagger {
             @AuthUser User user,
             @CookieValue(REFRESH_TOKEN) String token
     ) {
-        String email = authService.resolveToken(token, TokenType.REFRESH_TOKEN);
-        authService.logout(user, email);
+        String providerId = authService.resolveToken(token, TokenType.REFRESH_TOKEN);
+        authService.logout(user, Long.parseLong(providerId));
         ResponseCookie expiredRefreshTokenCookie = cookieManager.createExpiredCookie(REFRESH_TOKEN);
-        System.out.println(expiredRefreshTokenCookie.toString());
 
         return ResponseEntity.noContent()
                 .header(HttpHeaders.SET_COOKIE, expiredRefreshTokenCookie.toString())

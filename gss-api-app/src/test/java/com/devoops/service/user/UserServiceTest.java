@@ -22,24 +22,22 @@ class UserServiceTest extends BaseServiceTest {
 
         @Test
         void 신규_유저를_저장한다() {
-            User user = new User("email", "token");
+            User user = new User(1L, "nickname", "profile_url");
             User saveUser = userRepository.saveUser(user);
 
-            boolean isExist = userRepository.existsByEmail(user.getEmail());
+            boolean isExist = userRepository.existsByProviderId(user.getProviderId());
 
             assertThat(isExist).isTrue();
         }
 
         @Test
         void 이미_존재하는_유저라면_기존유저를_반환한다() {
-            User user = new User("email", "token");
+            User user = new User(1L, "nickname", "profile_url");
             userRepository.saveUser(user);
 
             User saveUser = userRepository.saveUser(user);
 
-            boolean isExist = userRepository.existsByEmail(user.getEmail());
-
-            assertThat(isExist).isTrue();
+            assertThat(saveUser).usingRecursiveComparison().isEqualTo(user);
         }
     }
 

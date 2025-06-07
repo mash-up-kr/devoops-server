@@ -29,7 +29,7 @@ public class AuthService {
         GithubTokenRequest tokenRequest = new GithubTokenRequest(request.code(), request.redirectUrl());
         GithubTokenResponse token = authClient.getToken(tokenRequest);
         UserInfoResponse userInfo = authClient.getUserInfo(token.accessToken());
-        return new AuthResponse(token.accessToken(), userInfo.email());
+        return new AuthResponse(token.accessToken(), userInfo.id(), userInfo.name(), userInfo.avatarUrl());
     }
 
     public UserTokenResponse issueToken(String value) {
@@ -49,8 +49,8 @@ public class AuthService {
         return jwtTokenManager.resolveToken(token, tokenType);
     }
 
-    public void logout(User user, String email) {
-        if (!user.isSameUser(email)) {
+    public void logout(User user, long providerId) {
+        if (!user.isSameUser(providerId)) {
             throw new RuntimeException("401 인증 에러");
         }
     }

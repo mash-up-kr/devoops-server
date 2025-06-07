@@ -14,6 +14,6 @@ public class FakeOAuthClient implements GithubOAuthClient {
 
     @Override
     public UserInfoResponse getUserInfo(String accessToken) {
-        return new UserInfoResponse("testEmail");
+        return new UserInfoResponse(1L, "testName", "avatarUrl");
     }
 }

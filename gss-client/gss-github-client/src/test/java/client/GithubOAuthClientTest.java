@@ -1,6 +1,7 @@
 package client;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.devoops.client.GithubOAuthClient;
 import com.devoops.client.GithubOAuthClientImpl;
@@ -53,12 +54,18 @@ class GithubOAuthClientTest {
 
         @Test
         void 유저_정보를_가져올_수_있다() throws IOException {
-            String expectedEmail = "kkwoo001021@naver.com";
+            long expectedProviderId = 148152234L;
+            String expectedNickname = "김건우";
+            String expectedProfileImageUrl = "https://avatars.githubusercontent.com/u/148152234?v=4";
             mockClient(HttpStatus.OK, "github-api-response/userInfoSuccess.json");
 
-            UserInfoResponse userInfoResponseMono = githubOAuthClient.getUserInfo("testAccessToken");
+            UserInfoResponse userInfoResponse = githubOAuthClient.getUserInfo("testAccessToken");
 
-            assertThat(userInfoResponseMono.email()).isEqualTo(expectedEmail);
+            assertAll(
+                    () -> assertThat(userInfoResponse.id()).isEqualTo(expectedProviderId),
+                    () -> assertThat(userInfoResponse.name()).isEqualTo(expectedNickname),
+                    () -> assertThat(userInfoResponse.avatarUrl()).isEqualTo(expectedProfileImageUrl)
+            );
         }
 
         private void mockClient(HttpStatus status, String responsePath) throws IOException {

@@ -36,7 +36,7 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
         if (accessToken == null) {
             throw new RuntimeException("401 인증 에러"); //TODO 추후 커스텀 에러로 수정
         }
-        String email = authService.resolveToken(accessToken, TokenType.ACCESS_TOKEN);
-        return userService.findByEmail(email);
+        String providerId = authService.resolveToken(accessToken, TokenType.ACCESS_TOKEN);
+        return userService.findByProviderId(Long.parseLong(providerId));
     }
 }

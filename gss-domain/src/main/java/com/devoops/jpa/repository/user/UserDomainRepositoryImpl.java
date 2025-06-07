@@ -14,16 +14,16 @@ public class UserDomainRepositoryImpl implements UserDomainRepository {
 
     @Transactional(readOnly = true)
     @Override
-    public User findByEmail(String email) {
-        return userJpaRepository.findByEmail(email)
+    public User findByProviderId(long providerId) {
+        return userJpaRepository.findByProviderId(providerId)
                 .orElseThrow(() -> new RuntimeException("EntityNotFound 공통 예외 처리 필요"))
                 .toDomainEntity();
     }
 
     @Transactional(readOnly = true)
     @Override
-    public boolean existsByEmail(String email) {
-        return userJpaRepository.existsByEmail(email);
+    public boolean existsByProviderId(long providerId) {
+        return userJpaRepository.existsByProviderId(providerId);
     }
 
     @Transactional

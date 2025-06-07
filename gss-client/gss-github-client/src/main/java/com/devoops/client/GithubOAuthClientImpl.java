@@ -34,7 +34,7 @@ public class GithubOAuthClientImpl implements GithubOAuthClient {
                         "client_id", authProperties.clientId(),
                         "client_secret", authProperties.clientSecret(),
                         "code", tokenRequest.code(),
-                        "redirect_uri", tokenRequest.redirect_uri()
+                        "redirect_uri", tokenRequest.redirectUrl()
                 ))
                 .retrieve()
                 .bodyToMono(GithubTokenResponse.class)

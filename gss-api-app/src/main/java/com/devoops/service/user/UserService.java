@@ -3,6 +3,7 @@ package com.devoops.service.user;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.user.UserDomainRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.support.PropertiesLoaderSupport;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,14 +13,14 @@ public class UserService {
     private final UserDomainRepository userDomainRepository;
 
     public User save(User user) {
-        String email = user.getEmail();
-        if (userDomainRepository.existsByEmail(email)) {
-            return userDomainRepository.findByEmail(email);
+        long providerId = user.getProviderId();
+        if (userDomainRepository.existsByProviderId(providerId)) {
+            return userDomainRepository.findByProviderId(providerId);
         }
         return userDomainRepository.saveUser(user);
     }
 
-    public User findByEmail(String email) {
-        return userDomainRepository.findByEmail(email);
+    public User findByProviderId(long providerId) {
+        return userDomainRepository.findByProviderId(providerId);
     }
 }

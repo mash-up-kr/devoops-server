@@ -5,9 +5,9 @@ import com.devoops.domain.entity.user.User;
 
 public interface UserDomainRepository {
 
-    User findByEmail(String email);
+    User findByProviderId(long providerId);
 
-    boolean existsByEmail(String email);
+    boolean existsByProviderId(long providerId);
 
     User saveUser(User user);
 }

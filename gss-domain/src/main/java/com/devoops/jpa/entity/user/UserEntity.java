@@ -16,22 +16,27 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String email;
+    private long providerId;
 
-    private String token;
+    private String nickname;
+
+    private String profileImageUrl;
+
 
     public User toDomainEntity() {
         return new User(
-                this.email,
-                this.token
+                this.providerId,
+                this.nickname,
+                this.profileImageUrl
         );
     }
 
     public static UserEntity from(User domainEntity) {
         return new UserEntity(
                 null,
-                domainEntity.getEmail(),
-                domainEntity.getToken()
+                domainEntity.getProviderId(),
+                domainEntity.getNickname(),
+                domainEntity.getProfileImageUrl()
         );
     }
 }
