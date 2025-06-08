@@ -14,8 +14,8 @@ public class UserDomainRepositoryImpl implements UserDomainRepository {
 
     @Transactional(readOnly = true)
     @Override
-    public User findByExternalId(String externalId) {
-        return userJpaRepository.findByExternalId(externalId)
+    public User findByProviderId(long providerId) {
+        return userJpaRepository.findByProviderId(providerId)
                 .orElseThrow(() -> new RuntimeException("EntityNotFound 공통 예외 처리 필요"))
                 .toDomainEntity();
     }
