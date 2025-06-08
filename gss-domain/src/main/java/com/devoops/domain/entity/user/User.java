@@ -1,4 +1,4 @@
-package com.devoops.domain.entity;
+package com.devoops.domain.entity.user;
 
 /**
  * pojo domain entity
