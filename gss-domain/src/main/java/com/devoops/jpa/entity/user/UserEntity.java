@@ -31,20 +31,20 @@ public class UserEntity {
 
     private long providerId;
 
-    public User toDomainEntity() {
-        return new User(
-                this.nickname,
-                this.profileImageUrl,
-                this.providerId
-        );
-    }
-
     public static UserEntity from(User domainEntity) {
         return new UserEntity(
                 null,
                 domainEntity.getNickname(),
                 domainEntity.getProfileImageUrl(),
                 domainEntity.getProviderId()
+        );
+    }
+
+    public User toDomainEntity() {
+        return new User(
+                this.nickname,
+                this.profileImageUrl,
+                this.providerId
         );
     }
 }
