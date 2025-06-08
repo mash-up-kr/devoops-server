@@ -4,6 +4,7 @@ import com.devoops.domain.entity.github.PullRequest;
 import com.devoops.domain.entity.github.RecordStatus;
 import com.devoops.jpa.entity.BaseTimeEntity;
 import com.devoops.jpa.entity.user.UserEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -46,9 +47,11 @@ public class PullRequestEntity extends BaseTimeEntity {
     private String title;
 
     @NotNull
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @NotNull
+    @Column(columnDefinition = "TEXT")
     private String summary;
 
     private long githubPullRequestId;
