@@ -1,7 +1,7 @@
 package com.devoops.jpa.entity.github;
 
 import com.devoops.domain.entity.github.GithubRepository;
-import com.devoops.domain.entity.user.User;
+import com.devoops.jpa.entity.BaseTimeEntity;
 import com.devoops.jpa.entity.user.UserEntity;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
@@ -15,13 +15,15 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "repositories")
+@Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GithubRepositoryEntity {
+public class GithubRepositoryEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,17 +46,8 @@ public class GithubRepositoryEntity {
                 this.user.getId(),
                 this.name,
                 this.url,
-                this.githubRepositoryId
-        );
-    }
-
-    public static GithubRepositoryEntity from(GithubRepository domainEntity, UserEntity userEntity) {
-        return new GithubRepositoryEntity(
-                null,
-                userEntity,
-                domainEntity.getName(),
-                domainEntity.getUrl(),
-                domainEntity.getExternalId()
+                this.githubRepositoryId,
+                getCreatedAt()
         );
     }
 }

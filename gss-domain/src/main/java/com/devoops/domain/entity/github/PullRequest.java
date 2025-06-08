@@ -6,11 +6,15 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class GithubRepository {
+public class PullRequest {
 
+    private final long repositoryId;
     private final long userId;
-    private final String name;
-    private final String url;
+    private final String title;
+    private final String description;
+    private final String summary;
     private final long externalId;
+    private final RecordStatus recordStatus;
+    private final LocalDateTime mergedAt;
     private final LocalDateTime createdAt;
 }
