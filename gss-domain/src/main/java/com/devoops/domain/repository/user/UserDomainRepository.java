@@ -1,4 +1,4 @@
-package com.devoops.domain.repository;
+package com.devoops.domain.repository.user;
 
 
 import com.devoops.domain.entity.user.User;
