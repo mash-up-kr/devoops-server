@@ -20,9 +20,11 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @Table(name = "pull_requests")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -67,8 +69,7 @@ public class PullRequestEntity extends BaseTimeEntity {
                 this.summary,
                 this.githubPullRequestId,
                 this.recordStatus,
-                this.mergedAt,
-                getCreatedAt()
+                this.mergedAt
         );
     }
 }

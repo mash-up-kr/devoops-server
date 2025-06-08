@@ -16,5 +16,4 @@ public class PullRequest {
     private final long externalId;
     private final RecordStatus recordStatus;
     private final LocalDateTime mergedAt;
-    private final LocalDateTime createdAt;
 }

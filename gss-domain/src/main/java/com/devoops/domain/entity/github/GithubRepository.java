@@ -1,6 +1,5 @@
 package com.devoops.domain.entity.github;
 
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -12,5 +11,4 @@ public class GithubRepository {
     private final String name;
     private final String url;
     private final long externalId;
-    private final LocalDateTime createdAt;
 }
