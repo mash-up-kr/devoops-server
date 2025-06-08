@@ -60,7 +60,7 @@ class AuthControllerTest extends BaseControllerTest {
 
             JwtToken accessToken = new JwtToken(reissuedAccessToken, TokenType.ACCESS_TOKEN);
             String resolvedToken = jwtTokenManager.resolveToken(accessToken, TokenType.ACCESS_TOKEN);
-            assertThat(resolvedToken).isEqualTo(saveUser.getProviderId());
+            assertThat(resolvedToken).isEqualTo(String.valueOf(saveUser.getProviderId()));
         }
     }
 
