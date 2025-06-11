@@ -8,3 +8,6 @@ spring:
     hibernate:
       ddl-auto: validate
     defer-datasource-initialization: false
+  config:
+    import:
+      - classpath:application-secret-manager.yml
