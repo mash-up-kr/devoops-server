@@ -2,12 +2,10 @@ package com.devoops.dto.response;
 
 import com.devoops.domain.entity.user.User;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nonnull;
 
 public record UserSaveResponse(
 
-        @Nonnull
-        @Schema(description = "깃허브 회원 아이디", example = "")
+        @Schema(description = "깃허브 회원 아이디", example = "234558")
         long providerId,
 
         @Schema(description = "깃허브 회원 닉네임", example = "my_nickname")
