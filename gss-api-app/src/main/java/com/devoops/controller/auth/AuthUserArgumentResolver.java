@@ -1,11 +1,11 @@
 package com.devoops.controller.auth;
 
 import com.devoops.service.auth.AuthService;
-import com.devoops.service.auth.jwt.JwtToken;
 import com.devoops.service.auth.jwt.TokenType;
 import com.devoops.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -33,7 +33,7 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
             WebDataBinderFactory binderFactory
     ) {
         String accessToken = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        if (accessToken == null) {
+        if (StringUtils.isBlank(accessToken)) {
             throw new RuntimeException("401 인증 에러"); //TODO 추후 커스텀 에러로 수정
         }
         String providerId = authService.resolveToken(accessToken, TokenType.ACCESS_TOKEN);
