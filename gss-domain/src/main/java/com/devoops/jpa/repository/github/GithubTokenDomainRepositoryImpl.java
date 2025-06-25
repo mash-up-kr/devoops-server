@@ -20,7 +20,7 @@ public class GithubTokenDomainRepositoryImpl implements GithubTokenDomainReposit
     @Transactional
     @Override
     public GithubToken save(GithubToken token, User owner) {
-        UserEntity userEntity = userJpaRepository.findByProviderId(owner.getProviderId())
+        UserEntity userEntity = userJpaRepository.findById(owner.getId())
                 .orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다")); //TODO 커스텀 에러 전환)
 
         return githubTokenJpaRepository.save(GithubTokenEntity.from(userEntity, token))

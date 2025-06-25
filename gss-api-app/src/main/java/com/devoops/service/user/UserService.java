@@ -15,7 +15,7 @@ public class UserService {
     private final GithubTokenDomainRepository tokenDomainRepository;
 
     public User save(User user, GithubToken token) {
-        long userId = user.getId();
+        Long userId = user.getId();
         if (userDomainRepository.existsById(userId)) {
             return userDomainRepository.findById(userId);
         }

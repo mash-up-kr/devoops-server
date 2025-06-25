@@ -7,6 +7,9 @@ jwt:
   access_token_expiration: 1h
   refresh_token_expiration: 1d
 
+cors:
+  origin: http://localhost:8080
+
 ---
 
 spring:
@@ -28,3 +31,4 @@ spring:
     defer-datasource-initialization: true
   flyway:
     enabled: false
+

@@ -1,8 +1,10 @@
 package com.devoops.config;
 
 import com.devoops.client.GithubOAuthClient;
+import com.devoops.domain.repository.github.GithubTokenDomainRepository;
 import com.devoops.domain.repository.user.UserDomainRepository;
 import com.devoops.fake.FakeOAuthClient;
+import com.devoops.fake.FakeTokenRepository;
 import com.devoops.fake.FakeUserRepository;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +19,12 @@ public class TestConfig {
     @Primary
     public UserDomainRepository userDomainRepository() {
         return new FakeUserRepository();
+    }
+
+    @Bean
+    @Primary
+    public GithubTokenDomainRepository tokenDomainRepository() {
+        return new FakeTokenRepository();
     }
 
     @Bean

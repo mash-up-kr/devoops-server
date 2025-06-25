@@ -3,6 +3,7 @@ package com.devoops.service.user;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.devoops.BaseServiceTest;
+import com.devoops.domain.entity.github.GithubToken;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.user.UserDomainRepository;
 import org.junit.jupiter.api.Nested;
@@ -23,9 +24,11 @@ class UserServiceTest extends BaseServiceTest {
         @Test
         void 신규_유저를_저장한다() {
             User user = new User(1L, "nickname", "profile_url");
-            User saveUser = userRepository.saveUser(user);
+            GithubToken token = new GithubToken("token");
 
-            boolean isExist = userRepository.existsByProviderId(user.getProviderId());
+            User saveUser = userService.save(user, token);
+
+            boolean isExist = userRepository.existsById(saveUser.getId());
 
             assertThat(isExist).isTrue();
         }
@@ -33,12 +36,14 @@ class UserServiceTest extends BaseServiceTest {
         @Test
         void 이미_존재하는_유저라면_기존유저를_반환한다() {
             User user = new User(1L, "nickname", "profile_url");
-            userRepository.saveUser(user);
+            GithubToken token = new GithubToken("token");
+            User existsUser = userRepository.saveUser(user);
 
-            User saveUser = userRepository.saveUser(user);
+            User saveUser = userService.save(existsUser, token);
 
-            assertThat(saveUser).usingRecursiveComparison().isEqualTo(user);
+            assertThat(saveUser).usingRecursiveComparison()
+                    .ignoringFields("id")
+                    .isEqualTo(existsUser);
         }
     }
-
 }

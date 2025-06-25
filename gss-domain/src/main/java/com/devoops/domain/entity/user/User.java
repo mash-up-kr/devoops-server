@@ -23,7 +23,7 @@ public class User {
         this(null, providerId, nickname, profileImageUrl);
     }
 
-    public boolean isSameUser(long providerId) {
-        return this.providerId == providerId;
+    public boolean isSameUser(long id) {
+        return this.id == id;
     }
 }

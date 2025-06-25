@@ -69,8 +69,8 @@ public class AuthController implements AuthControllerSwagger {
             @AuthUser User user,
             @CookieValue(REFRESH_TOKEN) String token
     ) {
-        String providerId = authService.resolveToken(token, TokenType.REFRESH_TOKEN);
-        authService.logout(user, Long.parseLong(providerId));
+        String userId = authService.resolveToken(token, TokenType.REFRESH_TOKEN);
+        authService.logout(user, Long.parseLong(userId));
         ResponseCookie expiredRefreshTokenCookie = cookieManager.createExpiredCookie(REFRESH_TOKEN);
 
         return ResponseEntity.noContent()

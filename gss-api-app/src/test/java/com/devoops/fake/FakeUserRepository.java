@@ -5,42 +5,47 @@ import com.devoops.domain.repository.user.UserDomainRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FakeUserRepository implements UserDomainRepository {
 
+    private final AtomicLong idGenerator = new AtomicLong();
     private final List<User> users = new ArrayList<>();
 
     @Override
-    public User findById(long id) {
+    public User findById(Long id) {
+        System.out.println("findById");
         return users.stream()
-                .filter(user -> user.getId() == id)
+                .filter(user -> Objects.equals(user.getId(), id))
                 .findAny()
                 .orElseThrow(() -> new NoSuchElementException("User with providerId " + id + " not found"));
     }
 
     @Override
-    public boolean existsById(long id) {
+    public boolean existsById(Long id) {
+        System.out.println("existsById");
         return users.stream()
-                .anyMatch(user -> user.getId() == id);
-    }
-
-    @Override
-    public User findByProviderId(long providerId) {
-        return users.stream()
-                .filter(user -> user.getProviderId() == providerId)
-                .findAny()
-                .orElseThrow(() -> new NoSuchElementException("User with providerId " + providerId + " not found"));
-    }
-
-    @Override
-    public boolean existsByProviderId(long providerId) {
-        return users.stream()
-                .anyMatch(user -> user.getProviderId() == providerId);
+                .anyMatch(user -> Objects.equals(user.getId(), id));
     }
 
     @Override
     public User saveUser(User user) {
-        users.add(user);
-        return user;
+        System.out.println("saveUser");
+        User saveUser = new User(
+                idGenerator.incrementAndGet(),
+                user.getProviderId(),
+                user.getNickname(),
+                user.getProfileImageUrl()
+        );
+        users.add(saveUser);
+        return saveUser;
+    }
+
+    public void clear() {
+        users.clear();
+        idGenerator.set(0);
     }
 }

@@ -49,8 +49,8 @@ public class AuthService {
         return jwtTokenManager.resolveToken(token, tokenType);
     }
 
-    public void logout(User user, long providerId) {
-        if (!user.isSameUser(providerId)) {
+    public void logout(User user, long id) {
+        if (!user.isSameUser(id)) {
             throw new RuntimeException("401 인증 에러");
         }
     }
