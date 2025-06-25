@@ -20,8 +20,9 @@ public class UserService {
         if (userDomainRepository.existsByProviderId(providerId)) {
             return userDomainRepository.findByProviderId(providerId);
         }
-        tokenDomainRepository.save(token, user);
-        return userDomainRepository.saveUser(user);
+        User savedUser = userDomainRepository.saveUser(user);
+        tokenDomainRepository.save(token, savedUser); //TODO 논의사항 : 연관관계에 따른 저장 순서 의존
+        return savedUser;
     }
 
     public User findByProviderId(long providerId) {
