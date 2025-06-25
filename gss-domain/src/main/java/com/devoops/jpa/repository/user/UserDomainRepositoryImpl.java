@@ -14,6 +14,20 @@ public class UserDomainRepositoryImpl implements UserDomainRepository {
 
     @Transactional(readOnly = true)
     @Override
+    public User findById(long id) {
+        return userJpaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("EntityNotFound 공통 예외 처리 필요"))
+                .toDomainEntity();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public boolean existsById(long id) {
+        return userJpaRepository.existsByProviderId(id);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public User findByProviderId(long providerId) {
         return userJpaRepository.findByProviderId(providerId)
                 .orElseThrow(() -> new RuntimeException("EntityNotFound 공통 예외 처리 필요"))

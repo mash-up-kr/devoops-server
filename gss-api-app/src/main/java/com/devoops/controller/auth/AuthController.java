@@ -40,7 +40,7 @@ public class AuthController implements AuthControllerSwagger {
         GithubToken accessToken = new GithubToken(authResponse.githubToken());
         User user = new User(authResponse.providerId(), authResponse.nickname(), authResponse.profileImageUrl());
         User savedUser = userService.save(user, accessToken);
-        UserTokenResponse userTokens = authService.issueToken(String.valueOf(savedUser.getProviderId()));
+        UserTokenResponse userTokens = authService.issueToken(String.valueOf(savedUser.getId()));
         ResponseCookie cookie = cookieManager.createCookie(REFRESH_TOKEN, userTokens.refreshToken(),
                 userTokens.refreshTokenExpiration());
 

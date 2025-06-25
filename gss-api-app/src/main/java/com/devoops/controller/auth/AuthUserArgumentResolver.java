@@ -37,6 +37,6 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
             throw new RuntimeException("401 인증 에러"); //TODO 추후 커스텀 에러로 수정
         }
         String providerId = authService.resolveToken(accessToken, TokenType.ACCESS_TOKEN);
-        return userService.findByProviderId(Long.parseLong(providerId));
+        return userService.findById(Long.parseLong(providerId));
     }
 }
