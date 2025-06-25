@@ -42,9 +42,9 @@ public class UserEntity {
 
     public User toDomainEntity() {
         return new User(
+                this.providerId,
                 this.nickname,
-                this.profileImageUrl,
-                this.providerId
+                this.profileImageUrl
         );
     }
 }

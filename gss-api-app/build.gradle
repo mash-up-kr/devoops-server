@@ -2,11 +2,27 @@ plugins {
     id 'org.springframework.boot'
 }
 
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:2024.0.1"
+    }
+}
+
 dependencies {
     implementation project(":gss-common")
     implementation project(":gss-domain")
+    implementation project(":gss-client:gss-github-client")
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // JWT
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-gson:0.11.5'
+
+    //Secret-Manager
+    //Secret-Manager
+    implementation 'io.awspring.cloud:spring-cloud-starter-aws-secrets-manager-config:2.4.4'
 
     //Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'

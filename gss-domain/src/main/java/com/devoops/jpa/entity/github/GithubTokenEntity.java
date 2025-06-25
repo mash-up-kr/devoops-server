@@ -2,6 +2,7 @@ package com.devoops.jpa.entity.github;
 
 import com.devoops.domain.entity.github.GithubToken;
 import com.devoops.jpa.entity.user.UserEntity;
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
@@ -12,7 +13,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,7 +33,7 @@ public class GithubTokenEntity {
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private UserEntity user;
 
-    @NotNull
+    @Nonnull
     @Column(length = 50)
     private String token;
 
