@@ -1,10 +1,9 @@
 spring:
   application:
-    name: 'gss-api-app'
+    name: 'gss-mcp-app'
   profiles:
     default: local
-    include:
-      - db
+
 
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
@@ -19,3 +18,5 @@ springdoc:
     persist-authorization: true
     filter: true
 
+server:
+  port: 8090

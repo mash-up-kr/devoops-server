@@ -7,15 +7,17 @@ import com.devoops.jpa.entity.github.GithubTokenEntity;
 import com.devoops.jpa.entity.user.UserEntity;
 import com.devoops.jpa.repository.user.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-@Component
+@Repository
 @RequiredArgsConstructor
 public class GithubTokenDomainRepositoryImpl implements GithubTokenDomainRepository {
 
     private final GithubTokenJpaRepository githubTokenJpaRepository;
     private final UserJpaRepository userJpaRepository;
 
+    @Transactional
     @Override
     public GithubToken save(GithubToken token, User owner) {
         UserEntity userEntity = userJpaRepository.findByProviderId(owner.getProviderId())
