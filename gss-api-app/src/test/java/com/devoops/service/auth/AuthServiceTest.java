@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.devoops.BaseServiceTest;
 import com.devoops.dto.response.UserTokenResponse;
+import com.devoops.service.auth.jwt.AccessToken;
 import com.devoops.service.auth.jwt.JwtToken;
 import com.devoops.service.auth.jwt.JwtTokenManager;
+import com.devoops.service.auth.jwt.RefreshToken;
 import com.devoops.service.auth.jwt.TokenType;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;
@@ -45,7 +47,8 @@ class AuthServiceTest extends BaseServiceTest {
         @Test
         void 토큰을_재발급할_수_있다() {
             String value = UUID.randomUUID().toString();
-            JwtToken refreshToken = jwtTokenManager.createToken(value, TokenType.REFRESH_TOKEN);
+            JwtToken token = jwtTokenManager.createToken(value, TokenType.REFRESH_TOKEN);
+            RefreshToken refreshToken = new RefreshToken(token.getToken());
 
             UserTokenResponse reissuedTokens = authService.reissueToken(refreshToken);
 
@@ -58,8 +61,10 @@ class AuthServiceTest extends BaseServiceTest {
         }
 
         private String resolveTokenValue(String tokenValue, TokenType tokenType) {
-            JwtToken jwtToken = new JwtToken(tokenValue, tokenType);
-            return jwtTokenManager.resolveToken(jwtToken, tokenType);
+            if(tokenType.isAccess()) {
+                return jwtTokenManager.resolveToken(new AccessToken(tokenValue));
+            }
+            return jwtTokenManager.resolveToken(new RefreshToken(tokenValue));
         }
     }
 }

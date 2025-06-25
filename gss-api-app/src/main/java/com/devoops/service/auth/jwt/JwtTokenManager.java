@@ -19,7 +19,7 @@ public class JwtTokenManager {
         return jwtProperties.getExpirationByTokenType(type);
     }
 
-    public String resolveToken(JwtToken token, TokenType type) {
-        return token.resolveToken(jwtProperties.getSecretKey(), type);
+    public String resolveToken(JwtToken token) {
+        return token.resolveToken(jwtProperties.getSecretKey());
     }
 }

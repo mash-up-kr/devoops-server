@@ -1,25 +1,19 @@
 package com.devoops.service.auth.jwt;
 
-import com.devoops.domain.entity.user.User;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import java.time.Duration;
 import java.util.Date;
 import javax.crypto.SecretKey;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class JwtToken {
+public abstract class JwtToken {
 
     private static final String TOKEN_TYPE_CLAIMS_NAME = "type";
-
-    private final String token;
-    private final TokenType tokenType;
 
     public static JwtToken from(
             String value,
@@ -27,19 +21,24 @@ public class JwtToken {
             TokenType type,
             SecretKey secretKey
     ) {
+        if (type.isAccess()) {
+            return new AccessToken(value, expiration, secretKey);
+        }
+        return new RefreshToken(value, expiration, secretKey);
+    }
+
+    protected String makeJwtTokenValue(Date expiredDate, String value, TokenType type, SecretKey secretKey) {
         Date now = new Date();
-        Date expiredDate = new Date(now.getTime() + expiration.toMillis());
-        String token = Jwts.builder()
+        return Jwts.builder()
                 .setSubject(value)
                 .setIssuedAt(now)
                 .setExpiration(expiredDate)
                 .claim(TOKEN_TYPE_CLAIMS_NAME, type.name())
                 .signWith(secretKey)
                 .compact();
-        return new JwtToken(token, type);
     }
 
-    public String resolveToken(SecretKey secretKey, TokenType type) throws JwtException {
+    protected String resolveJwtToken(SecretKey secretKey, TokenType type, String token) throws JwtException {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
@@ -55,4 +54,8 @@ public class JwtToken {
             throw new RuntimeException(type.name() + " token type is invalid");
         }
     }
+
+    public abstract String resolveToken(SecretKey secretKey);
+
+    public abstract String getToken();
 }

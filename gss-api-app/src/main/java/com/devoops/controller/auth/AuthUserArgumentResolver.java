@@ -1,7 +1,7 @@
 package com.devoops.controller.auth;
 
 import com.devoops.service.auth.AuthService;
-import com.devoops.service.auth.jwt.TokenType;
+import com.devoops.service.auth.jwt.AccessToken;
 import com.devoops.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
         if (StringUtils.isBlank(accessToken)) {
             throw new RuntimeException("401 인증 에러"); //TODO 추후 커스텀 에러로 수정
         }
-        String providerId = authService.resolveToken(accessToken, TokenType.ACCESS_TOKEN);
+        String providerId = authService.resolveToken(new AccessToken(accessToken));
         return userService.findById(Long.parseLong(providerId));
     }
 }

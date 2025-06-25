@@ -9,8 +9,7 @@ import com.devoops.dto.response.UserSaveResponse;
 import com.devoops.dto.response.UserTokenResponse;
 import com.devoops.service.auth.AuthService;
 import com.devoops.service.auth.cookie.CookieManager;
-import com.devoops.service.auth.jwt.JwtToken;
-import com.devoops.service.auth.jwt.TokenType;
+import com.devoops.service.auth.jwt.RefreshToken;
 import com.devoops.service.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -53,8 +52,7 @@ public class AuthController implements AuthControllerSwagger {
     @Override
     @PostMapping("/api/auth/github/reissue")
     public ResponseEntity<Void> reIssueToken(@CookieValue(REFRESH_TOKEN) String token) {
-        JwtToken refreshToken = new JwtToken(token, TokenType.REFRESH_TOKEN);
-        UserTokenResponse userTokens = authService.reissueToken(refreshToken);
+        UserTokenResponse userTokens = authService.reissueToken(new RefreshToken(token));
         ResponseCookie cookie = cookieManager.createCookie(REFRESH_TOKEN, userTokens.refreshToken(),
                 userTokens.refreshTokenExpiration());
 
@@ -69,7 +67,7 @@ public class AuthController implements AuthControllerSwagger {
             @AuthUser User user,
             @CookieValue(REFRESH_TOKEN) String token
     ) {
-        String userId = authService.resolveToken(token, TokenType.REFRESH_TOKEN);
+        String userId = authService.resolveToken(new RefreshToken(token));
         authService.logout(user, Long.parseLong(userId));
         ResponseCookie expiredRefreshTokenCookie = cookieManager.createExpiredCookie(REFRESH_TOKEN);
 

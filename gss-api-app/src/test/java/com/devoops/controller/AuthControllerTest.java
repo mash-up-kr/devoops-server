@@ -7,6 +7,7 @@ import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.user.UserDomainRepository;
 import com.devoops.dto.request.UserSaveRequest;
 import com.devoops.dto.response.UserSaveResponse;
+import com.devoops.service.auth.jwt.AccessToken;
 import com.devoops.service.auth.jwt.JwtToken;
 import com.devoops.service.auth.jwt.JwtTokenManager;
 import com.devoops.service.auth.jwt.TokenType;
@@ -58,8 +59,8 @@ class AuthControllerTest extends BaseControllerTest {
                     .then().statusCode(HttpStatus.CREATED.value())
                     .extract().header(HttpHeaders.AUTHORIZATION);
 
-            JwtToken accessToken = new JwtToken(reissuedAccessToken, TokenType.ACCESS_TOKEN);
-            String resolvedToken = jwtTokenManager.resolveToken(accessToken, TokenType.ACCESS_TOKEN);
+            AccessToken accessToken = new AccessToken(reissuedAccessToken);
+            String resolvedToken = jwtTokenManager.resolveToken(accessToken);
             assertThat(resolvedToken).isEqualTo(String.valueOf(saveUser.getId()));
         }
     }

@@ -40,20 +40,9 @@ class JwtTokenTest {
             SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
             JwtToken token = JwtToken.from(value, expiration, type, secretKey);
 
-            String resolvedToken = token.resolveToken(secretKey, type);
+            String resolvedToken = token.resolveToken(secretKey);
 
             assertThat(resolvedToken).isEqualTo(value);
-        }
-
-        @Test
-        void 다른_타입으로_jwt토큰추출을_시도하면_에러가_발생한다() {
-            String value = "test";
-            Duration expiration = Duration.ofSeconds(1L);
-            SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-            JwtToken accessToken = JwtToken.from(value, expiration, TokenType.ACCESS_TOKEN, secretKey);
-
-            assertThatThrownBy(() -> accessToken.resolveToken(secretKey, TokenType.REFRESH_TOKEN))
-                    .isInstanceOf(RuntimeException.class); //TODO 커스텀 에러로 전환
         }
 
         @Test
@@ -64,7 +53,7 @@ class JwtTokenTest {
             SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
             JwtToken expiredToken = JwtToken.from(value, expiration, type, secretKey);
 
-            assertThatThrownBy(() -> expiredToken.resolveToken(secretKey, type))
+            assertThatThrownBy(() -> expiredToken.resolveToken(secretKey))
                     .isInstanceOf(ExpiredJwtException.class); //TODO 커스텀 에러로 전환
         }
     }

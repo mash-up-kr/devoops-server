@@ -8,6 +8,7 @@ import com.devoops.dto.response.UserTokenResponse;
 import com.devoops.service.auth.jwt.JwtProperties;
 import com.devoops.service.auth.jwt.JwtToken;
 import com.devoops.service.auth.jwt.JwtTokenManager;
+import com.devoops.service.auth.jwt.RefreshToken;
 import com.devoops.service.auth.jwt.TokenType;
 import com.devoops.dto.request.GithubTokenRequest;
 import com.devoops.dto.response.GithubTokenResponse;
@@ -39,14 +40,13 @@ public class AuthService {
         return new UserTokenResponse(accessToken, refreshToken, refreshTokenExpiration);
     }
 
-    public UserTokenResponse reissueToken(JwtToken refreshToken) {
-        String resolvedValue = jwtTokenManager.resolveToken(refreshToken, TokenType.REFRESH_TOKEN);
+    public UserTokenResponse reissueToken(RefreshToken refreshToken) {
+        String resolvedValue = jwtTokenManager.resolveToken(refreshToken);
         return issueToken(resolvedValue);
     }
 
-    public String resolveToken(String rawToken, TokenType tokenType) {
-        JwtToken token = new JwtToken(rawToken, tokenType);
-        return jwtTokenManager.resolveToken(token, tokenType);
+    public String resolveToken(JwtToken token) {
+        return jwtTokenManager.resolveToken(token);
     }
 
     public void logout(User user, long id) {
