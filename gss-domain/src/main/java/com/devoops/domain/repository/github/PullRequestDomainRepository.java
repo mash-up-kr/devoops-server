@@ -9,4 +9,5 @@ public interface PullRequestDomainRepository {
 
     PullRequests findPullRequestsByRepositoryIdOrderByMergedAt(long repositoryId, int size, int page);
 
+    PullRequest updateToDone(long pullRequestId);
 }

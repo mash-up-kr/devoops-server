@@ -41,4 +41,13 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
                 .map(PullRequestEntity::toDomainEntity)
                 .collect(Collectors.collectingAndThen(Collectors.toList(), PullRequests::new));
     }
+
+    @Override
+    @Transactional
+    public PullRequest updateToDone(long pullRequestId) {
+        PullRequestEntity pullRequest = pullRequestRepository.findById(pullRequestId)
+                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.PULL_REQUEST_NOT_FOUND));
+        pullRequest.updateToDone();
+        return pullRequest.toDomainEntity();
+    }
 }
