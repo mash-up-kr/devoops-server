@@ -42,6 +42,7 @@ public class UserEntity {
 
     public User toDomainEntity() {
         return new User(
+                this.id,
                 this.providerId,
                 this.nickname,
                 this.profileImageUrl

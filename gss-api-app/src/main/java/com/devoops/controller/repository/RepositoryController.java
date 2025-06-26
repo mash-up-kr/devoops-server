@@ -25,8 +25,8 @@ public class RepositoryController {
             @RequestParam(name = "size") int size,
             @RequestParam(name = "page") int page
     ) {
-        PullRequests pullReausts = repositoryService.getPullRequestsByRepository(user, repositoryId, size, page);
-        RepositoryPullRequestResponses response = RepositoryPullRequestResponses.from(pullReausts);
+        PullRequests pullRequests = repositoryService.getPullRequestsByRepository(user, repositoryId, size, page);
+        RepositoryPullRequestResponses response = RepositoryPullRequestResponses.from(pullRequests);
         return ResponseEntity.ok(response);
     }
 }
