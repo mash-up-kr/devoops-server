@@ -8,6 +8,7 @@ import com.devoops.jpa.repository.user.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.ietf.jgss.GSSException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
@@ -17,6 +18,7 @@ public class GithubRepoDomainRepositoryImpl implements GithubRepoDomainRepositor
     private final GithubRepoJpaRepository repoJpaRepository;
 
     @Override
+    @Transactional
     public GithubRepository save(GithubRepository githubRepository) {
         UserEntity userEntity = userJpaRepository.findById(githubRepository.getUserId()).get();
         GithubRepositoryEntity repositoryEntity = GithubRepositoryEntity.from(githubRepository, userEntity);
@@ -25,6 +27,7 @@ public class GithubRepoDomainRepositoryImpl implements GithubRepoDomainRepositor
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean existsByIdAndUserId(long id, long userId) {
         return repoJpaRepository.existsByIdAndUser_Id(id, userId);
     }

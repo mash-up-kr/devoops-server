@@ -9,6 +9,7 @@ import com.devoops.jpa.entity.github.QuestionEntity;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
@@ -18,11 +19,21 @@ public class AnswerDomainRepositoryImpl implements AnswerDomainRepository {
     private final QuestionJpaRepository questionJpaRepository;
 
     @Override
+    @Transactional
     public Answer save(Answer answer) {
         QuestionEntity question = questionJpaRepository.findById(answer.getQuestionId())
                 .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.QUESTION_NOT_FOUND));
         AnswerEntity answerEntity = AnswerEntity.from(answer, question);
         AnswerEntity savedAnswer = answerJpaRepository.save(answerEntity);
         return savedAnswer.toDomainEntity();
+    }
+
+    @Override
+    @Transactional
+    public Answer updateByQuestionId(long questionId, String content) {
+        AnswerEntity answerEntity = answerJpaRepository.findByQuestionId(questionId)
+                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.ANSWER_NOT_FOUND));
+        answerEntity.update(content);
+        return answerEntity.toDomainEntity();
     }
 }
