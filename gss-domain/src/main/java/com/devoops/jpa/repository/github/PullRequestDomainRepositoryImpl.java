@@ -1,7 +1,9 @@
 package com.devoops.jpa.repository.github;
 
+import com.devoops.domain.entity.github.PullRequest;
 import com.devoops.domain.entity.github.PullRequests;
 import com.devoops.domain.repository.github.PullRequestDomainRepository;
+import com.devoops.jpa.entity.github.GithubRepositoryEntity;
 import com.devoops.jpa.entity.github.PullRequestEntity;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,15 @@ import org.springframework.stereotype.Repository;
 public class PullRequestDomainRepositoryImpl implements PullRequestDomainRepository {
 
     private final PullRequestJpaRepository pullRequestRepository;
+    private final GithubRepoJpaRepository githubRepoRepository;
+
+    @Override
+    public PullRequest save(PullRequest pullRequest) {
+        GithubRepositoryEntity githubRepositoryEntity = githubRepoRepository.findById(pullRequest.getRepositoryId()).get();
+        PullRequestEntity pullRequestEntity = PullRequestEntity.from(pullRequest, githubRepositoryEntity);
+        PullRequestEntity savedPullRequest = pullRequestRepository.save(pullRequestEntity);
+        return savedPullRequest.toDomainEntity();
+    }
 
     @Override
     public PullRequests findPullRequestsByRepositoryIdOrderByCreatedAt(long repositoryId, int size, int page) {

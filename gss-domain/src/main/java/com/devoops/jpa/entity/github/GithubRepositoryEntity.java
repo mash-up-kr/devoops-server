@@ -42,8 +42,20 @@ public class GithubRepositoryEntity extends BaseTimeEntity {
 
     private long githubRepositoryId;
 
+    public static GithubRepositoryEntity from(GithubRepository githubRepository, UserEntity user) {
+        return new GithubRepositoryEntity(
+                githubRepository.getId(),
+                user,
+                githubRepository.getName(),
+                githubRepository.getUrl(),
+                githubRepository.getExternalId()
+        );
+    }
+
+
     public GithubRepository toDomainEntity() {
         return new GithubRepository(
+                this.id,
                 this.user.getId(),
                 this.name,
                 this.url,

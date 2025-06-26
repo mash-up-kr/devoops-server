@@ -66,6 +66,24 @@ public class PullRequestEntity extends BaseTimeEntity {
     @NotNull
     private LocalDateTime mergedAt;
 
+    public static PullRequestEntity from(
+            PullRequest pullRequest,
+            GithubRepositoryEntity repository
+    ) {
+        return new PullRequestEntity(
+                pullRequest.getId(),
+                repository,
+                repository.getUser(),
+                pullRequest.getTitle(),
+                pullRequest.getDescription(),
+                pullRequest.getTag(),
+                pullRequest.getSummary(),
+                pullRequest.getExternalId(),
+                pullRequest.getRecordStatus(),
+                pullRequest.getMergedAt()
+        );
+    }
+
     public PullRequest toDomainEntity() {
         return new PullRequest(
                 this.id,
