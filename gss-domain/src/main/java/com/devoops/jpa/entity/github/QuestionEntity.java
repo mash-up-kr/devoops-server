@@ -42,6 +42,7 @@ public class QuestionEntity extends BaseTimeEntity {
 
     public Question toDomainEntity() {
         return new Question(
+                this.id,
                 pullRequest.getId(),
                 this.content,
                 this.isAnswered

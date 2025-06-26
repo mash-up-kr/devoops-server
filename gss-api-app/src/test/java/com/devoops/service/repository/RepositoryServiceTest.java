@@ -87,7 +87,7 @@ class RepositoryServiceTest extends BaseServiceTest {
 
             assertThatThrownBy(() -> repositoryService.getPullRequestsByRepository(seonwoo, repo.getId(), 6, 0))
                     .isInstanceOf(GssException.class)
-                    .hasMessage(ErrorCode.REPOSITIORY_NOT_FOUND.getMessage());
+                    .hasMessage(ErrorCode.REPOSITORY_NOT_FOUND.getMessage());
         }
 
 

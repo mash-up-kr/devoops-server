@@ -1,6 +1,7 @@
 package com.devoops.controller.question;
 
 import com.devoops.controller.auth.AuthUser;
+import com.devoops.domain.entity.github.Answer;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.response.AnswerSaveResponse;
 import com.devoops.service.question.QuestionService;
@@ -21,6 +22,8 @@ public class QuestionController {
             @AuthUser User user,
             @PathVariable(name = "questionId") long questionId
     ) {
-        return null;
+        Answer answer = questionService.saveAnswer(questionId, user);
+        AnswerSaveResponse response = new AnswerSaveResponse(answer);
+        return ResponseEntity.ok(response);
     }
 }
