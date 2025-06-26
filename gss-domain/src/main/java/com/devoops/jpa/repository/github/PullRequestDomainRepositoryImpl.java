@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
     private final GithubRepoJpaRepository githubRepoRepository;
 
     @Override
+    @Transactional
     public PullRequest save(PullRequest pullRequest) {
         GithubRepositoryEntity githubRepositoryEntity = githubRepoRepository.findById(pullRequest.getRepositoryId())
                 .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.GITHUB_REPOSITORY_NOT_FOUND));
@@ -31,6 +33,7 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PullRequests findPullRequestsByRepositoryIdOrderByMergedAt(long repositoryId, int size, int page) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "mergedAt"));
         return pullRequestRepository.findByRepositoryId(repositoryId, pageable)

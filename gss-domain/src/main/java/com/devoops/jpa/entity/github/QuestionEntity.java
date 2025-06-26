@@ -40,8 +40,13 @@ public class QuestionEntity extends BaseTimeEntity {
 
     private boolean isAnswered;
 
+    public static QuestionEntity from(Question question, PullRequestEntity pullRequest) {
+        return new QuestionEntity(question.getId(), pullRequest, question.getContent(), question.isAnswered());
+    }
+
     public Question toDomainEntity() {
         return new Question(
+                this.id,
                 pullRequest.getId(),
                 this.content,
                 this.isAnswered

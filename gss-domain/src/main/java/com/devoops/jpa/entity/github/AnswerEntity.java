@@ -44,8 +44,22 @@ public class AnswerEntity extends BaseTimeEntity {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
+    public static AnswerEntity from(Answer answer, QuestionEntity question) {
+        return new AnswerEntity(
+                answer.getId(),
+                question,
+                answer.getContent(),
+                LocalDateTime.now()
+        );
+    }
+
+    public void update(String content) {
+        this.content = content;
+    }
+
     public Answer toDomainEntity() {
         return new Answer(
+                this.id,
                 question.getId(),
                 content
         );

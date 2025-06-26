@@ -1,4 +1,12 @@
 package com.devoops.domain.repository.github;
 
+import com.devoops.domain.entity.github.Answer;
+
 public interface AnswerDomainRepository {
+
+    Answer save(Answer answer);
+
+    Answer updateById(long answerId, String content);
+
+    void deleteById(long answerId);
 }
