@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Answer {
 
+    private final Long id;
     private final long questionId;
     private final String content;
 }
