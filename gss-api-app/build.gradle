@@ -21,7 +21,6 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-gson:0.11.5'
 
     //Secret-Manager
-    //Secret-Manager
     implementation 'io.awspring.cloud:spring-cloud-starter-aws-secrets-manager-config:2.4.4'
 
     //Swagger
