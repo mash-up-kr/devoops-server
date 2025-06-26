@@ -15,8 +15,8 @@ public class QuestionService {
     private final QuestionDomainRepository questionRepository;
     private final AnswerDomainRepository answerRepository;
 
-    public Answer saveAnswer(long questionId, User user) {
-        Question question = questionRepository.findByIdAndUserId(questionId, user.getId());
+    public Answer initializeAnswer(long questionId, User user) {
+        Question question = questionRepository.findById(questionId); //소유권 검증 추가
         return answerRepository.save(Answer.initialize(question.getId()));
     }
 }

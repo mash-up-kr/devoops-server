@@ -48,14 +48,9 @@ public class AnswerEntity extends BaseTimeEntity {
         return new AnswerEntity(
                 answer.getId(),
                 question,
-                answer.getContent()
+                answer.getContent(),
+                LocalDateTime.now()
         );
-    }
-
-    public AnswerEntity(Long id, QuestionEntity question, String content) {
-        this.id = id;
-        this.question = question;
-        this.content = content;
     }
 
     public Answer toDomainEntity() {

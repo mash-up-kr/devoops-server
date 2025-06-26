@@ -22,7 +22,7 @@ public class QuestionController {
             @AuthUser User user,
             @PathVariable(name = "questionId") long questionId
     ) {
-        Answer answer = questionService.saveAnswer(questionId, user);
+        Answer answer = questionService.initializeAnswer(questionId, user);
         AnswerSaveResponse response = new AnswerSaveResponse(answer);
         return ResponseEntity.ok(response);
     }

@@ -16,8 +16,9 @@ public class QuestionDomainRepositoryImpl implements QuestionDomainRepository {
     private final QuestionJpaRepository questionRepository;
     private final PullRequestJpaRepository pullRequestRepository;
 
-    public Question findByIdAndUserId(long questionId, long userId) {
-        QuestionEntity questionEntity = questionRepository.findByIdAndUser_Id(questionId, userId);
+    public Question findById(long questionId) {
+        QuestionEntity questionEntity = questionRepository.findById(questionId)
+                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.QUESTION_NOT_FOUND));
         return questionEntity.toDomainEntity();
     }
 

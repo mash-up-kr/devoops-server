@@ -4,7 +4,7 @@ import com.devoops.domain.entity.github.Question;
 
 public interface QuestionDomainRepository {
 
-    Question findByIdAndUserId(long questionId, long userId);
+    Question findById(long questionId);
 
     Question save(Question question);
 }
