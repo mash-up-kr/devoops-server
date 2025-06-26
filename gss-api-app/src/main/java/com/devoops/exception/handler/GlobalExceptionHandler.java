@@ -2,6 +2,7 @@ package com.devoops.exception.handler;
 
 
 import com.devoops.exception.ErrorResponse;
+import com.devoops.exception.GssRepositoryException;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
 import jakarta.validation.ConstraintViolationException;
@@ -68,6 +69,10 @@ public class GlobalExceptionHandler {
         return toResponse(exception.getErrorCode());
     }
 
+    @ExceptionHandler(GssRepositoryException.class)
+    public ResponseEntity<ErrorResponse> handleGssRepositoryException(GssRepositoryException exception) {
+        return toResponse(ErrorCode.INTERNAL_SERVER_ERROR);
+    }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception exception) {
         return toResponse(ErrorCode.INTERNAL_SERVER_ERROR);
