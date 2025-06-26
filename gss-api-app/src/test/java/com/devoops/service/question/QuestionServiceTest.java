@@ -10,6 +10,7 @@ import com.devoops.domain.entity.github.PullRequest;
 import com.devoops.domain.entity.github.Question;
 import com.devoops.domain.entity.github.RecordStatus;
 import com.devoops.domain.entity.user.User;
+import com.devoops.jpa.repository.github.AnswerJpaRepository;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,8 +21,11 @@ class QuestionServiceTest extends BaseServiceTest {
     @Autowired
     private QuestionService questionService;
 
+    @Autowired
+    private AnswerJpaRepository answerJpaRepository;
+
     @Nested
-    class InitializeAnswer {
+    class AnswerCRUD {
 
         @Test
         void 질문에_대한_최초_응답을_저장한다() {
@@ -37,10 +41,6 @@ class QuestionServiceTest extends BaseServiceTest {
                     () -> assertThat(answer.getContent()).isEqualTo("")
             );
         }
-    }
-
-    @Nested
-    class UpdateAnswer {
 
         @Test
         void 질문에_대한_응답을_업데이트한다() {

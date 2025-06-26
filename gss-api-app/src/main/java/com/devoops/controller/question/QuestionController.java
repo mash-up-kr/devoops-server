@@ -9,6 +9,7 @@ import com.devoops.dto.response.AnswerUpdateResponse;
 import com.devoops.service.question.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,5 +41,14 @@ public class QuestionController {
         Answer updatedAnswer = questionService.updateAnswer(answerId, request.content());
         AnswerUpdateResponse response = new AnswerUpdateResponse(updatedAnswer);
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/api/questions/answer/{answerId}")
+    public ResponseEntity<Void> updateAnswer(
+            @AuthUser User user,
+            @PathVariable(name = "answerId") long answerId
+    ) {
+        questionService.deleteAnswer(answerId);
+        return ResponseEntity.noContent().build();
     }
 }

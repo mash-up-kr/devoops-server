@@ -23,4 +23,8 @@ public class QuestionService {
     public Answer updateAnswer(long answerId, String updateContent) {
         return answerRepository.updateById(answerId, updateContent);
     }
+
+    public void deleteAnswer(long answerId) {
+        answerRepository.deleteById(answerId);
+    }
 }

@@ -36,4 +36,10 @@ public class AnswerDomainRepositoryImpl implements AnswerDomainRepository {
         answerEntity.update(content);
         return answerEntity.toDomainEntity();
     }
+
+    @Override
+    @Transactional
+    public void deleteById(long answerId){
+        answerJpaRepository.deleteById(answerId);
+    }
 }

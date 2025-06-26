@@ -7,4 +7,6 @@ public interface AnswerDomainRepository {
     Answer save(Answer answer);
 
     Answer updateById(long answerId, String content);
+
+    void deleteById(long answerId);
 }
