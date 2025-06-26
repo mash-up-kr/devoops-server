@@ -51,6 +51,9 @@ public class PullRequestEntity extends BaseTimeEntity {
     private String description;
 
     @NotNull
+    private String tag;
+
+    @NotNull
     @Column(columnDefinition = "TEXT")
     private String summary;
 
@@ -65,6 +68,7 @@ public class PullRequestEntity extends BaseTimeEntity {
 
     public PullRequest toDomainEntity() {
         return new PullRequest(
+                this.id,
                 this.repository.getId(),
                 this.user.getId(),
                 this.title,
@@ -72,7 +76,8 @@ public class PullRequestEntity extends BaseTimeEntity {
                 this.summary,
                 this.githubPullRequestId,
                 this.recordStatus,
-                this.mergedAt
+                this.mergedAt,
+                this.tag
         );
     }
 }

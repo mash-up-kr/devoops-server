@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PullRequest {
 
+    private final Long id;
     private final long repositoryId;
     private final long userId;
     private final String title;
@@ -16,4 +17,5 @@ public class PullRequest {
     private final long externalId;
     private final RecordStatus recordStatus;
     private final LocalDateTime mergedAt;
+    private final String tag;
 }

@@ -1,5 +1,6 @@
 package com.devoops.dto.response;
 
+import com.devoops.domain.entity.github.PullRequest;
 import com.devoops.domain.entity.github.RecordStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,7 +12,18 @@ public record RepositoryPullRequestResponse(
         @NotNull RecordStatus recordStatus,
         @NotNull LocalDate mergedAt,
         @NotBlank String summary,
-        @NotNull String tag
+        String tag
 ) {
+
+    public RepositoryPullRequestResponse(PullRequest pullRequest) {
+        this(
+                pullRequest.getId(),
+                pullRequest.getTitle(),
+                pullRequest.getRecordStatus(),
+                pullRequest.getMergedAt().toLocalDate(),
+                pullRequest.getSummary(),
+                pullRequest.getTag()
+        );
+    }
 
 }
