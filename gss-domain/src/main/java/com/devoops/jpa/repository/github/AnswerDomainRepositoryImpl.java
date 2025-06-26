@@ -30,8 +30,8 @@ public class AnswerDomainRepositoryImpl implements AnswerDomainRepository {
 
     @Override
     @Transactional
-    public Answer updateByQuestionId(long questionId, String content) {
-        AnswerEntity answerEntity = answerJpaRepository.findByQuestionId(questionId)
+    public Answer updateById(long answerId, String content) {
+        AnswerEntity answerEntity = answerJpaRepository.findById(answerId)
                 .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.ANSWER_NOT_FOUND));
         answerEntity.update(content);
         return answerEntity.toDomainEntity();

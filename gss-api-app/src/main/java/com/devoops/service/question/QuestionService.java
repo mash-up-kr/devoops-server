@@ -19,4 +19,8 @@ public class QuestionService {
         Question question = questionRepository.findById(questionId); //소유권 검증 추가
         return answerRepository.save(Answer.initialize(question.getId()));
     }
+
+    public Answer updateAnswer(long answerId, String updateContent) {
+        return answerRepository.updateById(answerId, updateContent);
+    }
 }

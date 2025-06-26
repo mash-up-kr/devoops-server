@@ -53,6 +53,10 @@ public class AnswerEntity extends BaseTimeEntity {
         );
     }
 
+    public void update(String content) {
+        this.content = content;
+    }
+
     public Answer toDomainEntity() {
         return new Answer(
                 this.id,
