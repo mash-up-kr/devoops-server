@@ -39,4 +39,24 @@ class QuestionServiceTest extends BaseServiceTest {
         }
     }
 
+    @Nested
+    class UpdateAnswer {
+
+        @Test
+        void 질문에_대한_응답을_업데이트한다() {
+            User user = userGenerator.generate("김건우");
+            GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
+            PullRequest pullRequest = pullRequestGenerator.generate("최초 PR", RecordStatus.PENDING, repo, LocalDateTime.now());
+            Question question = questionGenerator.generate(pullRequest, "질문 : 이거 왜 이렇게 했어요?");
+            Answer answer = answerGenerator.generate(question, "before");
+
+            Answer updatedAnswer = questionService.updateAnswer(answer.getId(), "after");
+
+            assertAll(
+                    () -> assertThat(updatedAnswer.getQuestionId()).isEqualTo(question.getId()),
+                    () -> assertThat(updatedAnswer.getContent()).isEqualTo("after")
+            );
+        }
+    }
+
 }
