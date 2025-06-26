@@ -31,10 +31,9 @@ public class QuestionService {
 
     public Answers updateAllAnswers(AnswerPutRequests updateRequests) {
         List<Answer> answers = new ArrayList<>();
-        //TODO 쿼리 반복호출 말고, batch 쿼리로 줄이기
         for(AnswerPutRequest request : updateRequests.answers()) {
             Answer uppdatedAnswer = answerRepository.updateById(request.answerId(), request.content());
-            answers.add(uppdatedAnswer);
+            answers.add(uppdatedAnswer); //TODO 쿼리 반복호출 말고, in절을 활용해 쿼리 2개로 줄이기
         }
         return new Answers(answers);
     }
