@@ -6,7 +6,6 @@ import com.devoops.domain.repository.github.GithubRepoDomainRepository;
 import com.devoops.domain.repository.github.PullRequestDomainRepository;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
-import java.awt.print.Pageable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +18,7 @@ public class RepositoryService {
 
     public PullRequests getPullRequestsByRepository(User user, long repositoryId, int size, int page) {
         validateOwn(user, repositoryId);
-        return pullRequestRepository.findPullRequestsByRepositoryIdOrderByCreatedAt(repositoryId, size, page);
+        return pullRequestRepository.findPullRequestsByRepositoryIdOrderByMergedAt(repositoryId, size, page);
     }
 
     private void validateOwn(User user, long repositoryId) {

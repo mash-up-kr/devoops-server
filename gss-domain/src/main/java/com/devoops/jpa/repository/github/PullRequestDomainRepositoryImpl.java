@@ -28,8 +28,8 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
     }
 
     @Override
-    public PullRequests findPullRequestsByRepositoryIdOrderByCreatedAt(long repositoryId, int size, int page) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+    public PullRequests findPullRequestsByRepositoryIdOrderByMergedAt(long repositoryId, int size, int page) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "mergedAt"));
         return pullRequestRepository.findByRepositoryId(repositoryId, pageable).get()
                 .map(PullRequestEntity::toDomainEntity)
                 .collect(Collectors.collectingAndThen(Collectors.toList(), PullRequests::new));
