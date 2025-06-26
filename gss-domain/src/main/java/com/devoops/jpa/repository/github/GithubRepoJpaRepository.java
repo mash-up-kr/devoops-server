@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface GithubRepoJpaRepository extends JpaRepository<GithubRepositoryEntity, Long> {
 
+    boolean existsByIdAndUserId(long id, long userId);
 }
