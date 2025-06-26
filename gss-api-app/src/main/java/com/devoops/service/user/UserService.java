@@ -16,7 +16,7 @@ public class UserService {
 
     public User save(User user, GithubToken token) {
         Long userId = user.getId();
-        if (userDomainRepository.existsById(userId)) {
+        if (userId != null && userDomainRepository.existsById(userId)) {
             return userDomainRepository.findById(userId);
         }
         User savedUser = userDomainRepository.saveUser(user);
