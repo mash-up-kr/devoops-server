@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     //4XX
-    REPOSITORY_OWNER_MISMATCH(HttpStatus.BAD_REQUEST, "레포지토리 소유권이 없습니다"),
+    REPOSITIORY_NOT_FOUND(HttpStatus.BAD_REQUEST, "레포지토리를 찾을 수 없습니다"),
 
     FIELD_ERROR(HttpStatus.BAD_REQUEST, "입력이 잘못되었습니다."),
     URL_PARAMETER_ERROR(HttpStatus.BAD_REQUEST, "입력이 잘못되었습니다."),

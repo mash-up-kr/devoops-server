@@ -26,6 +26,6 @@ public class GithubRepoDomainRepositoryImpl implements GithubRepoDomainRepositor
 
     @Override
     public boolean existsByIdAndUserId(long id, long userId) {
-        return repoJpaRepository.existsByIdAndUserId(id, userId);
+        return repoJpaRepository.existsByIdAndUser_Id(id, userId);
     }
 }

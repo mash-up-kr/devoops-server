@@ -23,7 +23,7 @@ public class RepositoryService {
 
     private void validateOwn(User user, long repositoryId) {
         if(!repoRepository.existsByIdAndUserId(repositoryId, user.getId())) {
-            throw new GssException(ErrorCode.REPOSITORY_OWNER_MISMATCH);
+            throw new GssException(ErrorCode.REPOSITIORY_NOT_FOUND);
         }
     }
 }
