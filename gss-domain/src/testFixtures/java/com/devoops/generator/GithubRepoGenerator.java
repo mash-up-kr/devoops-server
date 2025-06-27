@@ -13,7 +13,7 @@ public class GithubRepoGenerator {
     private GithubRepoDomainRepository githubRepoDomainRepository;
 
     public GithubRepository generate(User user, String repoName) {
-        GithubRepository repository = new GithubRepository(null, user.getId(), repoName, "url", 1L);
+        GithubRepository repository = new GithubRepository(null, user.getId(), repoName, "url", "owner", 1L);
         return githubRepoDomainRepository.save(repository);
     }
 }
