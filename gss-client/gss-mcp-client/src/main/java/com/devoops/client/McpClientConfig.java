@@ -15,4 +15,3 @@ class McpClientConfig {
             .build();
     }
 }
-
