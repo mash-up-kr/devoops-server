@@ -32,3 +32,6 @@ spring:
   flyway:
     enabled: false
 
+dev-oops:
+  mcp:
+    webhook-url: https://test.dev-oops.kr/api/webhooks

@@ -5,6 +5,10 @@ spring:
     default: local
     include:
       - db
+      - github-client
+
+server:
+  port: 8080
 
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8

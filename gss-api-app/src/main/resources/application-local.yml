@@ -1,0 +1,3 @@
+dev-oops:
+  mcp:
+    webhook-url: https://smee.io/abc123xyz456/webhook/github # GitHub Webhook 테스트용 (https://docs.github.com/ko/webhooks/testing-and-troubleshooting-webhooks/testing-webhooks)

@@ -40,6 +40,9 @@ public class GithubRepositoryEntity extends BaseTimeEntity {
     @NotNull
     private String url;
 
+    @NotNull
+    private String owner;
+
     private long githubRepositoryId;
 
     public static GithubRepositoryEntity from(GithubRepository githubRepository, UserEntity user) {
@@ -48,6 +51,7 @@ public class GithubRepositoryEntity extends BaseTimeEntity {
                 user,
                 githubRepository.getName(),
                 githubRepository.getUrl(),
+                githubRepository.getName(),
                 githubRepository.getExternalId()
         );
     }
@@ -59,6 +63,7 @@ public class GithubRepositoryEntity extends BaseTimeEntity {
                 this.user.getId(),
                 this.name,
                 this.url,
+                this.owner,
                 this.githubRepositoryId
         );
     }
