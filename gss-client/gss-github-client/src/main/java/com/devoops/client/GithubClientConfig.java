@@ -24,7 +24,15 @@ public class GithubClientConfig {
 
     @Bean
     public GitHubClient gitHubApiClient() {
-        WebClient webClient = WebClient.builder()
+
+        return HttpServiceProxyFactory
+            .builderFor(WebClientAdapter.create(createGitHubWebClient()))
+            .build()
+            .createClient(GitHubClient.class);
+    }
+
+    private WebClient createGitHubWebClient() {
+        return WebClient.builder()
             .baseUrl(properties.url())
             .clientConnector(new ReactorClientHttpConnector(
                 HttpClient.create()
@@ -33,10 +41,5 @@ public class GithubClientConfig {
             ))
             .filter(githubErrorDecoder)
             .build();
-
-        return HttpServiceProxyFactory
-            .builderFor(WebClientAdapter.create(webClient))
-            .build()
-            .createClient(GitHubClient.class);
     }
 }

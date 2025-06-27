@@ -1,6 +1,7 @@
 package com.devoops.client;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.http.MediaType;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public record GitHubWebhookRequest(
             List.of("pull_request"),
             new GitHubWebhookConfig(
                 webhookUrl,
-                "json"
+                MediaType.APPLICATION_JSON.getSubtype()
             )
         );
     }
