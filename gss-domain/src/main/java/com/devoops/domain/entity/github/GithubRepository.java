@@ -11,5 +11,6 @@ public class GithubRepository {
     private final long userId;
     private final String name;
     private final String url;
+    private final String owner;
     private final long externalId;
 }

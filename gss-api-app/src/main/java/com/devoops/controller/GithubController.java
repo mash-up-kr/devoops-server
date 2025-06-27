@@ -1,5 +1,7 @@
 package com.devoops.controller;
 
+import com.devoops.controller.auth.AuthUser;
+import com.devoops.domain.entity.user.User;
 import com.devoops.service.GitHubService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,11 +18,9 @@ public class GithubController {
 
     @PostMapping("/repositories/{repositoryId}/webhooks")
     public void registerWebhook(
+        @AuthUser User user,
         @PathVariable long repositoryId
     ) {
-
-        // TODO: 인증 정보를 기반으로 userId 추출 (ex: SecurityContext, JWT 등)
-        long userId = 1L;
-        gitHubService.registerWebhook(userId, repositoryId);
+        gitHubService.registerWebhook(user, repositoryId);
     }
 }

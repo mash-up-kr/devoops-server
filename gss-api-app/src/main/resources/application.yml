@@ -5,6 +5,7 @@ spring:
     default: local
     include:
       - db
+      - github-client
 
 server:
   port: 8080

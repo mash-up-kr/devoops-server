@@ -7,4 +7,6 @@ public interface GithubRepoDomainRepository {
     GithubRepository save(GithubRepository githubRepository);
 
     boolean existsByIdAndUserId(long id, long userId);
+
+    GithubRepository findByIdAndUserId(long id, long userId);
 }
