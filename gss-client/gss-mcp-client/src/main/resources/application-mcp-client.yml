@@ -1,0 +1,17 @@
+spring:
+  config:
+    import: 'aws-secretsmanager:dev/devoops/secrets'
+
+dev-oops:
+  github-pr-analysis:
+    prompt: |
+      summary: 이 PR은 ~~입니다.
+      considerations:
+        - 조건 처리 부족
+        - 메서드 명확성 부족
+        - 테스트 누락 가능성
+  
+      PR 제목: {{title}}
+      --- BEGIN DIFF ---
+      {{diff}}
+      --- END DIFF ---

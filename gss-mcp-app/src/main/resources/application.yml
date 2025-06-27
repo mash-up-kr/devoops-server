@@ -3,6 +3,9 @@ spring:
     name: 'gss-mcp-app'
   profiles:
     default: local
+    include:
+      - db
+      - mcp-client
 
 server:
   port: 8090
