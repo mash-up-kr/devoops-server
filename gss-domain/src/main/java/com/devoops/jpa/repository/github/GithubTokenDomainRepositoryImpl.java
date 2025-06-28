@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class GithubTokenDomainRepositoryImpl implements GithubTokenDomainRepository {
@@ -27,5 +29,12 @@ public class GithubTokenDomainRepositoryImpl implements GithubTokenDomainReposit
 
         return githubTokenJpaRepository.save(GithubTokenEntity.from(userEntity, token))
                 .toDomainEntity();
+    }
+
+    @Override
+    public Optional<GithubToken> findByUserId(User owner) {
+
+        return githubTokenJpaRepository.findByUser_Id(owner.getId())
+            .map(GithubTokenEntity::toDomainEntity);
     }
 }
