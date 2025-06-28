@@ -12,10 +12,16 @@ public record UserSaveResponse(
         String nickname,
 
         @Schema(description = "깃허브 프로필 url", example = "https://avatars.githubusercontent.com/u/148152234?v=4")
-        String profileImageUrl
+        String profileImageUrl,
+
+        @Schema(description = "엑세스 토큰", example = "accesstokenValue..")
+        String accessToken,
+
+        @Schema(description = "리프레시 토큰", example = "refreshTokenValue..")
+        String refreshToken
 ) {
 
-    public UserSaveResponse(User user) {
-        this(user.getProviderId(), user.getNickname(), user.getProfileImageUrl());
+    public UserSaveResponse(User user, String accessToken, String refreshToken) {
+        this(user.getProviderId(), user.getNickname(), user.getProfileImageUrl(), accessToken, refreshToken);
     }
 }

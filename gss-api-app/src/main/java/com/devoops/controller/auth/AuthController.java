@@ -32,6 +32,10 @@ public class AuthController implements AuthControllerSwagger {
     private final AuthService authService;
     private final UserService userService;
 
+    //TODO body에 담아서 반환하도록 수정
+    //TODO request 로직 변경에 따라 로직 수정
+    //TODO 파사드로 리팩터링
+
     @Override
     @PostMapping("/api/auth/github")
     public ResponseEntity<UserSaveResponse> issueToken(@RequestBody @Valid UserSaveRequest userSaveRequest) {
@@ -40,13 +44,8 @@ public class AuthController implements AuthControllerSwagger {
         User user = new User(authResponse.providerId(), authResponse.nickname(), authResponse.profileImageUrl());
         User savedUser = userService.save(user, accessToken);
         UserTokenResponse userTokens = authService.issueToken(String.valueOf(savedUser.getId()));
-        ResponseCookie cookie = cookieManager.createCookie(REFRESH_TOKEN, userTokens.refreshToken(),
-                userTokens.refreshTokenExpiration());
-
         return ResponseEntity.status(HttpStatus.CREATED)
-                .header(HttpHeaders.AUTHORIZATION, userTokens.accessToken())
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(new UserSaveResponse(savedUser));
+                .body(new UserSaveResponse(savedUser, userTokens.accessToken(), userTokens.refreshToken()));
     }
 
     @Override
