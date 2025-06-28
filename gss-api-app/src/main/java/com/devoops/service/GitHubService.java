@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GitHubService {
 
+    private static final String BEARER_PREFIX = "Bearer ";
+
     @Value("${dev-oops.mcp.webhook-url}")
     private String mcpWebhookUrl;
 
@@ -33,7 +35,7 @@ public class GitHubService {
                 .orElseThrow(() -> new GssException(ErrorCode.NO_RESOURCE_FOUND));
 
         gitHubClient.createWebhook(
-                "Bearer " + githubToken.getToken(),
+                BEARER_PREFIX + githubToken.getToken(),
                 githubRepository.getOwner(),
                 githubRepository.getName(),
                 GitHubWebhookRequest.ofPullRequestEvent(mcpWebhookUrl)
@@ -42,7 +44,7 @@ public class GitHubService {
 
     public GithubRepoInfoResponse getRepositoryInfo(GithubRepoUrl repoUrl, GithubToken token) {
         return gitHubClient.getRepositoryInfo(
-                "Bearer " + token.getToken(),
+                BEARER_PREFIX + token.getToken(),
                 repoUrl.getOwner(),
                 repoUrl.getRepoName()
         );
