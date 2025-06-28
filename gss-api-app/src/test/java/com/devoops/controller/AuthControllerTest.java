@@ -55,7 +55,7 @@ class AuthControllerTest extends BaseControllerTest {
             String reissuedAccessToken = RestAssured.given()
                     .contentType(ContentType.JSON)
                     .header(HttpHeaders.COOKIE, "refreshToken=" + refreshToken.getToken())
-                    .when().post("/api/auth/github/reissue")
+                    .when().post("/api/auth/github/refresh")
                     .then().statusCode(HttpStatus.CREATED.value())
                     .extract().header(HttpHeaders.AUTHORIZATION);
 

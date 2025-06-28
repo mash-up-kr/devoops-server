@@ -49,7 +49,7 @@ public class AuthController implements AuthControllerSwagger {
     }
 
     @Override
-    @PostMapping("/api/auth/github/reissue")
+    @PostMapping("/api/auth/github/refresh")
     public ResponseEntity<Void> reIssueToken(@CookieValue(REFRESH_TOKEN) String token) {
         UserTokenResponse userTokens = authService.reissueToken(new RefreshToken(token));
         ResponseCookie cookie = cookieManager.createCookie(REFRESH_TOKEN, userTokens.refreshToken(),
