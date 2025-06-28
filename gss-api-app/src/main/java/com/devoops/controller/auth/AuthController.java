@@ -1,16 +1,13 @@
 package com.devoops.controller.auth;
 
 import com.devoops.controller.docs.AuthControllerSwagger;
-import com.devoops.domain.entity.github.GithubToken;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.UserSaveRequest;
-import com.devoops.dto.response.AuthResponse;
 import com.devoops.dto.response.UserSaveResponse;
-import com.devoops.dto.response.UserTokenResponse;
-import com.devoops.service.auth.AuthService;
+import com.devoops.dto.response.UserTokenRefreshResponse;
 import com.devoops.service.auth.cookie.CookieManager;
 import com.devoops.service.auth.jwt.RefreshToken;
-import com.devoops.service.user.UserService;
+import com.devoops.service.facade.AuthFacadeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -29,34 +26,22 @@ public class AuthController implements AuthControllerSwagger {
     private static final String REFRESH_TOKEN = "refreshToken";
 
     private final CookieManager cookieManager;
-    private final AuthService authService;
-    private final UserService userService;
-
-    //TODO 파사드로 리팩터링
+    private final AuthFacadeService authFacadeService;
 
     @Override
     @PostMapping("/api/auth/github")
     public ResponseEntity<UserSaveResponse> issueToken(@RequestBody @Valid UserSaveRequest userSaveRequest) {
-        AuthResponse authResponse = authService.getUserInfo(userSaveRequest);
-        GithubToken accessToken = new GithubToken(authResponse.githubToken());
-        User user = new User(authResponse.providerId(), authResponse.nickname(), authResponse.profileImageUrl());
-        User savedUser = userService.save(user, accessToken);
-        UserTokenResponse userTokens = authService.issueToken(String.valueOf(savedUser.getId()));
+        UserSaveResponse response = authFacadeService.issueToken(userSaveRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new UserSaveResponse(savedUser, userTokens.accessToken(), userTokens.refreshToken()));
+                .body(response);
     }
 
     @Override
     @PostMapping("/api/auth/github/refresh")
-    public ResponseEntity<Void> reIssueToken(@CookieValue(REFRESH_TOKEN) String token) {
-        UserTokenResponse userTokens = authService.reissueToken(new RefreshToken(token));
-        ResponseCookie cookie = cookieManager.createCookie(REFRESH_TOKEN, userTokens.refreshToken(),
-                userTokens.refreshTokenExpiration());
-
+    public ResponseEntity<UserTokenRefreshResponse> reIssueToken(@CookieValue(REFRESH_TOKEN) String token) {
+        UserTokenRefreshResponse response = authFacadeService.refresh(new RefreshToken(token));
         return ResponseEntity.status(HttpStatus.CREATED)
-                .header(HttpHeaders.AUTHORIZATION, userTokens.accessToken())
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .build();
+                .body(response);
     }
 
     @PostMapping("/api/auth/logout")
@@ -64,10 +49,8 @@ public class AuthController implements AuthControllerSwagger {
             @AuthUser User user,
             @CookieValue(REFRESH_TOKEN) String token
     ) {
-        String userId = authService.resolveToken(new RefreshToken(token));
-        authService.logout(user, Long.parseLong(userId));
+        authFacadeService.logout(new RefreshToken(token), user);
         ResponseCookie expiredRefreshTokenCookie = cookieManager.createExpiredCookie(REFRESH_TOKEN);
-
         return ResponseEntity.noContent()
                 .header(HttpHeaders.SET_COOKIE, expiredRefreshTokenCookie.toString())
                 .build();
