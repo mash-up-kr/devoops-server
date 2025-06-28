@@ -3,6 +3,7 @@ package com.devoops.service.question;
 import com.devoops.domain.entity.github.Answer;
 import com.devoops.domain.entity.github.Answers;
 import com.devoops.domain.entity.github.Question;
+import com.devoops.domain.entity.github.QuestionAnswer;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.github.AnswerDomainRepository;
 import com.devoops.domain.repository.github.QuestionDomainRepository;
@@ -23,6 +24,10 @@ public class QuestionService {
     public Answer initializeAnswer(long questionId, User user) {
         Question question = questionRepository.findById(questionId); //소유권 검증 추가
         return answerRepository.save(Answer.initialize(question.getId()));
+    }
+
+    public List<QuestionAnswer> getAllPrQuestions(long pullRequestsId) {
+        return questionRepository.findAllPrQuestions(pullRequestsId);
     }
 
     public Answer updateAnswer(long answerId, String updateContent) {

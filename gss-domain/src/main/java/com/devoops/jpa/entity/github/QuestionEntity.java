@@ -35,19 +35,24 @@ public class QuestionEntity extends BaseTimeEntity {
     private PullRequestEntity pullRequest;
 
     @NotNull
+    private String category;
+
+    @NotNull
     @Column(columnDefinition = "TEXT")
     private String content;
 
     private boolean isAnswered;
 
     public static QuestionEntity from(Question question, PullRequestEntity pullRequest) {
-        return new QuestionEntity(question.getId(), pullRequest, question.getContent(), question.isAnswered());
+        return new QuestionEntity(question.getId(), pullRequest, question.getCategory(), question.getContent(),
+                question.isAnswered());
     }
 
     public Question toDomainEntity() {
         return new Question(
                 this.id,
                 pullRequest.getId(),
+                this.category,
                 this.content,
                 this.isAnswered
         );

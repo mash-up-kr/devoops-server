@@ -5,11 +5,12 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class Question {
+public class QuestionAnswer {
 
-    private final Long id;
-    private final long pullRequestId;
+    private final long questionId;
     private final String category;
     private final String content;
-    private final boolean isAnswered;
+    private final boolean isSelected;
+    private final Long answerId;
+    private final String answer;
 }

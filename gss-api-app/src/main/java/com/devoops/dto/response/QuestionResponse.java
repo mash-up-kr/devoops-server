@@ -1,5 +1,6 @@
 package com.devoops.dto.response;
 
+import com.devoops.domain.entity.github.QuestionAnswer;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 
@@ -13,4 +14,14 @@ public record QuestionResponse(
 
 ) {
 
+    public QuestionResponse(QuestionAnswer question) {
+        this(
+                question.getQuestionId(),
+                question.getCategory(),
+                question.getContent(),
+                question.isSelected(),
+                question.getAnswerId(),
+                question.getAnswer()
+        );
+    }
 }

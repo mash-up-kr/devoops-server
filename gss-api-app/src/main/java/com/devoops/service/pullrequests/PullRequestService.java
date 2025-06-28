@@ -14,4 +14,8 @@ public class PullRequestService {
     public PullRequest updateToDone(long pullRequestId) {
         return pullRequestRepository.updateToDone(pullRequestId);
     }
+
+    public PullRequest getPullRequest(long pullRequestId) {
+        return pullRequestRepository.findById(pullRequestId);
+    }
 }

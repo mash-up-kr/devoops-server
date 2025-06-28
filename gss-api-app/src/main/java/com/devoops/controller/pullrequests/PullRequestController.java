@@ -3,6 +3,7 @@ package com.devoops.controller.pullrequests;
 import com.devoops.controller.auth.AuthUser;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.response.PullRequestReadResponse;
+import com.devoops.service.facade.PullRequestFacadeService;
 import com.devoops.service.pullrequests.PullRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,24 +16,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PullRequestController {
 
-    private final PullRequestService pullRequestService;
+    private final PullRequestFacadeService pullRequestFacadeService;
 
     @GetMapping("/api/pull-requests/{pullRequestId}")
     public ResponseEntity<PullRequestReadResponse> getPullRequest(
             @AuthUser User user,
             @PathVariable long pullRequestId
     ) {
-
-        return ResponseEntity.ok().build();
+        PullRequestReadResponse response = pullRequestFacadeService.read(pullRequestId);
+        return ResponseEntity.ok(response);
     }
-
 
     @PatchMapping("/api/pull-requests/{pullRequestId}/done")
     public ResponseEntity<Void> pullRequestUpdateToDone(
             @AuthUser User user,
             @PathVariable(name = "pullRequestId") long pullRequestId
     ) {
-        pullRequestService.updateToDone(pullRequestId);
+        pullRequestFacadeService.updateToDone(pullRequestId);
         return ResponseEntity.ok().build();
     }
 }
