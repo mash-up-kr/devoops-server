@@ -8,26 +8,24 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record PullRequestDetailReadResponse(
+public record PullRequestReadResponse(
         long id,
-        @NotNull String title,
-        @NotNull String tag,
+        @NotBlank String title,
+        String tag,
         @NotNull RecordStatus recordStatus,
         @NotNull LocalDateTime mergedAt,
         @NotBlank String summary,
-        @NotNull List<String> categories,
-        @NotNull List<QuestionAnswerResponse> questions
+        List<String> categories,
+        List<QuestionResponse> questions
 ) {
 
-    public static PullRequestDetailReadResponse from(
+    public static PullRequestReadResponse from(
             PullRequest pullRequest,
             List<String> categories,
-            List<QuestionAnswer> prQuestions
+            List<QuestionAnswer> questionAnswers
     ) {
-        List<QuestionAnswerResponse> questionAnswerRespons = prQuestions.stream()
-                .map(QuestionAnswerResponse::new)
-                .toList();
-        return new PullRequestDetailReadResponse(
+        List<QuestionResponse> questionResponses = mapToQuestionResponses(questionAnswers);
+        return new PullRequestReadResponse(
                 pullRequest.getId(),
                 pullRequest.getTitle(),
                 pullRequest.getTag(),
@@ -35,7 +33,13 @@ public record PullRequestDetailReadResponse(
                 pullRequest.getMergedAt(),
                 pullRequest.getSummary(),
                 categories,
-                questionAnswerRespons
+                questionResponses
         );
+    }
+
+    private static List<QuestionResponse> mapToQuestionResponses(List<QuestionAnswer> questionAnswers) {
+        return questionAnswers.stream()
+                .map(QuestionResponse::new)
+                .toList();
     }
 }

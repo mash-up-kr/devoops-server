@@ -14,7 +14,15 @@ public interface QuestionJpaRepository extends JpaRepository<QuestionEntity, Int
 
     @Query("""
             select new com.devoops.domain.entity.github.QuestionAnswer(
-                        qe.id, qe.category, qe.content, qe.isAnswered, ae.id, ae.content)
+                        qe.id,
+                        qe.category,
+                        qe.content,
+                        qe.isAnswered,
+                        ae.id,
+                        ae.content,
+                        ae.createdAt,
+                        ae.updatedAt
+              )
               from QuestionEntity qe
               left outer join AnswerEntity ae on qe.id = ae.question.id
               where qe.pullRequest.id = :pullRequestId

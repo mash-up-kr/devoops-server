@@ -3,6 +3,7 @@ package com.devoops.controller.pullrequests;
 import com.devoops.controller.auth.AuthUser;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.response.PullRequestDetailReadResponse;
+import com.devoops.dto.response.PullRequestReadResponse;
 import com.devoops.service.facade.PullRequestFacadeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +28,11 @@ public class PullRequestController {
     }
 
     @GetMapping("/api/repositories/pull-requests/{pullRequestId}")
-    public ResponseEntity<Void> getPullRequest(
+    public ResponseEntity<PullRequestReadResponse> getPullRequest(
             @AuthUser User user,
             @PathVariable long pullRequestId
     ) {
+        pullRequestFacadeService.read(pullRequestId);
 
         return ResponseEntity.ok().build();
     }

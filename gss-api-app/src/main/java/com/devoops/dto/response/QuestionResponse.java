@@ -1,27 +1,24 @@
 package com.devoops.dto.response;
 
 import com.devoops.domain.entity.github.QuestionAnswer;
-import jakarta.annotation.Nullable;
-import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 public record QuestionResponse(
-        long questionId,
+        long id,
+        boolean isSelected,
         String category,
         String content,
-        boolean isSelected,
-        @Nullable Long answerId,
-        @NotNull String answer
-
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {
-
-    public QuestionResponse(QuestionAnswer question) {
+    public QuestionResponse(QuestionAnswer questionAnswer) {
         this(
-                question.getQuestionId(),
-                question.getCategory(),
-                question.getContent(),
-                question.isSelected(),
-                question.getAnswerId(),
-                question.getAnswer()
+                questionAnswer.getQuestionId(),
+                questionAnswer.isSelected(),
+                questionAnswer.getCategory(),
+                questionAnswer.getContent(),
+                questionAnswer.getCreatedAt(),
+                questionAnswer.getUpdatedAt()
         );
     }
 }
