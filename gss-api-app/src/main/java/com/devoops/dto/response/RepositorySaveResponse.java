@@ -1,5 +1,6 @@
 package com.devoops.dto.response;
 
+import com.devoops.domain.entity.github.GithubRepository;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record RepositorySaveResponse(
@@ -16,4 +17,7 @@ public record RepositorySaveResponse(
         String url
 ) {
 
+        public RepositorySaveResponse(GithubRepository repository) {
+                this(repository.getId(), repository.getUserId(), repository.getName(), repository.getUrl());
+        }
 }

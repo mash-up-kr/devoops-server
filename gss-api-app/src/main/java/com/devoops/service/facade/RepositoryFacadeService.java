@@ -1,7 +1,12 @@
 package com.devoops.service.facade;
 
+import com.devoops.client.GitHubClient;
+import com.devoops.command.request.RepositoryCreateCommand;
 import com.devoops.domain.entity.github.GithubRepository;
+import com.devoops.domain.entity.github.PullRequests;
 import com.devoops.domain.entity.user.User;
+import com.devoops.dto.request.GithubRepoUrl;
+import com.devoops.dto.response.GithubRepoInfoResponse;
 import com.devoops.service.GitHubService;
 import com.devoops.service.repository.RepositoryService;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +19,26 @@ public class RepositoryFacadeService {
     private final RepositoryService repositoryService;
     private final GitHubService gitHubService;
 
-    public GithubRepository save(String repositoryUrl, User user) {
-        //TODO 레포지토리 정보 가져와서 저장
-        //TODO 레포지토리에 웹훅 심기
-
-        return null;
-
+    public GithubRepository save(GithubRepoUrl repoUrl, User user) {
+        GithubRepository savedRepository = saveRepository(repoUrl, user);
+        gitHubService.registerWebhook(user, savedRepository.getId());
+        return savedRepository;
     }
+
+    private GithubRepository saveRepository(GithubRepoUrl url, User user) {
+        GithubRepoInfoResponse repositoryInfo = gitHubService.getRepositoryInfo(url, user.getGithubToken());
+        RepositoryCreateCommand createCommand = new RepositoryCreateCommand(
+                user.getId(),
+                repositoryInfo.name(),
+                repositoryInfo.url(),
+                repositoryInfo.getOwnerName(),
+                repositoryInfo.id()
+        );
+        return repositoryService.save(createCommand);
+    }
+
+    public PullRequests findAllPullRequests(User user, long repositoryId, int size, int page) {
+        return repositoryService.getPullRequestsByRepository(user, repositoryId, size, page);
+    }
+
 }

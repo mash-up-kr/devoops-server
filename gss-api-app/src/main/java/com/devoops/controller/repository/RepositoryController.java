@@ -1,13 +1,18 @@
 package com.devoops.controller.repository;
 
 import com.devoops.controller.auth.AuthUser;
+import com.devoops.domain.entity.github.GithubRepository;
 import com.devoops.domain.entity.github.PullRequests;
 import com.devoops.domain.entity.user.User;
+import com.devoops.dto.request.GithubRepoUrl;
 import com.devoops.dto.request.RepositorySaveRequest;
 import com.devoops.dto.response.RepositoryPullRequestResponses;
+import com.devoops.dto.response.RepositorySaveResponse;
+import com.devoops.service.facade.RepositoryFacadeService;
 import com.devoops.service.repository.RepositoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RepositoryController {
 
-    private final RepositoryService repositoryService;
+    private final RepositoryFacadeService repositoryFacadeService;
 
     @GetMapping("/api/repositories/{repositoryId}/pull-requests")
     public ResponseEntity<RepositoryPullRequestResponses> getRepositoryPullRequests(
@@ -30,19 +35,21 @@ public class RepositoryController {
             @RequestParam(name = "size") int size,
             @RequestParam(name = "page") int page
     ) {
-        PullRequests pullRequests = repositoryService.getPullRequestsByRepository(user, repositoryId, size, page);
+        PullRequests pullRequests = repositoryFacadeService.findAllPullRequests(user, repositoryId, size, page);
         RepositoryPullRequestResponses response = RepositoryPullRequestResponses.from(pullRequests);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/api/repositories")
-    public ResponseEntity<Void> saveRepository(
+    public ResponseEntity<RepositorySaveResponse> saveRepository(
             @AuthUser User user,
             @Valid @RequestBody RepositorySaveRequest request
     ) {
-
-
-        return null;
+        GithubRepoUrl repoUrl = new GithubRepoUrl(request.url());
+        GithubRepository savedRepository = repositoryFacadeService.save(repoUrl, user);
+        RepositorySaveResponse response = new RepositorySaveResponse(savedRepository);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(response);
     }
 }
 

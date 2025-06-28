@@ -13,4 +13,8 @@ public class GithubRepository {
     private final String url;
     private final String owner;
     private final long externalId;
+
+    public GithubRepository(long userId, String name, String url, String owner, long externalId) {
+        this(null, userId, name, url, owner, externalId);
+    }
 }

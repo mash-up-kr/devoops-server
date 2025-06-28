@@ -1,5 +1,7 @@
 package com.devoops.service.repository;
 
+import com.devoops.command.request.RepositoryCreateCommand;
+import com.devoops.domain.entity.github.GithubRepository;
 import com.devoops.domain.entity.github.PullRequests;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.github.GithubRepoDomainRepository;
@@ -15,6 +17,10 @@ public class RepositoryService {
 
     private final GithubRepoDomainRepository repoRepository;
     private final PullRequestDomainRepository pullRequestRepository;
+
+    public GithubRepository save(RepositoryCreateCommand command) {
+        return repoRepository.save(command.toDomainEntity());
+    }
 
     public PullRequests getPullRequestsByRepository(User user, long repositoryId, int size, int page) {
         validateOwn(user, repositoryId);
