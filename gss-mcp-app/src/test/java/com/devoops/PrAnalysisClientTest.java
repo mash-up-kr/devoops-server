@@ -10,7 +10,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 @Disabled
 @SpringBootTest
-@ActiveProfiles("dev")
 class PrAnalysisClientTest {
 
     @Autowired
