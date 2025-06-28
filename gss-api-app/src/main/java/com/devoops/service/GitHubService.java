@@ -33,7 +33,7 @@ public class GitHubService {
                 .orElseThrow(() -> new GssException(ErrorCode.NO_RESOURCE_FOUND));
 
         gitHubClient.createWebhook(
-                githubToken.getToken(),
+                "Bearer " + githubToken.getToken(),
                 githubRepository.getOwner(),
                 githubRepository.getName(),
                 GitHubWebhookRequest.ofPullRequestEvent(mcpWebhookUrl)
@@ -42,7 +42,7 @@ public class GitHubService {
 
     public GithubRepoInfoResponse getRepositoryInfo(GithubRepoUrl repoUrl, GithubToken token) {
         return gitHubClient.getRepositoryInfo(
-                token.getToken(),
+                "Bearer " + token.getToken(),
                 repoUrl.getOwner(),
                 repoUrl.getRepoName()
         );
