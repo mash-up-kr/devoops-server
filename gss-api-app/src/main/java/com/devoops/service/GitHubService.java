@@ -1,12 +1,13 @@
 package com.devoops.service;
 
 import com.devoops.client.GitHubClient;
-import com.devoops.client.GitHubWebhookRequest;
+import com.devoops.dto.request.GitHubWebhookRequest;
 import com.devoops.domain.entity.github.GithubRepository;
 import com.devoops.domain.entity.github.GithubToken;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.github.GithubRepoDomainRepository;
 import com.devoops.domain.repository.github.GithubTokenDomainRepository;
+import com.devoops.dto.response.GithubRepoInfoResponse;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -36,5 +37,10 @@ public class GitHubService {
             githubRepository.getName(),
             GitHubWebhookRequest.ofPullRequestEvent(mcpWebhookUrl)
         );
+    }
+
+    public GithubRepoInfoResponse getRepositoryInfo(String owner, String repo, String token) {
+        gitHubClient.getRepositoryInfo(token, owner, repo)
+
     }
 }
