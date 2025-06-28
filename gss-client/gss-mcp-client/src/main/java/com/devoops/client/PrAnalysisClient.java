@@ -1,29 +1,42 @@
 package com.devoops.client;
 
 import com.devoops.dto.response.AnalyzePrResponse;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.prompt.Prompt;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class PrAnalysisClient {
 
     @Value("${dev-oops.github-pr-analysis.prompt}")
-    private String prompt;
+    private String promptTemplate;
 
-    private final ChatClient prAnalyzerClient;
+    private final ChatModel chatModel;
+    private final ObjectMapper objectMapper;
 
-    public AnalyzePrResponse analyze(String title, String diff) {
-        String template = String.format(prompt, title, diff);
-        Prompt prompt = new Prompt(new UserMessage(template));
+    public AnalyzePrResponse analyze(String title, String description, String diff) {
+        String prompt = buildPrompt(title, description, diff);
+        String content = chatModel.call(prompt);
+        return parseResponse(content);
+    }
 
-        // TODO: 프롬프트에서 요구한 응답값이 아닌 경우 예외 처리 구현
-        return prAnalyzerClient.prompt(prompt)
-            .call()
-            .entity(AnalyzePrResponse.class);
+    private String buildPrompt(String title, String description, String diff) {
+        return String.format(promptTemplate, title, description, diff);
+    }
+
+    private AnalyzePrResponse parseResponse(String content) {
+        try {
+            return objectMapper.readValue(content, new TypeReference<>() {
+            });
+        } catch (Exception e) {
+            log.error("AI 응답 파싱 실패. 응답 내용: {}", content, e);
+            throw new IllegalArgumentException("AI 응답 파싱 중 오류 발생", e);
+        }
     }
 }

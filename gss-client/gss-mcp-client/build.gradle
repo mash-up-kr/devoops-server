@@ -6,6 +6,5 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
-    implementation 'org.springframework.ai:spring-ai-mcp-server-webmvc-spring-boot-starter:1.0.0-M6'
     implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter:1.0.0-M6'
 }

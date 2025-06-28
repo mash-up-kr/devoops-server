@@ -11,9 +11,9 @@ public class PullRequestService {
 
     private final PrAnalysisClient prAnalysisClient;
 
-    public void handlePullRequestEvent(long userId, String title, String diff) {
+    public void handlePullRequestEvent(long userId, String title, String description, String diff) {
 
-        AnalyzePrResponse analyzePrResponse = prAnalysisClient.analyze(title, diff);
+        AnalyzePrResponse analyzePrResponse = prAnalysisClient.analyze(title, description, diff);
         // TODO: 저장 로직
     }
 }
