@@ -32,8 +32,6 @@ public class AuthController implements AuthControllerSwagger {
     private final AuthService authService;
     private final UserService userService;
 
-    //TODO body에 담아서 반환하도록 수정
-    //TODO request 로직 변경에 따라 로직 수정
     //TODO 파사드로 리팩터링
 
     @Override

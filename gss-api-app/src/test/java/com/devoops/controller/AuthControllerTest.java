@@ -32,7 +32,7 @@ class AuthControllerTest extends BaseControllerTest {
 
         @Test
         void 회원_생성_및_토큰_발급을_할_수_있다() {
-            UserSaveRequest request = new UserSaveRequest("testCode", "testRedirectUrl");
+            UserSaveRequest request = new UserSaveRequest("testAccessToken");
 
             RestAssured.given()
                     .contentType(ContentType.JSON)
