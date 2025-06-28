@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record PullRequestReadResponse(
+public record PullRequestDetailReadResponse(
         long id,
         @NotNull String title,
         @NotNull String tag,
@@ -19,11 +19,11 @@ public record PullRequestReadResponse(
         @NotNull List<QuestionResponse> questions
 ) {
 
-    public static PullRequestReadResponse from(PullRequest pullRequest, List<QuestionAnswer> prQuestions) {
+    public static PullRequestDetailReadResponse from(PullRequest pullRequest, List<QuestionAnswer> prQuestions) {
         List<QuestionResponse> questionResponses = prQuestions.stream()
                 .map(QuestionResponse::new)
                 .toList();
-        return new PullRequestReadResponse(
+        return new PullRequestDetailReadResponse(
                 pullRequest.getId(),
                 pullRequest.getTitle(),
                 pullRequest.getTag(),

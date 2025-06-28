@@ -2,9 +2,8 @@ package com.devoops.controller.pullrequests;
 
 import com.devoops.controller.auth.AuthUser;
 import com.devoops.domain.entity.user.User;
-import com.devoops.dto.response.PullRequestReadResponse;
+import com.devoops.dto.response.PullRequestDetailReadResponse;
 import com.devoops.service.facade.PullRequestFacadeService;
-import com.devoops.service.pullrequests.PullRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,12 +18,21 @@ public class PullRequestController {
     private final PullRequestFacadeService pullRequestFacadeService;
 
     @GetMapping("/api/pull-requests/{pullRequestId}")
-    public ResponseEntity<PullRequestReadResponse> getPullRequest(
+    public ResponseEntity<PullRequestDetailReadResponse> getDetailPullRequest(
             @AuthUser User user,
             @PathVariable long pullRequestId
     ) {
-        PullRequestReadResponse response = pullRequestFacadeService.read(pullRequestId);
+        PullRequestDetailReadResponse response = pullRequestFacadeService.detailRead(pullRequestId);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/api/repositories/pull-requests/{pullRequestId}")
+    public ResponseEntity<Void> getPullRequest(
+            @AuthUser User user,
+            @PathVariable long pullRequestId
+    ) {
+
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/api/pull-requests/{pullRequestId}/done")
