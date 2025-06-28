@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface GithubTokenJpaRepository extends JpaRepository<GithubTokenEntity, Long> {
 
+    GithubTokenEntity findByUserId(long userId);
 }

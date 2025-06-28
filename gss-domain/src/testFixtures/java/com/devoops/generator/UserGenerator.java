@@ -1,5 +1,6 @@
 package com.devoops.generator;
 
+import com.devoops.domain.entity.github.GithubToken;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.user.UserDomainRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,8 @@ public class UserGenerator {
     private UserDomainRepository userRepository;
 
     public User generate(String name) {
-        User user = new User(1L, name, "profileUrl");
+        GithubToken token = new GithubToken(name);
+        User user = new User(1L, name, "profileUrl", token);
         return userRepository.saveUser(user);
     }
 }

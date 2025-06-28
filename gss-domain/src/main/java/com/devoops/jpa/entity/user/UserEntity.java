@@ -1,5 +1,6 @@
 package com.devoops.jpa.entity.user;
 
+import com.devoops.domain.entity.github.GithubToken;
 import com.devoops.domain.entity.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,12 +41,13 @@ public class UserEntity {
         );
     }
 
-    public User toDomainEntity() {
+    public User toDomainEntity(GithubToken githubToken) {
         return new User(
                 this.id,
                 this.providerId,
                 this.nickname,
-                this.profileImageUrl
+                this.profileImageUrl,
+                githubToken
         );
     }
 }
