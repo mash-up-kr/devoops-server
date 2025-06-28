@@ -5,9 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.devoops.client.GithubOAuthClient;
 import com.devoops.client.GithubOAuthClientImpl;
-import com.devoops.client.GithubOAuthProperties;
-import com.devoops.dto.request.GithubTokenRequest;
-import com.devoops.dto.response.GithubTokenResponse;
 import com.devoops.dto.response.UserInfoResponse;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,26 +28,14 @@ class GithubOAuthClientTest {
 
     @BeforeEach
     void setUp() {
-        GithubOAuthProperties authProperties = new GithubOAuthProperties("testClientId", "testClientSecret");
         mockExchangeFunction = Mockito.mock(ExchangeFunction.class);
         WebClient.Builder webClientBuilder = WebClient.builder()
                 .exchangeFunction(mockExchangeFunction);
-        githubOAuthClient = new GithubOAuthClientImpl(webClientBuilder, authProperties);
+        githubOAuthClient = new GithubOAuthClientImpl(webClientBuilder);
     }
 
     @Nested
     class BindResult {
-
-        @Test
-        void 액세스_토큰을_가져올_수_있다() throws IOException {
-            GithubTokenRequest githubTokenRequest = new GithubTokenRequest("testCode", "testRedirectUrl");
-            String expectedAccessToken = "example_access_token";
-            mockClient(HttpStatus.OK, "github-api-response/tokenSuccess.json");
-
-            GithubTokenResponse tokenResponse = githubOAuthClient.getToken(githubTokenRequest);
-
-            assertThat(tokenResponse.accessToken()).isEqualTo(expectedAccessToken);
-        }
 
         @Test
         void 유저_정보를_가져올_수_있다() throws IOException {

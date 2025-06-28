@@ -26,11 +26,9 @@ public class AuthService {
     private final GithubOAuthClient authClient;
     private final JwtTokenManager jwtTokenManager;
 
-    public AuthResponse getUserInfo(UserSaveRequest request) {
-        GithubTokenRequest tokenRequest = new GithubTokenRequest(request.code(), request.redirectUrl());
-        GithubTokenResponse token = authClient.getToken(tokenRequest);
-        UserInfoResponse userInfo = authClient.getUserInfo(token.accessToken());
-        return new AuthResponse(token.accessToken(), userInfo.id(), userInfo.name(), userInfo.avatarUrl());
+    public AuthResponse getUserInfo(String token) {
+        UserInfoResponse userInfo = authClient.getUserInfo(token);
+        return new AuthResponse(token, userInfo.id(), userInfo.name(), userInfo.avatarUrl());
     }
 
     public UserTokenResponse issueToken(String value) {

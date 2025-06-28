@@ -26,7 +26,7 @@ class UserServiceTest extends BaseServiceTest {
             User user = new User(1L, "nickname", "profile_url");
             GithubToken token = new GithubToken("token");
 
-            User saveUser = userService.save(user, token);
+            User saveUser = userService.save(user);
 
             boolean isExist = userRepository.existsById(saveUser.getId());
 
@@ -39,7 +39,7 @@ class UserServiceTest extends BaseServiceTest {
             GithubToken token = new GithubToken("token");
             User existsUser = userRepository.saveUser(user);
 
-            User saveUser = userService.save(existsUser, token);
+            User saveUser = userService.save(existsUser);
 
             assertThat(saveUser).usingRecursiveComparison()
                     .ignoringFields("id")

@@ -32,7 +32,7 @@ class AuthControllerTest extends BaseControllerTest {
 
         @Test
         void 회원_생성_및_토큰_발급을_할_수_있다() {
-            UserSaveRequest request = new UserSaveRequest("testCode", "testRedirectUrl");
+            UserSaveRequest request = new UserSaveRequest("testAccessToken");
 
             RestAssured.given()
                     .contentType(ContentType.JSON)
@@ -55,7 +55,7 @@ class AuthControllerTest extends BaseControllerTest {
             String reissuedAccessToken = RestAssured.given()
                     .contentType(ContentType.JSON)
                     .header(HttpHeaders.COOKIE, "refreshToken=" + refreshToken.getToken())
-                    .when().post("/api/auth/github/reissue")
+                    .when().post("/api/auth/github/refresh")
                     .then().statusCode(HttpStatus.CREATED.value())
                     .extract().header(HttpHeaders.AUTHORIZATION);
 

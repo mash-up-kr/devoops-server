@@ -1,5 +1,6 @@
 package com.devoops.domain.entity.user;
 
+import com.devoops.domain.entity.github.GithubToken;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -19,8 +20,10 @@ public class User {
 
     private final String profileImageUrl;
 
-    public User(long providerId, String nickname, String profileImageUrl) {
-        this(null, providerId, nickname, profileImageUrl);
+    private final GithubToken githubToken;
+
+    public User(long providerId, String nickname, String profileImageUrl, GithubToken githubToken) {
+        this(null, providerId, nickname, profileImageUrl, githubToken);
     }
 
     public boolean isSameUser(long id) {

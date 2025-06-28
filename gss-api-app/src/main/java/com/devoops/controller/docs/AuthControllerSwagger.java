@@ -2,6 +2,7 @@ package com.devoops.controller.docs;
 
 import com.devoops.dto.request.UserSaveRequest;
 import com.devoops.dto.response.UserSaveResponse;
+import com.devoops.dto.response.UserTokenRefreshResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -58,15 +59,10 @@ public interface AuthControllerSwagger {
                                     name = "Set-Cookie",
                                     description = "새로운 리프레시 토큰이 포함된 쿠키",
                                     schema = @Schema(type = "string", example = "refreshToken=abc.def.ghi;")
-                            ),
-                            @Header(
-                                    name = "Authorization",
-                                    description = "새로 발급된 액세스 토큰 (Bearer)",
-                                    schema = @Schema(type = "string", example = "Bearer eyJhbGciOiJIUzI1NiIsInR...")
                             )
                     }
             )
             }
     )
-    ResponseEntity<Void> reIssueToken(String token);
+    ResponseEntity<UserTokenRefreshResponse> reIssueToken(String token);
 }
