@@ -43,28 +43,34 @@ public class GithubRepositoryEntity extends BaseTimeEntity {
     @NotNull
     private String owner;
 
+    @NotNull
+    private int pullRequestCount;
+
     private long githubRepositoryId;
 
     public static GithubRepositoryEntity from(GithubRepository githubRepository, UserEntity user) {
+        final int INITIAL_PULL_REQUEST_COUNT = 0;
+
         return new GithubRepositoryEntity(
-                githubRepository.getId(),
-                user,
-                githubRepository.getName(),
-                githubRepository.getUrl(),
-                githubRepository.getName(),
-                githubRepository.getExternalId()
+            githubRepository.getId(),
+            user,
+            githubRepository.getName(),
+            githubRepository.getUrl(),
+            githubRepository.getName(),
+            INITIAL_PULL_REQUEST_COUNT,
+            githubRepository.getExternalId()
         );
     }
 
-
     public GithubRepository toDomainEntity() {
         return new GithubRepository(
-                this.id,
-                this.user.getId(),
-                this.name,
-                this.url,
-                this.owner,
-                this.githubRepositoryId
+            this.id,
+            this.user.getId(),
+            this.name,
+            this.url,
+            this.owner,
+            this.pullRequestCount,
+            this.githubRepositoryId
         );
     }
 }

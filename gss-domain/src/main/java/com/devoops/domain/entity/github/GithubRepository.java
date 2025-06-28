@@ -12,6 +12,7 @@ public class GithubRepository {
     private final String name;
     private final String url;
     private final String owner;
+    private final int prCount;
     private final long externalId;
 
     public GithubRepository(long userId, String name, String url, String owner, long externalId) {

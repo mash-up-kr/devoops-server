@@ -11,6 +11,8 @@ import com.devoops.exception.errorcode.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class RepositoryService {
@@ -28,8 +30,12 @@ public class RepositoryService {
     }
 
     private void validateOwn(User user, long repositoryId) {
-        if(!repoRepository.existsByIdAndUserId(repositoryId, user.getId())) {
+        if (!repoRepository.existsByIdAndUserId(repositoryId, user.getId())) {
             throw new GssException(ErrorCode.REPOSITORY_NOT_FOUND);
         }
+    }
+
+    public List<GithubRepository> getMyRepositories(User user) {
+        return repoRepository.findByUserId(user.getId());
     }
 }

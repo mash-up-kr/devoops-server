@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class GithubRepoDomainRepositoryImpl implements GithubRepoDomainRepository {
@@ -40,5 +42,14 @@ public class GithubRepoDomainRepositoryImpl implements GithubRepoDomainRepositor
             .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.GITHUB_REPOSITORY_NOT_FOUND));
 
         return repositoryEntity.toDomainEntity();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<GithubRepository> findByUserId(long userId) {
+        return repoJpaRepository.findAllByUser_Id(userId)
+            .stream()
+            .map(GithubRepositoryEntity::toDomainEntity)
+            .toList();
     }
 }
