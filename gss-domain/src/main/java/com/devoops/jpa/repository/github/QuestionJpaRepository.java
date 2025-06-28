@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface QuestionJpaRepository extends JpaRepository<QuestionEntity, Integer> {
 
@@ -18,5 +19,5 @@ public interface QuestionJpaRepository extends JpaRepository<QuestionEntity, Int
               left outer join AnswerEntity ae on qe.id = ae.question.id
               where qe.pullRequest.id = :pullRequestId
             """)
-    List<QuestionAnswer> findByPullRequestId(long pullRequestId);
+    List<QuestionAnswer> findByPullRequestId(@Param("pullRequestId") long pullRequestId);
 }
