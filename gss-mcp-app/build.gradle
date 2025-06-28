@@ -17,6 +17,8 @@ dependencies {
 
     // test fixtures
     testImplementation(testFixtures(project(":gss-domain")))
+    testCompileOnly "org.projectlombok:lombok"
+    testAnnotationProcessor "org.projectlombok:lombok"
 }
 
 tasks.named("bootJar") {
