@@ -2,9 +2,11 @@ package com.devoops.controller.pullrequests;
 
 import com.devoops.controller.auth.AuthUser;
 import com.devoops.domain.entity.user.User;
+import com.devoops.dto.response.PullRequestReadResponse;
 import com.devoops.service.pullrequests.PullRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class PullRequestController {
 
     private final PullRequestService pullRequestService;
+
+    @GetMapping("/api/pull-requests/{pullRequestId}")
+    public ResponseEntity<PullRequestReadResponse> getPullRequest(
+            @AuthUser User user,
+            @PathVariable long pullRequestId
+    ) {
+
+        return ResponseEntity.ok().build();
+    }
+
 
     @PatchMapping("/api/pull-requests/{pullRequestId}/done")
     public ResponseEntity<Void> pullRequestUpdateToDone(
