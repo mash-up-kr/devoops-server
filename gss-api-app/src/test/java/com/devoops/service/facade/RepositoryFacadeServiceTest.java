@@ -13,6 +13,7 @@ import com.devoops.domain.entity.github.GithubRepository;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.github.GithubRepoDomainRepository;
 import com.devoops.dto.request.GithubRepoUrl;
+import com.devoops.dto.request.RepositorySaveRequest;
 import com.devoops.dto.response.GithubRepoInfoResponse;
 import com.devoops.dto.response.OwnerResponse;
 import org.junit.jupiter.api.Nested;
@@ -38,12 +39,12 @@ class RepositoryFacadeServiceTest extends BaseServiceTest {
         @Test
         void 레포지토리를_저장하고_웹훅을_심는다() {
             User user = userGenerator.generate("김건우");
-            GithubRepoUrl githubRepoUrl = new GithubRepoUrl("https://github.com/octocat/Hello-World");
+            RepositorySaveRequest request = new RepositorySaveRequest("https://github.com/octocat/Hello-World");
             GithubRepoInfoResponse mockResponse = new GithubRepoInfoResponse(123, "testName", "testUrl", new OwnerResponse("김건우"));
             Mockito.when(gitHubClient.getRepositoryInfo(anyString(), anyString(), anyString()))
                     .thenReturn(mockResponse);
 
-            GithubRepository savedRepository = repositoryFacadeService.save(githubRepoUrl, user);
+            GithubRepository savedRepository = repositoryFacadeService.save(request, user);
 
             boolean exists = githubRepoDomainRepository.existsByIdAndUserId(savedRepository.getId(), user.getId());
 

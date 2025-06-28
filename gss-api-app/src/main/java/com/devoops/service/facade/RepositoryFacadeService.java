@@ -1,11 +1,11 @@
 package com.devoops.service.facade;
 
-import com.devoops.client.GitHubClient;
 import com.devoops.command.request.RepositoryCreateCommand;
 import com.devoops.domain.entity.github.GithubRepository;
 import com.devoops.domain.entity.github.PullRequests;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.GithubRepoUrl;
+import com.devoops.dto.request.RepositorySaveRequest;
 import com.devoops.dto.response.GithubRepoInfoResponse;
 import com.devoops.service.GitHubService;
 import com.devoops.service.repository.RepositoryService;
@@ -19,7 +19,8 @@ public class RepositoryFacadeService {
     private final RepositoryService repositoryService;
     private final GitHubService gitHubService;
 
-    public GithubRepository save(GithubRepoUrl repoUrl, User user) {
+    public GithubRepository save(RepositorySaveRequest request, User user) {
+        GithubRepoUrl repoUrl = new GithubRepoUrl(request.url());
         GithubRepository savedRepository = saveRepository(repoUrl, user);
         gitHubService.registerWebhook(user, savedRepository.getId());
         return savedRepository;
