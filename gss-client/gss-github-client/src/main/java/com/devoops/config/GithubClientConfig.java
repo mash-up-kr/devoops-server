@@ -1,5 +1,7 @@
-package com.devoops.client;
+package com.devoops.config;
 
+import com.devoops.client.GitHubClient;
+import com.devoops.client.GitHubWebClientProperties;
 import io.netty.channel.ChannelOption;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

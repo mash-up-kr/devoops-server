@@ -1,0 +1,45 @@
+package com.devoops.service.facade;
+
+import com.devoops.command.request.RepositoryCreateCommand;
+import com.devoops.domain.entity.github.GithubRepository;
+import com.devoops.domain.entity.github.PullRequests;
+import com.devoops.domain.entity.user.User;
+import com.devoops.dto.request.GithubRepoUrl;
+import com.devoops.dto.request.RepositorySaveRequest;
+import com.devoops.dto.response.GithubRepoInfoResponse;
+import com.devoops.service.GitHubService;
+import com.devoops.service.repository.RepositoryService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class RepositoryFacadeService {
+
+    private final RepositoryService repositoryService;
+    private final GitHubService gitHubService;
+
+    public GithubRepository save(RepositorySaveRequest request, User user) {
+        GithubRepoUrl repoUrl = new GithubRepoUrl(request.url());
+        GithubRepository savedRepository = saveRepository(repoUrl, user);
+        gitHubService.registerWebhook(user, savedRepository.getId());
+        return savedRepository;
+    }
+
+    private GithubRepository saveRepository(GithubRepoUrl url, User user) {
+        GithubRepoInfoResponse repositoryInfo = gitHubService.getRepositoryInfo(url, user.getGithubToken());
+        RepositoryCreateCommand createCommand = new RepositoryCreateCommand(
+                user.getId(),
+                repositoryInfo.name(),
+                repositoryInfo.url(),
+                repositoryInfo.getOwnerName(),
+                repositoryInfo.id()
+        );
+        return repositoryService.save(createCommand);
+    }
+
+    public PullRequests findAllPullRequests(User user, long repositoryId, int size, int page) {
+        return repositoryService.getPullRequestsByRepository(user, repositoryId, size, page);
+    }
+
+}
