@@ -1,5 +1,6 @@
 package com.devoops.jpa.entity.github;
 
+import com.devoops.domain.entity.github.AnswerRanking;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +31,24 @@ public class AnswerRankingEntity {
 
     private LocalDateTime updatedAt;
 
-    public AnswerRankingEntity(long questionId, long pullRequestId, long userId, LocalDateTime updatedAt) {
-        this(null, questionId, pullRequestId, userId, updatedAt);
+    public AnswerRankingEntity(AnswerRanking answerRanking) {
+        this(
+                null,
+                answerRanking.getQuestionId(),
+                answerRanking.getPullRequestId(),
+                answerRanking.getUserId(),
+                answerRanking.getUpdatedAt()
+        );
+    }
+
+    public AnswerRanking toDomainEntity() {
+        return new AnswerRanking(id, questionId, pullRequestId, userId, updatedAt);
+    }
+
+    public void update(AnswerRanking answerRanking) {
+        this.questionId = answerRanking.getQuestionId();
+        this.pullRequestId = answerRanking.getPullRequestId();
+        this.userId = answerRanking.getUserId();
+        this.updatedAt = answerRanking.getUpdatedAt();
     }
 }
