@@ -2,11 +2,13 @@ package com.devoops.jpa.repository.github;
 
 import com.devoops.domain.entity.github.PullRequest;
 import com.devoops.domain.entity.github.PullRequests;
+import com.devoops.domain.entity.github.QuestionAnswer;
 import com.devoops.domain.repository.github.PullRequestDomainRepository;
 import com.devoops.exception.GssRepositoryException;
 import com.devoops.exception.RepositoryErrorCode;
 import com.devoops.jpa.entity.github.GithubRepositoryEntity;
 import com.devoops.jpa.entity.github.PullRequestEntity;
+import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +32,14 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
         PullRequestEntity pullRequestEntity = PullRequestEntity.from(pullRequest, githubRepositoryEntity);
         PullRequestEntity savedPullRequest = pullRequestRepository.save(pullRequestEntity);
         return savedPullRequest.toDomainEntity();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PullRequest findById(long pullRequestId) {
+        PullRequestEntity pullRequestEntity = pullRequestRepository.findById(pullRequestId)
+                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.PULL_REQUEST_NOT_FOUND));
+        return pullRequestEntity.toDomainEntity();
     }
 
     @Override

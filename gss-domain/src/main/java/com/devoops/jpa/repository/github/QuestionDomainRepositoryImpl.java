@@ -1,11 +1,13 @@
 package com.devoops.jpa.repository.github;
 
 import com.devoops.domain.entity.github.Question;
+import com.devoops.domain.entity.github.QuestionAnswer;
 import com.devoops.domain.repository.github.QuestionDomainRepository;
 import com.devoops.exception.GssRepositoryException;
 import com.devoops.exception.RepositoryErrorCode;
 import com.devoops.jpa.entity.github.PullRequestEntity;
 import com.devoops.jpa.entity.github.QuestionEntity;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,5 +33,10 @@ public class QuestionDomainRepositoryImpl implements QuestionDomainRepository {
         QuestionEntity questionEntity = questionRepository.findById(questionId)
                 .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.QUESTION_NOT_FOUND));
         return questionEntity.toDomainEntity();
+    }
+
+    @Transactional(readOnly = true)
+    public List<QuestionAnswer> findAllPrQuestions(long pullRequestId) {
+        return questionRepository.findByPullRequestId(pullRequestId);
     }
 }

@@ -7,6 +7,8 @@ public interface PullRequestDomainRepository {
 
     PullRequest save(PullRequest pullRequest);
 
+    PullRequest findById(long pullRequestId);
+
     PullRequests findPullRequestsByRepositoryIdOrderByMergedAt(long repositoryId, int size, int page);
 
     PullRequest updateToDone(long pullRequestId);

@@ -13,7 +13,7 @@ public class QuestionGenerator {
     private QuestionDomainRepository questionDomainRepository;
 
     public Question generate(PullRequest pullRequest, String content) {
-        Question question = new Question(null, pullRequest.getId(), content, false);
+        Question question = new Question(null, pullRequest.getId(), "category", content, false);
         return questionDomainRepository.save(question);
     }
 }

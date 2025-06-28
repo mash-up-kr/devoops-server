@@ -9,6 +9,7 @@ import com.devoops.domain.entity.github.Answers;
 import com.devoops.domain.entity.github.GithubRepository;
 import com.devoops.domain.entity.github.PullRequest;
 import com.devoops.domain.entity.github.Question;
+import com.devoops.domain.entity.github.QuestionAnswer;
 import com.devoops.domain.entity.github.RecordStatus;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.AnswerPutRequest;
@@ -87,6 +88,28 @@ class QuestionServiceTest extends BaseServiceTest {
                     () -> assertThat(updatedAllAnswers.get(0).getContent()).isEqualTo("after1"),
                     () -> assertThat(updatedAllAnswers.get(1).getContent()).isEqualTo("after2"),
                     () -> assertThat(updatedAllAnswers.get(2).getContent()).isEqualTo("after3")
+            );
+        }
+    }
+
+    @Nested
+    class PRQuestions {
+
+        @Test
+        void 풀리퀘스트의_질문과_대답을_모두_조회한다() {
+            User user = userGenerator.generate("김건우");
+            GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
+            PullRequest pullRequest = pullRequestGenerator.generate("최초 PR", RecordStatus.PENDING, repo, LocalDateTime.now());
+            Question question1 = questionGenerator.generate(pullRequest, "질문1");
+            questionGenerator.generate(pullRequest, "질문1");
+            Answer answer1 = answerGenerator.generate(question1, "answerContent");
+
+            List<QuestionAnswer> prQuestions = questionService.getAllPrQuestions(pullRequest.getId());
+
+            assertAll(
+                    () -> assertThat(prQuestions).hasSize(2),
+                    () -> assertThat(prQuestions.get(0).getAnswer()).isEqualTo(answer1.getContent()),
+                    () -> assertThat(prQuestions.get(1).getAnswer()).isNull()
             );
         }
     }
