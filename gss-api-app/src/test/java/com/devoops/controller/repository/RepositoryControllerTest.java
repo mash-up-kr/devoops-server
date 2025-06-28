@@ -3,10 +3,12 @@ package com.devoops.controller.repository;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.devoops.BaseControllerTest;
+import com.devoops.command.request.RepositoryCreateCommand;
 import com.devoops.domain.entity.github.GithubRepository;
 import com.devoops.domain.entity.github.PullRequest;
 import com.devoops.domain.entity.github.RecordStatus;
 import com.devoops.domain.entity.user.User;
+import com.devoops.dto.request.RepositorySaveRequest;
 import com.devoops.dto.response.UserSaveResponse;
 import com.devoops.service.auth.jwt.JwtToken;
 import com.devoops.service.auth.jwt.TokenType;
@@ -63,6 +65,24 @@ class RepositoryControllerTest extends BaseControllerTest {
                     .pathParam("repositoryId", repo.getId())
                     .when().get("/api/repositories/{repositoryId}/pull-requests")
                     .then().statusCode(HttpStatus.BAD_REQUEST.value());
+        }
+    }
+
+    @Nested
+    class CreateRepository {
+
+        @Test
+        void 레포지토리를_생성할_수_있다() {
+            User user = userGenerator.generate("김건우");
+            JwtToken accessToken = jwtTokenManager.createToken(String.valueOf(user.getId()), TokenType.ACCESS_TOKEN);
+            RepositorySaveRequest request = new RepositorySaveRequest("https://github.com/octocat/Hello-World");
+
+            RestAssured.given()
+                    .contentType(ContentType.JSON)
+                    .header(HttpHeaders.AUTHORIZATION, accessToken.getToken())
+                    .body(request)
+                    .when().post("/api/repositories")
+                    .then().statusCode(HttpStatus.CREATED.value());
         }
     }
 }
