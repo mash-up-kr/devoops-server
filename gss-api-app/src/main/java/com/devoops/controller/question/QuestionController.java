@@ -10,7 +10,6 @@ import com.devoops.dto.response.AnswerPutResponses;
 import com.devoops.dto.response.AnswerSaveResponse;
 import com.devoops.dto.response.AnswerUpdateResponse;
 import com.devoops.service.facade.QuestionFacadeService;
-import com.devoops.service.question.QuestionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -56,13 +55,13 @@ public class QuestionController {
     ) {
 
         //TODO ranking 갱신
-        Answer updatedAnswer = questionFacadeService.updateAnswer(answerId, request.content());
+        Answer updatedAnswer = questionFacadeService.updateAnswer(answerId, request.content(), user.getId());
         AnswerUpdateResponse response = new AnswerUpdateResponse(updatedAnswer);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/api/questions/answer/{answerId}")
-    public ResponseEntity<Void> updateAnswer(
+    public ResponseEntity<Void> deleteAnswer(
             @AuthUser User user,
             @PathVariable(name = "answerId") long answerId
     ) {

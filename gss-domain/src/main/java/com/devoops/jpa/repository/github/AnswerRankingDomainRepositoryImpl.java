@@ -1,11 +1,15 @@
 package com.devoops.jpa.repository.github;
 
+import com.devoops.domain.entity.github.Answer;
 import com.devoops.domain.entity.github.AnswerRanking;
 import com.devoops.domain.entity.github.AnswerRankings;
 import com.devoops.domain.repository.github.AnswerRankingDomainRepository;
 import com.devoops.exception.GssRepositoryException;
 import com.devoops.exception.RepositoryErrorCode;
 import com.devoops.jpa.entity.github.AnswerRankingEntity;
+import com.devoops.jpa.entity.github.PullRequestEntity;
+import com.devoops.jpa.entity.github.QuestionEntity;
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -16,10 +20,24 @@ import org.springframework.transaction.annotation.Transactional;
 public class AnswerRankingDomainRepositoryImpl implements AnswerRankingDomainRepository {
 
     private final AnswerRankingJpaRepository answerRankingJpaRepository;
+    private final QuestionJpaRepository questionJpaRepository;
 
     @Override
     @Transactional
-    public AnswerRanking save(AnswerRanking answerRanking) {
+    public AnswerRanking save(Answer answer, long userId) {
+        QuestionEntity questionEntity = questionJpaRepository.findById(answer.getQuestionId())
+                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.QUESTION_NOT_FOUND));
+        PullRequestEntity pullRequestEntity = questionEntity.getPullRequest();
+        AnswerRanking answerRanking = new AnswerRanking(
+                null,
+                pullRequestEntity.getId(),
+                pullRequestEntity.getTitle(),
+                userId,
+                answer.getQuestionId(),
+                questionEntity.getContent(),
+                LocalDateTime.now()
+        );
+
         AnswerRankingEntity answerRankingEntity = new AnswerRankingEntity(answerRanking);
         AnswerRankingEntity savedAnswerRanking = answerRankingJpaRepository.save(answerRankingEntity);
         return savedAnswerRanking.toDomainEntity();

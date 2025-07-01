@@ -1,12 +1,12 @@
 package com.devoops.service.facade;
 
 import com.devoops.domain.entity.github.Answer;
+import com.devoops.domain.entity.github.AnswerRanking;
 import com.devoops.domain.entity.github.Answers;
-import com.devoops.domain.entity.github.QuestionAnswer;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.AnswerPutRequests;
+import com.devoops.service.answerranking.AnswerRankingService;
 import com.devoops.service.question.QuestionService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,17 +15,16 @@ import org.springframework.stereotype.Service;
 public class QuestionFacadeService {
 
     private final QuestionService questionService;
+    private final AnswerRankingService answerRankingService;
 
     public Answer initializeAnswer(long questionId, User user) {
         return questionService.initializeAnswer(questionId, user);
     }
 
-    public List<QuestionAnswer> getAllPrQuestions(long pullRequestsId) {
-        return questionService.getAllPrQuestions(pullRequestsId);
-    }
-
-    public Answer updateAnswer(long answerId, String updateContent) {
-        return questionService.updateAnswer(answerId, updateContent);
+    public Answer updateAnswer(long answerId, String updateContent, long userId) {
+        Answer answer = questionService.updateAnswer(answerId, updateContent);
+        answerRankingService.push(answer, userId);
+        return answer;
     }
 
     public Answers updateAllAnswers(AnswerPutRequests updateRequests) {
