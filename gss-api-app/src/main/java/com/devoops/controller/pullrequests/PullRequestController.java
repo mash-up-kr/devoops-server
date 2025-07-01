@@ -2,6 +2,7 @@ package com.devoops.controller.pullrequests;
 
 import com.devoops.controller.auth.AuthUser;
 import com.devoops.domain.entity.user.User;
+import com.devoops.dto.response.PullRequestRankingResponses;
 import com.devoops.dto.response.PullRequestReadResponse;
 import com.devoops.service.facade.PullRequestFacadeService;
 import com.devoops.service.pullrequests.PullRequestService;
@@ -25,6 +26,12 @@ public class PullRequestController {
     ) {
         PullRequestReadResponse response = pullRequestFacadeService.read(pullRequestId);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/api/pull-requests/ranking")
+    public ResponseEntity<PullRequestRankingResponses> getPullRequestRanking(@AuthUser User user) {
+//        PullRequestReadResponse response = pullRequestFacadeService.read();
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/api/pull-requests/{pullRequestId}/done")
