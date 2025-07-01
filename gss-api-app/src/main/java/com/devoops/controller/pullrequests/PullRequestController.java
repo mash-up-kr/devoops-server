@@ -30,8 +30,8 @@ public class PullRequestController {
 
     @GetMapping("/api/pull-requests/ranking")
     public ResponseEntity<PullRequestRankingResponses> getPullRequestRanking(@AuthUser User user) {
-//        PullRequestReadResponse response = pullRequestFacadeService.read();
-        return ResponseEntity.ok().build();
+        PullRequestRankingResponses response = pullRequestFacadeService.ranking(user.getId());
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/api/pull-requests/{pullRequestId}/done")

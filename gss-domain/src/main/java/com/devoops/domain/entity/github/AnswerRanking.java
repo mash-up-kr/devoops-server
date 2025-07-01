@@ -9,8 +9,10 @@ import lombok.RequiredArgsConstructor;
 public class AnswerRanking {
 
     private final Long id;
-    private final long questionId;
     private final long pullRequestId;
+    private final String pullRequestTitle;
     private final long userId;
+    private final long questionId;
+    private final String questionContent;
     private final LocalDateTime updatedAt;
 }

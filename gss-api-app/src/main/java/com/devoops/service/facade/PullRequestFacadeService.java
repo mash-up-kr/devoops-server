@@ -1,8 +1,11 @@
 package com.devoops.service.facade;
 
+import com.devoops.domain.entity.github.AnswerRankings;
 import com.devoops.domain.entity.github.PullRequest;
 import com.devoops.domain.entity.github.QuestionAnswer;
+import com.devoops.dto.response.PullRequestRankingResponses;
 import com.devoops.dto.response.PullRequestReadResponse;
+import com.devoops.service.answerranking.AnswerRankingService;
 import com.devoops.service.pullrequests.PullRequestService;
 import com.devoops.service.question.QuestionService;
 import java.util.List;
@@ -15,11 +18,17 @@ public class PullRequestFacadeService {
 
     private final PullRequestService pullRequestService;
     private final QuestionService questionService;
+    private final AnswerRankingService answerRankingService;
 
     public PullRequestReadResponse read(long pullRequestId) {
         PullRequest pullRequest = pullRequestService.getPullRequest(pullRequestId);
         List<QuestionAnswer> prQuestions = questionService.getAllPrQuestions(pullRequest.getId());
         return PullRequestReadResponse.from(pullRequest, prQuestions);
+    }
+
+    public PullRequestRankingResponses ranking(long userId) {
+        AnswerRankings userRanking = answerRankingService.findUserRanking(userId);
+        return PullRequestRankingResponses.from(userRanking);
     }
 
     public void updateToDone(long pullRequestId) {
