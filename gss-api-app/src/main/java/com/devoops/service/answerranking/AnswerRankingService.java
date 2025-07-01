@@ -27,7 +27,7 @@ public class AnswerRankingService {
 
         Optional<AnswerRanking> samePrRanking = answerRankings.getSamePrRanking(question.getPullRequestId());
         if (samePrRanking.isPresent()) {
-            answerRankingDomainRepository.update(samePrRanking.get());
+            answerRankingDomainRepository.update(samePrRanking.get().getPullRequestId(), answer.getQuestionId());
             return;
         }
         rotateAnswerRanking(answerRankings, answer, userId);

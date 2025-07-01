@@ -1,5 +1,6 @@
 package com.devoops.jpa.entity.github;
 
+import com.devoops.domain.entity.github.Answer;
 import com.devoops.domain.entity.github.AnswerRanking;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -55,12 +56,9 @@ public class AnswerRankingEntity {
         return new AnswerRanking(id, pullRequestId, pullRequestTitle, userId, questionId, questionContent, updatedAt);
     }
 
-    public void update(AnswerRanking answerRanking) {
-        this.questionId = answerRanking.getQuestionId();
-        this.questionContent = answerRanking.getQuestionContent();
-        this.pullRequestTitle = answerRanking.getPullRequestTitle();
-        this.pullRequestId = answerRanking.getPullRequestId();
-        this.userId = answerRanking.getUserId();
-        this.updatedAt = answerRanking.getUpdatedAt();
+    public void update(QuestionEntity questionEntity) {
+        this.questionId = questionEntity.getId();
+        this.questionContent = questionEntity.getContent();
+        this.updatedAt = LocalDateTime.now();
     }
 }

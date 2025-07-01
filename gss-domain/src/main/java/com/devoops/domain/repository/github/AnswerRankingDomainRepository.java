@@ -10,7 +10,7 @@ public interface AnswerRankingDomainRepository {
 
     AnswerRankings findAllByUserId(long userId);
 
-    AnswerRanking update(AnswerRanking answerRanking);
+    AnswerRanking update(long pullRequestId, long questionId);
 
     void deleteById(long id);
 }

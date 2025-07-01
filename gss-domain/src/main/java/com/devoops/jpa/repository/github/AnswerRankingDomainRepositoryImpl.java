@@ -25,8 +25,7 @@ public class AnswerRankingDomainRepositoryImpl implements AnswerRankingDomainRep
     @Override
     @Transactional
     public AnswerRanking save(Answer answer, long userId) {
-        QuestionEntity questionEntity = questionJpaRepository.findById(answer.getQuestionId())
-                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.QUESTION_NOT_FOUND));
+        QuestionEntity questionEntity = findQuestionById(answer.getQuestionId());
         PullRequestEntity pullRequestEntity = questionEntity.getPullRequest();
         AnswerRanking answerRanking = new AnswerRanking(
                 null,
@@ -54,10 +53,11 @@ public class AnswerRankingDomainRepositoryImpl implements AnswerRankingDomainRep
 
     @Override
     @Transactional
-    public AnswerRanking update(AnswerRanking answerRanking) {
-        AnswerRankingEntity answerRankingEntity = answerRankingJpaRepository.findById(answerRanking.getId())
+    public AnswerRanking update(long pullRequestId, long questionId) {
+        AnswerRankingEntity answerRankingEntity = answerRankingJpaRepository.findByPullRequestId(pullRequestId)
                 .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.ANSWER_RANKING_NOT_FOUND));
-        answerRankingEntity.update(answerRanking);
+        QuestionEntity questionEntity = findQuestionById(questionId);
+        answerRankingEntity.update(questionEntity);
         return answerRankingEntity.toDomainEntity();
     }
 
@@ -65,5 +65,10 @@ public class AnswerRankingDomainRepositoryImpl implements AnswerRankingDomainRep
     @Transactional
     public void deleteById(long id) {
         answerRankingJpaRepository.deleteById(id);
+    }
+
+    private QuestionEntity findQuestionById(long questionId) {
+        return questionJpaRepository.findById(questionId)
+                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.QUESTION_NOT_FOUND));
     }
 }
