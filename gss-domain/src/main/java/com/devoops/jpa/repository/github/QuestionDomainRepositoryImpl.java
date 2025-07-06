@@ -39,4 +39,13 @@ public class QuestionDomainRepositoryImpl implements QuestionDomainRepository {
     public List<QuestionAnswer> findAllPrQuestions(long pullRequestId) {
         return questionRepository.findByPullRequestId(pullRequestId);
     }
+
+    @Override
+    @Transactional
+    public void saveAll(List<Question> questions) {
+        List<QuestionEntity> questionEntityList = questions.stream().map(
+                QuestionEntity::toJpaEntity
+        ).toList();
+        questionRepository.saveAll(questionEntityList);
+    }
 }

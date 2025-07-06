@@ -12,4 +12,8 @@ public class Question {
     private final String category;
     private final String content;
     private final boolean isAnswered;
+
+    public Question(long pullRequestId, String content) {
+        this(null, pullRequestId, content, false);
+    }
 }
