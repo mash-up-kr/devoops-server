@@ -60,4 +60,13 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
         pullRequest.updateToDone();
         return pullRequest.toDomainEntity();
     }
+
+    @Override
+    @Transactional
+    public PullRequest updateAnalyzedResult(long pullRequestId, String summary) {
+        PullRequestEntity pullRequest = pullRequestRepository.findById(pullRequestId)
+                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.PULL_REQUEST_NOT_FOUND));
+        pullRequest.updateAnalyzeResult(summary);
+        return pullRequest.toDomainEntity();
+    }
 }

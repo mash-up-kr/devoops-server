@@ -82,6 +82,10 @@ public class PullRequestEntity extends BaseTimeEntity {
         this.recordStatus = RecordStatus.DONE;
     }
 
+    public void updateAnalyzeResult(String summary) {
+        this.summary = summary;
+    }
+
     public PullRequest toDomainEntity() {
         return new PullRequest(
             this.id,
