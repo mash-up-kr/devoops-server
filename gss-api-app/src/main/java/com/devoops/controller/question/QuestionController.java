@@ -1,6 +1,7 @@
 package com.devoops.controller.question;
 
 import com.devoops.controller.auth.AuthUser;
+import com.devoops.controller.docs.QuestionControllerSwagger;
 import com.devoops.domain.entity.github.Answer;
 import com.devoops.domain.entity.github.Answers;
 import com.devoops.domain.entity.user.User;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class QuestionController {
+public class QuestionController implements QuestionControllerSwagger {
 
     private final QuestionService questionService;
 
@@ -59,7 +60,7 @@ public class QuestionController {
     }
 
     @DeleteMapping("/api/questions/answer/{answerId}")
-    public ResponseEntity<Void> updateAnswer(
+    public ResponseEntity<Void> deleteAnswer(
             @AuthUser User user,
             @PathVariable(name = "answerId") long answerId
     ) {
