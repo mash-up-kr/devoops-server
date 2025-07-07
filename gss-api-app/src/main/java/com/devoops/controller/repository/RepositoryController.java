@@ -1,6 +1,7 @@
 package com.devoops.controller.repository;
 
 import com.devoops.controller.auth.AuthUser;
+import com.devoops.controller.docs.RepositoryControllerSwagger;
 import com.devoops.domain.entity.github.GithubRepository;
 import com.devoops.domain.entity.github.PullRequests;
 import com.devoops.domain.entity.user.User;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class RepositoryController {
+public class RepositoryController implements RepositoryControllerSwagger {
 
     private final RepositoryFacadeService repositoryFacadeService;
 
