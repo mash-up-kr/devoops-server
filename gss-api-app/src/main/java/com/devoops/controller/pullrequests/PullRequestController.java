@@ -1,10 +1,10 @@
 package com.devoops.controller.pullrequests;
 
 import com.devoops.controller.auth.AuthUser;
+import com.devoops.controller.docs.PullRequestControllerSwagger;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.response.PullRequestReadResponse;
 import com.devoops.service.facade.PullRequestFacadeService;
-import com.devoops.service.pullrequests.PullRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class PullRequestController {
+public class PullRequestController implements PullRequestControllerSwagger {
 
     private final PullRequestFacadeService pullRequestFacadeService;
 
