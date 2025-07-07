@@ -2,6 +2,7 @@ package com.devoops;
 
 import com.devoops.config.TestConfig;
 import com.devoops.generator.AnswerGenerator;
+import com.devoops.generator.AnswerRankingGenerator;
 import com.devoops.generator.GithubRepoGenerator;
 import com.devoops.generator.PullRequestGenerator;
 import com.devoops.generator.QuestionGenerator;
@@ -32,5 +33,8 @@ public abstract class BaseServiceTest {
 
     @Autowired
     protected AnswerGenerator answerGenerator;
+
+    @Autowired
+    protected AnswerRankingGenerator answerRankingGenerator;
 }
 
