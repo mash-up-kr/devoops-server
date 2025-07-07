@@ -33,9 +33,9 @@ public class PullRequestController implements PullRequestControllerSwagger {
             @AuthUser User user,
             @PathVariable long pullRequestId
     ) {
-        pullRequestFacadeService.read(pullRequestId);
+        PullRequestReadResponse response = pullRequestFacadeService.read(pullRequestId);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/api/pull-requests/{pullRequestId}/done")

@@ -39,8 +39,8 @@ public record PullRequestReadResponse(
         List<String> categories,
 
         @NotNull
-        @ArraySchema(schema = @Schema(description = "회고-질문 내역 목록", implementation = QuestionResponse.class))
-        List<QuestionResponse> questions
+        @ArraySchema(schema = @Schema(description = "회고-질문 내역 목록", implementation = QuestionBriefResponse.class))
+        List<QuestionBriefResponse> questions
 ) {
 
     public static PullRequestReadResponse from(
@@ -48,7 +48,6 @@ public record PullRequestReadResponse(
             List<String> categories,
             List<QuestionAnswer> questionAnswers
     ) {
-        List<QuestionResponse> questionResponses = mapToQuestionResponses(questionAnswers);
         return new PullRequestReadResponse(
                 pullRequest.getId(),
                 pullRequest.getTitle(),
@@ -57,13 +56,13 @@ public record PullRequestReadResponse(
                 pullRequest.getMergedAt(),
                 pullRequest.getSummary(),
                 categories,
-                questionResponses
+                mapToQuestionResponses(questionAnswers)
         );
     }
 
-    private static List<QuestionResponse> mapToQuestionResponses(List<QuestionAnswer> questionAnswers) {
+    private static List<QuestionBriefResponse> mapToQuestionResponses(List<QuestionAnswer> questionAnswers) {
         return questionAnswers.stream()
-                .map(QuestionResponse::new)
+                .map(QuestionBriefResponse::new)
                 .toList();
     }
 }
