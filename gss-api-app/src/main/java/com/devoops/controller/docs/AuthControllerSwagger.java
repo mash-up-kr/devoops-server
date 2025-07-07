@@ -21,22 +21,9 @@ public interface AuthControllerSwagger {
             summary = "회원 생성 & 토큰 발급",
             requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = UserSaveRequest.class))),
             responses = {@ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "회원 생성 & 토큰 발급 성공",
-                    headers = {
-                                @Header(
-                                        name = "Set-Cookie",
-                                        description = "리프레시 토큰이 포함된 쿠키",
-                                        schema = @Schema(type = "string", example = "refreshToken=abc.def.ghi;")
-                                ),
-                                @Header(
-                                        name = "Authorization",
-                                        description = "발급된 액세스 토큰 (Bearer)",
-                                        schema = @Schema(type = "string", example = "Bearer eyJhbGciOiJIUzI1NiIsInR...")
-                                )
-                    }
-                    )
-            }
+                    content = @Content(schema = @Schema(implementation = UserSaveResponse.class)))}
     )
     ResponseEntity<UserSaveResponse> issueToken(UserSaveRequest userSaveRequest);
 
@@ -54,15 +41,7 @@ public interface AuthControllerSwagger {
             responses = {@ApiResponse(
                     responseCode = "200",
                     description = "토큰 재발급 성공",
-                    headers = {
-                            @Header(
-                                    name = "Set-Cookie",
-                                    description = "새로운 리프레시 토큰이 포함된 쿠키",
-                                    schema = @Schema(type = "string", example = "refreshToken=abc.def.ghi;")
-                            )
-                    }
-            )
-            }
+                    content = @Content(schema = @Schema(implementation = UserTokenRefreshResponse.class)))}
     )
     ResponseEntity<UserTokenRefreshResponse> reIssueToken(String token);
 }
