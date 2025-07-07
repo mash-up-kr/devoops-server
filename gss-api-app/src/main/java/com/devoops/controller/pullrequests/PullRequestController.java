@@ -4,6 +4,7 @@ import com.devoops.controller.auth.AuthUser;
 import com.devoops.controller.docs.PullRequestControllerSwagger;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.response.PullRequestDetailReadResponse;
+import com.devoops.dto.response.PullRequestRankingResponses;
 import com.devoops.dto.response.PullRequestReadResponse;
 import com.devoops.service.facade.PullRequestFacadeService;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,12 @@ public class PullRequestController implements PullRequestControllerSwagger {
     ) {
         PullRequestReadResponse response = pullRequestFacadeService.read(pullRequestId);
 
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/api/pull-requests/ranking")
+    public ResponseEntity<PullRequestRankingResponses> getPullRequestRanking(@AuthUser User user) {
+        PullRequestRankingResponses response = pullRequestFacadeService.ranking(user.getId());
         return ResponseEntity.ok(response);
     }
 

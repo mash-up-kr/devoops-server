@@ -10,7 +10,7 @@ import com.devoops.dto.request.AnswerUpdateRequest;
 import com.devoops.dto.response.AnswerPutResponses;
 import com.devoops.dto.response.AnswerSaveResponse;
 import com.devoops.dto.response.AnswerUpdateResponse;
-import com.devoops.service.question.QuestionService;
+import com.devoops.service.facade.QuestionFacadeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,14 +26,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class QuestionController implements QuestionControllerSwagger {
 
-    private final QuestionService questionService;
+    private final QuestionFacadeService questionFacadeService;
 
     @PostMapping("/api/questions/{questionId}/answer")
     public ResponseEntity<AnswerSaveResponse> createAnswer(
             @AuthUser User user,
             @PathVariable(name = "questionId") long questionId
     ) {
-        Answer answer = questionService.initializeAnswer(questionId, user);
+        Answer answer = questionFacadeService.initializeAnswer(questionId, user);
         AnswerSaveResponse response = new AnswerSaveResponse(answer);
         return ResponseEntity.ok(response);
     }
@@ -43,7 +43,7 @@ public class QuestionController implements QuestionControllerSwagger {
             @AuthUser User user,
             @Valid @RequestBody AnswerPutRequests request
     ) {
-        Answers updatedAnswers = questionService.updateAllAnswers(request);
+        Answers updatedAnswers = questionFacadeService.updateAllAnswers(request);
         AnswerPutResponses response = AnswerPutResponses.from(updatedAnswers);
         return ResponseEntity.ok(response);
     }
@@ -54,7 +54,9 @@ public class QuestionController implements QuestionControllerSwagger {
             @PathVariable(name = "answerId") long answerId,
             @Valid @RequestBody AnswerUpdateRequest request
     ) {
-        Answer updatedAnswer = questionService.updateAnswer(answerId, request.content());
+
+        //TODO ranking 갱신
+        Answer updatedAnswer = questionFacadeService.updateAnswer(answerId, request.content(), user.getId());
         AnswerUpdateResponse response = new AnswerUpdateResponse(updatedAnswer);
         return ResponseEntity.ok(response);
     }
@@ -64,7 +66,7 @@ public class QuestionController implements QuestionControllerSwagger {
             @AuthUser User user,
             @PathVariable(name = "answerId") long answerId
     ) {
-        questionService.deleteAnswer(answerId);
+        questionFacadeService.deleteAnswer(answerId);
         return ResponseEntity.noContent().build();
     }
 }
