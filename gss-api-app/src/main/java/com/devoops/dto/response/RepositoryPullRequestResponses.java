@@ -1,10 +1,15 @@
 package com.devoops.dto.response;
 
 import com.devoops.domain.entity.github.PullRequests;
+import com.devoops.dto.request.AnswerPutRequest;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public record RepositoryPullRequestResponses(
+
+        @ArraySchema(schema = @Schema(description = "레포지토리 PR 리스트 모음", implementation = RepositoryPullRequestResponse.class))
         List<RepositoryPullRequestResponse> pullRequests
 ) {
 
