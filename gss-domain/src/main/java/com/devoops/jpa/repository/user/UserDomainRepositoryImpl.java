@@ -31,10 +31,26 @@ public class UserDomainRepositoryImpl implements UserDomainRepository {
                 .toDomainEntity(githubToken);
     }
 
+    @Override
+    public User findByProviderId(Long providerId) {
+        UserEntity userEntity = userJpaRepository.findByProviderId(providerId)
+                .orElseThrow(() -> new RuntimeException("EntityNotFound 공통 예외 처리 필요"));
+        GithubToken githubToken = githubTokenJpaRepository.findByUser_Id(userEntity.getId())
+                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.GITHUB_TOKEN_NOT_FOUND))
+                .toDomainEntity();
+        return userEntity.toDomainEntity(githubToken);
+    }
+
     @Transactional(readOnly = true)
     @Override
     public boolean existsById(Long id) {
         return userJpaRepository.existsById(id);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public boolean existsByProviderId(Long externalId) {
+        return userJpaRepository.existsByProviderId(externalId);
     }
 
     @Transactional
