@@ -43,7 +43,6 @@ public class GithubRepositoryEntity extends BaseTimeEntity {
     @NotNull
     private String owner;
 
-    @NotNull
     private int pullRequestCount;
 
     private long githubRepositoryId;
