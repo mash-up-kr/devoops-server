@@ -7,10 +7,11 @@ public record RepositoryCreateCommand(
         String repositoryName,
         String url,
         String ownerName,
+        int prCount,
         long externalId
 ) {
 
     public GithubRepository toDomainEntity() {
-        return new GithubRepository(userId, repositoryName, url, ownerName, externalId);
+        return new GithubRepository(userId, repositoryName, url, ownerName, prCount, externalId);
     }
 }
