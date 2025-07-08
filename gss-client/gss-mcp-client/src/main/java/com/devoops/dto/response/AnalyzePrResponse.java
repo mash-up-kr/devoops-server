@@ -6,7 +6,7 @@ import java.util.List;
 public record AnalyzePrResponse(
     String summary,
     List<SummaryDetails> summaryDetails,
-    List<TaggedQuestion> questions
+    List<CategorizedQuestion> questions
 ) {
     public record SummaryDetails(
         String title,
@@ -14,8 +14,8 @@ public record AnalyzePrResponse(
     ) {
     }
 
-    public record TaggedQuestion(
-        String tag,
+    public record CategorizedQuestion(
+        String category,
         List<String> question
     ) {
     }
