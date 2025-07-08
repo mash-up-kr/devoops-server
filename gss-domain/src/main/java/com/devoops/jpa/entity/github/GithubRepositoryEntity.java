@@ -19,6 +19,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static com.devoops.Constants.INITIAL_PULL_REQUEST_COUNT;
+
 @Entity
 @Getter
 @Table(name = "repositories")
@@ -48,7 +50,6 @@ public class GithubRepositoryEntity extends BaseTimeEntity {
     private long githubRepositoryId;
 
     public static GithubRepositoryEntity from(GithubRepository githubRepository, UserEntity user) {
-        final int INITIAL_PULL_REQUEST_COUNT = 0;
 
         return new GithubRepositoryEntity(
             githubRepository.getId(),
