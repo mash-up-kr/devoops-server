@@ -6,6 +6,10 @@ public interface AnswerDomainRepository {
 
     Answer save(Answer answer);
 
+    Answer findById(long answerId);
+
+    long getAnswerCountByPullRequestId(long pullRequestId);
+
     Answer updateById(long answerId, String content);
 
     void deleteById(long answerId);

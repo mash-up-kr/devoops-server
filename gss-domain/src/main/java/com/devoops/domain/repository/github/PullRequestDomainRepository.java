@@ -2,6 +2,7 @@ package com.devoops.domain.repository.github;
 
 import com.devoops.domain.entity.github.PullRequest;
 import com.devoops.domain.entity.github.PullRequests;
+import com.devoops.domain.entity.github.RecordStatus;
 
 public interface PullRequestDomainRepository {
 
@@ -11,5 +12,7 @@ public interface PullRequestDomainRepository {
 
     PullRequests findPullRequestsByRepositoryIdOrderByMergedAt(long repositoryId, int size, int page);
 
-    PullRequest updateToDone(long pullRequestId);
+    PullRequest findByQuestionId(long questionId);
+
+    PullRequest updateStatus(long pullRequestId, RecordStatus status);
 }

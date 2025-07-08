@@ -1,6 +1,7 @@
 package com.devoops.service.pullrequests;
 
 import com.devoops.domain.entity.github.PullRequest;
+import com.devoops.domain.entity.github.RecordStatus;
 import com.devoops.domain.repository.github.PullRequestDomainRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,8 +12,12 @@ public class PullRequestService {
 
     private final PullRequestDomainRepository pullRequestRepository;
 
-    public PullRequest updateToDone(long pullRequestId) {
-        return pullRequestRepository.updateToDone(pullRequestId);
+    public PullRequest updateStatus(long pullRequestId, RecordStatus status) {
+        return pullRequestRepository.updateStatus(pullRequestId, status);
+    }
+
+    public PullRequest findByQuestionId(long questionId) {
+        return pullRequestRepository.findByQuestionId(questionId);
     }
 
     public PullRequest getPullRequest(long pullRequestId) {
