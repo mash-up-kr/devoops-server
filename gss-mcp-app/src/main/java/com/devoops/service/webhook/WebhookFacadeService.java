@@ -7,6 +7,7 @@ import com.devoops.command.request.QuestionCreateCommand;
 import com.devoops.domain.entity.github.GithubToken;
 import com.devoops.domain.entity.github.PullRequest;
 import com.devoops.domain.entity.github.Question;
+import com.devoops.domain.entity.github.RecordStatus;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.github.GithubTokenDomainRepository;
 import com.devoops.domain.repository.github.PullRequestDomainRepository;
@@ -14,10 +15,12 @@ import com.devoops.domain.repository.github.QuestionDomainRepository;
 import com.devoops.domain.repository.user.UserDomainRepository;
 import com.devoops.dto.request.GitHubWebhookEventRequest;
 import com.devoops.dto.response.AnalyzePrResponse;
+import com.devoops.util.SummaryFormatter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -42,30 +45,37 @@ public class WebhookFacadeService {
          */
         User triggerUser = userDomainRepository.findById(gitHubWebhookEventRequest.getUserId());
         GithubToken githubToken = githubTokenDomainRepository.findByUserId(triggerUser)
-                .orElseThrow(() -> new RuntimeException("ErrorCode.NO_RESOURCE_FOUND"));
+            .orElseThrow(() -> new RuntimeException("ErrorCode.NO_RESOURCE_FOUND"));
 //                .orElseThrow(() -> new GssException(ErrorCode.NO_RESOURCE_FOUND));
-
-        // pull request ready
-        PullRequest readyPullRequest = pullRequestDomainRepository.save(
-                new PullRequestCreateCommand(
-                        gitHubWebhookEventRequest.getRepositoryId(),
-                        gitHubWebhookEventRequest.getUserId(),
-                        gitHubWebhookEventRequest.getTitle(),
-                        gitHubWebhookEventRequest.getDescription(),
-                        gitHubWebhookEventRequest.getExternalId(),
-                        gitHubWebhookEventRequest.getMergedAt(),
-                        gitHubWebhookEventRequest.getTag()
-                ).toDomainEntity()
-        );
 
         // take diff code
         String diff = githubAdaptor.getCodeChangeHistory(gitHubWebhookEventRequest.getPullRequestDiffUrl(), githubToken.getToken());
 
         // 분석 결과
         AnalyzePrResponse analyzePrResponse = prAnalysisClient.analyze(
+            gitHubWebhookEventRequest.getTitle(),
+            gitHubWebhookEventRequest.getDescription(),
+            diff
+        );
+
+        List<Map.Entry<String, String>> converted = analyzePrResponse.summaryDetails().stream()
+            .map(sd -> Map.entry(sd.title(), sd.description()))
+            .toList();
+
+        // pull request ready
+        PullRequest readyPullRequest = pullRequestDomainRepository.save(
+            new PullRequestCreateCommand(
+                gitHubWebhookEventRequest.getRepositoryId(),
+                gitHubWebhookEventRequest.getUserId(),
                 gitHubWebhookEventRequest.getTitle(),
                 gitHubWebhookEventRequest.getDescription(),
-                diff
+                analyzePrResponse.summary(),
+                SummaryFormatter.formatWithNumbering(converted),
+                gitHubWebhookEventRequest.getExternalId(),
+                RecordStatus.PENDING,
+                gitHubWebhookEventRequest.getMergedAt(),
+                gitHubWebhookEventRequest.getTag()
+            ).toDomainEntity()
         );
 
         /**
@@ -78,7 +88,7 @@ public class WebhookFacadeService {
         PullRequest updatedPullRequest = pullRequestDomainRepository.updateAnalyzedResult(readyPullRequest.getId(), analyzePrResponse.summary());
 
         questionDomainRepository.saveAll(
-                createQuestionListFromTaggedQuestions(analyzePrResponse.questions(), updatedPullRequest.getId())
+            createQuestionListFromCategorizedQuestions(analyzePrResponse.questions(), updatedPullRequest.getId())
         );
     }
 
@@ -86,14 +96,14 @@ public class WebhookFacadeService {
         return gitHubWebhookEventRequest.isMerged();
     }
 
-    private List<Question> createQuestionListFromTaggedQuestions(List<AnalyzePrResponse.TaggedQuestion> questions, Long pulLRequestId) {
+    private List<Question> createQuestionListFromCategorizedQuestions(List<AnalyzePrResponse.CategorizedQuestion> questions, Long pulLRequestId) {
         return questions.stream().flatMap(
-                        taggedQuestion -> taggedQuestion.question()
-                                .stream()
-                                .map(
-                                        question -> new QuestionCreateCommand(pulLRequestId, question)
-                                )
-                )
-                .map(QuestionCreateCommand::toDomainEntity).toList();
+                taggedQuestion -> taggedQuestion.question()
+                    .stream()
+                    .map(
+                        question -> new QuestionCreateCommand(pulLRequestId, taggedQuestion.category(), question)
+                    )
+            )
+            .map(QuestionCreateCommand::toDomainEntity).toList();
     }
 }

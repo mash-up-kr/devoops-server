@@ -13,7 +13,7 @@ public class Question {
     private final String content;
     private final boolean isAnswered;
 
-    public Question(long pullRequestId, String content) {
-        this(null, pullRequestId, content, false);
+    public Question(long pullRequestId, String category, String content) {
+        this(null, pullRequestId, category, content, false);
     }
 }
