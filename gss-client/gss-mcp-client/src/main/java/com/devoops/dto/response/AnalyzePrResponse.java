@@ -5,11 +5,19 @@ import java.util.List;
 
 public record AnalyzePrResponse(
     String summary,
-    List<TaggedQuestion> questions
+    List<SummaryDetails> summaryDetails,
+    List<CategorizedQuestion> questions
 ) {
-    public record TaggedQuestion(
-        String tag,
+    public record SummaryDetails(
+        String title,
+        String description
+    ) {
+    }
+
+    public record CategorizedQuestion(
+        String category,
         List<String> question
-    ) {}
+    ) {
+    }
 }
 
