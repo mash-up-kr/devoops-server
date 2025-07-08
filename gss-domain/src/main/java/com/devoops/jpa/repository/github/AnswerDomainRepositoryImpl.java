@@ -28,6 +28,18 @@ public class AnswerDomainRepositoryImpl implements AnswerDomainRepository {
     }
 
     @Override
+    public Answer findById(long answerId) {
+        return answerJpaRepository.findById(answerId)
+                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.ANSWER_NOT_FOUND))
+                .toDomainEntity();
+    }
+
+    @Override
+    public long getAnswerCountByPullRequestId(long pullRequestId) {
+        return answerJpaRepository.getAnswerCountByPullRequestId(pullRequestId);
+    }
+
+    @Override
     @Transactional
     public Answer updateById(long answerId, String content) {
         AnswerEntity answerEntity = answerJpaRepository.findById(answerId)
