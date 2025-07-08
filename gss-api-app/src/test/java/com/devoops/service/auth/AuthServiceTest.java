@@ -62,7 +62,7 @@ class AuthServiceTest extends BaseServiceTest {
 
         private String resolveTokenValue(String tokenValue, TokenType tokenType) {
             if(tokenType.isAccess()) {
-                return jwtTokenManager.resolveToken(new AccessToken(tokenValue));
+                return jwtTokenManager.resolveToken(new AccessToken("Bearer " + tokenValue));
             }
             return jwtTokenManager.resolveToken(new RefreshToken(tokenValue));
         }
