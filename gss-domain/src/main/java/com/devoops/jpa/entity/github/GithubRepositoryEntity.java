@@ -3,16 +3,7 @@ package com.devoops.jpa.entity.github;
 import com.devoops.domain.entity.github.GithubRepository;
 import com.devoops.jpa.entity.BaseTimeEntity;
 import com.devoops.jpa.entity.user.UserEntity;
-import jakarta.persistence.ConstraintMode;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -43,28 +34,32 @@ public class GithubRepositoryEntity extends BaseTimeEntity {
     @NotNull
     private String owner;
 
+    private int pullRequestCount;
+
     private long githubRepositoryId;
 
     public static GithubRepositoryEntity from(GithubRepository githubRepository, UserEntity user) {
+
         return new GithubRepositoryEntity(
-                githubRepository.getId(),
-                user,
-                githubRepository.getName(),
-                githubRepository.getUrl(),
-                githubRepository.getName(),
-                githubRepository.getExternalId()
+            githubRepository.getId(),
+            user,
+            githubRepository.getName(),
+            githubRepository.getUrl(),
+            githubRepository.getName(),
+            githubRepository.getPrCount(),
+            githubRepository.getExternalId()
         );
     }
 
-
     public GithubRepository toDomainEntity() {
         return new GithubRepository(
-                this.id,
-                this.user.getId(),
-                this.name,
-                this.url,
-                this.owner,
-                this.githubRepositoryId
+            this.id,
+            this.user.getId(),
+            this.name,
+            this.url,
+            this.owner,
+            this.pullRequestCount,
+            this.githubRepositoryId
         );
     }
 }

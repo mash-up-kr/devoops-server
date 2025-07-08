@@ -2,6 +2,8 @@ package com.devoops.domain.repository.github;
 
 import com.devoops.domain.entity.github.GithubRepository;
 
+import java.util.List;
+
 public interface GithubRepoDomainRepository {
 
     GithubRepository save(GithubRepository githubRepository);
@@ -9,4 +11,6 @@ public interface GithubRepoDomainRepository {
     boolean existsByIdAndUserId(long id, long userId);
 
     GithubRepository findByIdAndUserId(long id, long userId);
+
+    List<GithubRepository> findByUserId(long userId);
 }

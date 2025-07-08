@@ -12,6 +12,8 @@ import com.devoops.service.repository.RepositoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static com.devoops.Constants.INITIAL_PULL_REQUEST_COUNT;
+
 @Service
 @RequiredArgsConstructor
 public class RepositoryFacadeService {
@@ -29,11 +31,12 @@ public class RepositoryFacadeService {
     private GithubRepository saveRepository(GithubRepoUrl url, User user) {
         GithubRepoInfoResponse repositoryInfo = gitHubService.getRepositoryInfo(url, user.getGithubToken());
         RepositoryCreateCommand createCommand = new RepositoryCreateCommand(
-                user.getId(),
-                repositoryInfo.name(),
-                repositoryInfo.url(),
-                repositoryInfo.getOwnerName(),
-                repositoryInfo.id()
+            user.getId(),
+            repositoryInfo.name(),
+            repositoryInfo.url(),
+            repositoryInfo.getOwnerName(),
+            INITIAL_PULL_REQUEST_COUNT,
+            repositoryInfo.id()
         );
         return repositoryService.save(createCommand);
     }
