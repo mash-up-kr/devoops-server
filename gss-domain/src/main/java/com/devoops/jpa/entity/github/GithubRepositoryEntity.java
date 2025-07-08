@@ -45,7 +45,7 @@ public class GithubRepositoryEntity extends BaseTimeEntity {
             user,
             githubRepository.getName(),
             githubRepository.getUrl(),
-            githubRepository.getName(),
+            githubRepository.getOwner(),
             githubRepository.getPrCount(),
             githubRepository.getExternalId()
         );
