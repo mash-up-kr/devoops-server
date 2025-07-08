@@ -6,7 +6,6 @@ import com.devoops.exception.GssRepositoryException;
 import com.devoops.exception.RepositoryErrorCode;
 import com.devoops.jpa.entity.github.AnswerEntity;
 import com.devoops.jpa.entity.github.QuestionEntity;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +38,7 @@ public class AnswerDomainRepositoryImpl implements AnswerDomainRepository {
 
     @Override
     @Transactional
-    public void deleteById(long answerId){
+    public void deleteById(long answerId) {
         answerJpaRepository.deleteById(answerId);
     }
 }
