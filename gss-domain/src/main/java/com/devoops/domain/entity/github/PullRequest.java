@@ -20,4 +20,8 @@ public class PullRequest {
     private final RecordStatus recordStatus;
     private final LocalDateTime mergedAt;
     private final String tag;
+
+    public boolean isPending() {
+        return recordStatus == RecordStatus.PENDING;
+    }
 }

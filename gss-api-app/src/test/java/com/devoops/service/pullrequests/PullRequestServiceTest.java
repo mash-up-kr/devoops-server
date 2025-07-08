@@ -27,7 +27,7 @@ class PullRequestServiceTest extends BaseServiceTest {
             PullRequest pullRequest = pullRequestGenerator.generate("최초 PR", RecordStatus.PENDING, repo,
                     LocalDateTime.now());
 
-            PullRequest updatedPullRequest = pullRequestService.updateToDone(pullRequest.getId());
+            PullRequest updatedPullRequest = pullRequestService.updateStatus(pullRequest.getId(), RecordStatus.DONE);
 
             assertThat(updatedPullRequest.getRecordStatus()).isEqualTo(RecordStatus.DONE);
         }

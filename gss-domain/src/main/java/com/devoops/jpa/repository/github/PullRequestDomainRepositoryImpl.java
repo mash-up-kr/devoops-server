@@ -2,13 +2,13 @@ package com.devoops.jpa.repository.github;
 
 import com.devoops.domain.entity.github.PullRequest;
 import com.devoops.domain.entity.github.PullRequests;
-import com.devoops.domain.entity.github.QuestionAnswer;
+import com.devoops.domain.entity.github.RecordStatus;
 import com.devoops.domain.repository.github.PullRequestDomainRepository;
 import com.devoops.exception.GssRepositoryException;
 import com.devoops.exception.RepositoryErrorCode;
 import com.devoops.jpa.entity.github.GithubRepositoryEntity;
 import com.devoops.jpa.entity.github.PullRequestEntity;
-import java.util.List;
+import com.devoops.jpa.entity.github.QuestionEntity;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +23,7 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
 
     private final PullRequestJpaRepository pullRequestRepository;
     private final GithubRepoJpaRepository githubRepoRepository;
+    private final QuestionJpaRepository questionJpaRepository;
 
     @Override
     @Transactional
@@ -54,10 +55,19 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
 
     @Override
     @Transactional
-    public PullRequest updateToDone(long pullRequestId) {
+    public PullRequest updateStatus(long pullRequestId, RecordStatus status) {
         PullRequestEntity pullRequest = pullRequestRepository.findById(pullRequestId)
                 .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.PULL_REQUEST_NOT_FOUND));
-        pullRequest.updateToDone();
+        pullRequest.updateStatus(status);
         return pullRequest.toDomainEntity();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PullRequest findByQuestionId(long questionId) {
+        QuestionEntity questionEntity = questionJpaRepository.findById(questionId)
+                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.QUESTION_NOT_FOUND));
+        return questionEntity.getPullRequest()
+                .toDomainEntity();
     }
 }
