@@ -39,7 +39,7 @@ class RepositoryControllerTest extends BaseControllerTest {
 
             RestAssured.given()
                     .contentType(ContentType.JSON)
-                    .header(HttpHeaders.AUTHORIZATION, accessToken.getToken())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken.getToken())
                     .queryParam("page", 0L)
                     .queryParam("size", 6L)
                     .pathParam("repositoryId", repo.getId())
@@ -59,7 +59,7 @@ class RepositoryControllerTest extends BaseControllerTest {
 
             RestAssured.given()
                     .contentType(ContentType.JSON)
-                    .header(HttpHeaders.AUTHORIZATION, accessToken.getToken())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken.getToken())
                     .queryParam("page", 0L)
                     .queryParam("size", 6L)
                     .pathParam("repositoryId", repo.getId())
@@ -79,7 +79,7 @@ class RepositoryControllerTest extends BaseControllerTest {
 
             RestAssured.given()
                     .contentType(ContentType.JSON)
-                    .header(HttpHeaders.AUTHORIZATION, accessToken.getToken())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken.getToken())
                     .body(request)
                     .when().post("/api/repositories")
                     .then().statusCode(HttpStatus.CREATED.value());
