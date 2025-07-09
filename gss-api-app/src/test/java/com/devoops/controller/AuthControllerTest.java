@@ -10,7 +10,7 @@ import com.devoops.dto.response.UserSaveResponse;
 import com.devoops.dto.response.UserTokenResponse;
 import com.devoops.service.auth.jwt.AccessToken;
 import com.devoops.service.auth.jwt.JwtToken;
-import com.devoops.service.auth.jwt.JwtTokenManager;
+import com.devoops.service.auth.TokenManager;
 import com.devoops.service.auth.jwt.TokenType;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -26,7 +26,7 @@ class AuthControllerTest extends BaseControllerTest {
     private UserDomainRepository userDomainRepository;
 
     @Autowired
-    private JwtTokenManager jwtTokenManager;
+    private TokenManager tokenManager;
 
     @Nested
     class IssueToken {
@@ -69,7 +69,7 @@ class AuthControllerTest extends BaseControllerTest {
         @Test
         void 회원의_토큰을_재발급할_수_있다() {
             User saveUser = userGenerator.generate("김건우");
-            JwtToken refreshToken = jwtTokenManager.createToken(String.valueOf(saveUser.getId()),
+            JwtToken refreshToken = tokenManager.createToken(String.valueOf(saveUser.getId()),
                     TokenType.REFRESH_TOKEN);
 
             UserTokenResponse userTokenResponse = RestAssured.given()
@@ -82,7 +82,7 @@ class AuthControllerTest extends BaseControllerTest {
                     .as(UserTokenResponse.class);
 
             AccessToken accessToken = new AccessToken("Bearer " + userTokenResponse.accessToken());
-            String resolvedToken = jwtTokenManager.resolveToken(accessToken);
+            String resolvedToken = tokenManager.resolveToken(accessToken);
             assertThat(resolvedToken).isEqualTo(String.valueOf(saveUser.getId()));
         }
     }
@@ -93,9 +93,9 @@ class AuthControllerTest extends BaseControllerTest {
         @Test
         void 로그아웃_할_수_있다() {
             User saveUser = userGenerator.generate("김건우");
-            JwtToken accessToken = jwtTokenManager.createToken(String.valueOf(saveUser.getId()),
+            JwtToken accessToken = tokenManager.createToken(String.valueOf(saveUser.getId()),
                     TokenType.ACCESS_TOKEN);
-            JwtToken refreshToken = jwtTokenManager.createToken(String.valueOf(saveUser.getId()),
+            JwtToken refreshToken = tokenManager.createToken(String.valueOf(saveUser.getId()),
                     TokenType.REFRESH_TOKEN);
 
             RestAssured.given()
@@ -110,9 +110,9 @@ class AuthControllerTest extends BaseControllerTest {
         void 로그아웃_시도대상과_리프레시_토큰값이_불일치하면_에러가_발생한다() {
             User saveUser1 = userGenerator.generate("김건우1");
             User saveUser2 = userGenerator.generate("김건우2");
-            JwtToken accessToken = jwtTokenManager.createToken(String.valueOf(saveUser1.getId()),
+            JwtToken accessToken = tokenManager.createToken(String.valueOf(saveUser1.getId()),
                     TokenType.ACCESS_TOKEN);
-            JwtToken refreshToken = jwtTokenManager.createToken(String.valueOf(saveUser2.getId()),
+            JwtToken refreshToken = tokenManager.createToken(String.valueOf(saveUser2.getId()),
                     TokenType.REFRESH_TOKEN);
 
             RestAssured.given()
@@ -126,7 +126,7 @@ class AuthControllerTest extends BaseControllerTest {
         @Test
         void 토큰이_없으면_400에러가_발생한다() {
             User saveUser = userGenerator.generate("김건우1");
-            JwtToken accessToken = jwtTokenManager.createToken(String.valueOf(saveUser.getId()), TokenType.ACCESS_TOKEN);
+            JwtToken accessToken = tokenManager.createToken(String.valueOf(saveUser.getId()), TokenType.ACCESS_TOKEN);
 
             RestAssured.given()
                     .contentType(ContentType.JSON)

@@ -1,12 +1,15 @@
-package com.devoops.service.auth.jwt;
+package com.devoops.service.auth;
 
+import com.devoops.service.auth.jwt.JwtProperties;
+import com.devoops.service.auth.jwt.JwtToken;
+import com.devoops.service.auth.jwt.TokenType;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class JwtTokenManager {
+public class TokenManager {
 
     private final JwtProperties jwtProperties;
 

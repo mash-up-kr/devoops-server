@@ -3,16 +3,12 @@ package com.devoops.service.auth;
 import com.devoops.client.GithubOAuthClient;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.auth.RefreshTokenDomainRepository;
-import com.devoops.dto.request.UserSaveRequest;
 import com.devoops.dto.response.AuthResponse;
 import com.devoops.dto.response.UserTokenResponse;
 import com.devoops.service.auth.jwt.JwtProperties;
 import com.devoops.service.auth.jwt.JwtToken;
-import com.devoops.service.auth.jwt.JwtTokenManager;
 import com.devoops.service.auth.jwt.RefreshToken;
 import com.devoops.service.auth.jwt.TokenType;
-import com.devoops.dto.request.GithubTokenRequest;
-import com.devoops.dto.response.GithubTokenResponse;
 import com.devoops.dto.response.UserInfoResponse;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +21,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final GithubOAuthClient authClient;
-    private final JwtTokenManager jwtTokenManager;
+    private final TokenManager jwtTokenManager;
     private final RefreshTokenDomainRepository refreshTokenDomainRepository;
 
     public AuthResponse getUserInfo(String token) {

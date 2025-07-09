@@ -7,7 +7,6 @@ import com.devoops.BaseServiceTest;
 import com.devoops.dto.response.UserTokenResponse;
 import com.devoops.service.auth.jwt.AccessToken;
 import com.devoops.service.auth.jwt.JwtToken;
-import com.devoops.service.auth.jwt.JwtTokenManager;
 import com.devoops.service.auth.jwt.RefreshToken;
 import com.devoops.service.auth.jwt.TokenType;
 import java.util.UUID;
@@ -18,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 class AuthServiceTest extends BaseServiceTest {
 
     @Autowired
-    private JwtTokenManager jwtTokenManager;
+    private TokenManager tokenManager;
 
     @Autowired
     private AuthService authService;
@@ -47,7 +46,7 @@ class AuthServiceTest extends BaseServiceTest {
         @Test
         void 토큰을_재발급할_수_있다() {
             String value = UUID.randomUUID().toString();
-            JwtToken token = jwtTokenManager.createToken(value, TokenType.REFRESH_TOKEN);
+            JwtToken token = tokenManager.createToken(value, TokenType.REFRESH_TOKEN);
             RefreshToken refreshToken = new RefreshToken(token.getToken());
 
             UserTokenResponse reissuedTokens = authService.reissueToken(refreshToken);
@@ -62,9 +61,9 @@ class AuthServiceTest extends BaseServiceTest {
 
         private String resolveTokenValue(String tokenValue, TokenType tokenType) {
             if(tokenType.isAccess()) {
-                return jwtTokenManager.resolveToken(new AccessToken("Bearer " + tokenValue));
+                return tokenManager.resolveToken(new AccessToken("Bearer " + tokenValue));
             }
-            return jwtTokenManager.resolveToken(new RefreshToken(tokenValue));
+            return tokenManager.resolveToken(new RefreshToken(tokenValue));
         }
     }
 }
