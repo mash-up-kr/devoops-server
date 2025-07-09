@@ -5,14 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.devoops.BaseControllerTest;
 import com.devoops.domain.entity.auth.RefreshToken2;
 import com.devoops.domain.entity.user.User;
-import com.devoops.domain.repository.user.UserDomainRepository;
 import com.devoops.dto.request.UserSaveRequest;
 import com.devoops.dto.response.UserSaveResponse;
 import com.devoops.dto.response.UserTokenResponse;
-import com.devoops.service.auth.jwt.AccessToken;
-import com.devoops.service.auth.jwt.JwtToken;
 import com.devoops.service.auth.TokenManager;
-import com.devoops.service.auth.jwt.TokenType;
+import com.devoops.service.auth.jwt.AccessToken;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Nested;
@@ -108,7 +105,7 @@ class AuthControllerTest extends BaseControllerTest {
         @Test
         void 로그아웃_할_수_있다() {
             User saveUser = userGenerator.generate("김건우");
-            JwtToken accessToken = tokenManager.createAccessToken(saveUser.getId());
+            AccessToken accessToken = tokenManager.createAccessToken(saveUser.getId());
             RefreshToken2 refreshToken = tokenManager.createRefreshToken(saveUser.getId());
 
             RestAssured.given()
@@ -123,7 +120,7 @@ class AuthControllerTest extends BaseControllerTest {
         void 로그아웃_시도대상과_리프레시_토큰값이_불일치하면_에러가_발생한다() {
             User saveUser1 = userGenerator.generate("김건우1");
             User saveUser2 = userGenerator.generate("김건우2");
-            JwtToken accessToken = tokenManager.createAccessToken(saveUser1.getId());
+            AccessToken accessToken = tokenManager.createAccessToken(saveUser1.getId());
             RefreshToken2 refreshToken = tokenManager.createRefreshToken(saveUser2.getId());
 
             RestAssured.given()

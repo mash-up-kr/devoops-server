@@ -8,8 +8,8 @@ import com.devoops.dto.response.UserInfoResponse;
 import com.devoops.dto.response.UserTokenResponse;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
+import com.devoops.service.auth.jwt.AccessToken;
 import com.devoops.service.auth.jwt.JwtProperties;
-import com.devoops.service.auth.jwt.JwtToken;
 import com.devoops.service.auth.jwt.TokenType;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class AuthService {
     }
 
     public UserTokenResponse issueToken(long userId) {
-        JwtToken accessToken = jwtTokenManager.createAccessToken(userId);
+        AccessToken accessToken = jwtTokenManager.createAccessToken(userId);
         RefreshToken2 refreshToken = jwtTokenManager.createRefreshToken(userId);
         Duration refreshTokenExpiration = jwtTokenManager.getTokenExpiration(TokenType.REFRESH_TOKEN);
         return new UserTokenResponse(accessToken.getToken(), refreshToken.getValue(), refreshTokenExpiration);
@@ -38,12 +38,12 @@ public class AuthService {
 
     public UserTokenResponse reissueToken(String refreshTokenValue) {
         RefreshToken2 refreshToken = jwtTokenManager.refresh(refreshTokenValue);
-        JwtToken accessToken = jwtTokenManager.createAccessToken(refreshToken.getUserId());
+        AccessToken accessToken = jwtTokenManager.createAccessToken(refreshToken.getUserId());
         Duration refreshTokenExpiration = jwtTokenManager.getTokenExpiration(TokenType.REFRESH_TOKEN);
         return new UserTokenResponse(accessToken.getToken(), refreshToken.getValue(), refreshTokenExpiration);
     }
 
-    public String resolveToken(JwtToken token) {
+    public String resolveToken(AccessToken token) {
         return jwtTokenManager.resolveToken(token);
     }
 

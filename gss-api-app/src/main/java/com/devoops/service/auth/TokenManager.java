@@ -4,8 +4,8 @@ import com.devoops.domain.entity.auth.RefreshToken2;
 import com.devoops.domain.repository.auth.RefreshTokenDomainRepository;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
+import com.devoops.service.auth.jwt.AccessToken;
 import com.devoops.service.auth.jwt.JwtProperties;
-import com.devoops.service.auth.jwt.JwtToken;
 import com.devoops.service.auth.jwt.TokenType;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +18,9 @@ public class TokenManager {
     private final JwtProperties jwtProperties;
     private final RefreshTokenDomainRepository refreshTokenDomainRepository;
 
-    public JwtToken createToken(String value, TokenType type) {
-        Duration expiration = jwtProperties.getExpirationByTokenType(type);
-        return JwtToken.from(value, expiration, type, jwtProperties.getSecretKey());
-    }
-
-    public JwtToken createAccessToken(long userId) {
+    public AccessToken createAccessToken(long userId) {
         Duration expiration = jwtProperties.getExpirationByTokenType(TokenType.ACCESS_TOKEN);
-        return JwtToken.from(String.valueOf(userId), expiration, TokenType.ACCESS_TOKEN, jwtProperties.getSecretKey());
+        return new AccessToken(String.valueOf(userId), expiration, jwtProperties.getSecretKey());
     }
 
     public RefreshToken2 createRefreshToken(long userId) {
@@ -58,7 +53,7 @@ public class TokenManager {
         refreshTokenDomainRepository.delete(refreshToken.getValue());
     }
 
-    public String resolveToken(JwtToken token) {
+    public String resolveToken(AccessToken token) {
         return token.resolveToken(jwtProperties.getSecretKey());
     }
 

@@ -6,8 +6,6 @@ import com.devoops.BaseServiceTest;
 import com.devoops.domain.entity.auth.RefreshToken2;
 import com.devoops.dto.response.UserTokenResponse;
 import com.devoops.service.auth.jwt.AccessToken;
-import com.devoops.service.auth.jwt.JwtToken;
-import java.time.Duration;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +36,7 @@ class AuthServiceTest extends BaseServiceTest {
         @Test
         void 토큰을_재발급할_수_있다() {
             long userId = 1L;
-            JwtToken token = tokenManager.createAccessToken(userId);
+            AccessToken token = tokenManager.createAccessToken(userId);
             RefreshToken2 refreshToken = tokenManager.createRefreshToken(userId);
 
             UserTokenResponse reissuedTokens = authService.reissueToken(refreshToken.getValue());

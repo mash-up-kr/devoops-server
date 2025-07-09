@@ -11,6 +11,7 @@ public enum ErrorCode {
     MALFORMED_GITHUB_REPOSITORY_URL(HttpStatus.BAD_REQUEST, "잘못된 형식의 레포지토리 url입니다"),
     UNAUTHORIZED_EXCEPTION(HttpStatus.UNAUTHORIZED, "잘못된 유저 접근입니다"),
     INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "잘못된 리프레시 토큰입니다"),
+    TOKEN_TYPE_MISMATCH(HttpStatus.BAD_REQUEST, "토큰 타입이 일치하지 않습니다"),
     EXPIRED_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "만료된 리프레시 토큰입니다"),
 
     FIELD_ERROR(HttpStatus.BAD_REQUEST, "입력이 잘못되었습니다."),
