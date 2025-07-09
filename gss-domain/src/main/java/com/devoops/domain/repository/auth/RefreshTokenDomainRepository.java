@@ -6,7 +6,9 @@ public interface RefreshTokenDomainRepository {
 
     void save(RefreshToken2 refreshToken);
 
-    RefreshToken2 getRefreshToken(long userId);
+    boolean exists(String refreshToken);
+
+    RefreshToken2 getRefreshToken(String tokenValue);
 
     void delete(long userId);
 }
