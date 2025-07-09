@@ -42,11 +42,6 @@ public class AuthService {
         return new UserTokenResponse(accessToken.getToken(), refreshToken.getValue(), refreshTokenExpiration);
     }
 
-    public UserTokenResponse reissueToken(RefreshToken refreshToken) {
-        String resolvedValue = jwtTokenManager.resolveToken(refreshToken);
-        return issueToken(resolvedValue);
-    }
-
     public UserTokenResponse reissueToken2(String refreshTokenValue) {
         RefreshToken2 refreshToken = jwtTokenManager.refresh(refreshTokenValue);
         JwtToken accessToken = jwtTokenManager.createAccessToken(String.valueOf(refreshToken.getUserId()));

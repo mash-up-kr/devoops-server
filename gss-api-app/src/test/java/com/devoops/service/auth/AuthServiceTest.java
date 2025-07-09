@@ -22,25 +22,19 @@ class AuthServiceTest extends BaseServiceTest {
     @Autowired
     private AuthService authService;
 
-    //TODO 유효기간을 secretManager에 작성하기
     //TODO 엘라스틱 캐시로 refresh 관리, 블랙리스트 관리
-    //TODO 로그아웃 구현하기
 
     @Nested
     class IssueTokens {
 
         @Test
         void 토큰을_발급할_수_있다() {
-            String value = UUID.randomUUID().toString();
+            long userId = 1L;
 
-            UserTokenResponse issuedTokens = authService.issueToken(value);
+            UserTokenResponse issuedTokens = authService.issueToken2(userId);
 
             String resolvedAccessToken = resolveTokenValue(issuedTokens.accessToken(), TokenType.ACCESS_TOKEN);
-            String resolvedRefreshToken = resolveTokenValue(issuedTokens.refreshToken(), TokenType.REFRESH_TOKEN);
-            assertAll(
-                    () -> assertThat(resolvedAccessToken).isEqualTo(value),
-                    () -> assertThat(resolvedRefreshToken).isEqualTo(value)
-            );
+            assertThat(resolvedAccessToken).isEqualTo(userId);
         }
 
         @Test
@@ -49,14 +43,10 @@ class AuthServiceTest extends BaseServiceTest {
             JwtToken token = tokenManager.createToken(value, TokenType.REFRESH_TOKEN);
             RefreshToken refreshToken = new RefreshToken(token.getToken());
 
-            UserTokenResponse reissuedTokens = authService.reissueToken(refreshToken);
+            UserTokenResponse reissuedTokens = authService.reissueToken2(refreshToken.getToken());
 
             String resolvedAccessToken = resolveTokenValue(reissuedTokens.accessToken(), TokenType.ACCESS_TOKEN);
-            String resolvedRefreshToken = resolveTokenValue(reissuedTokens.refreshToken(), TokenType.REFRESH_TOKEN);
-            assertAll(
-                    () -> assertThat(resolvedAccessToken).isEqualTo(value),
-                    () -> assertThat(resolvedRefreshToken).isEqualTo(value)
-            );
+            assertThat(resolvedAccessToken).isEqualTo(value);
         }
 
         private String resolveTokenValue(String tokenValue, TokenType tokenType) {

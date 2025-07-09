@@ -25,12 +25,12 @@ public class AuthFacadeService {
         GithubToken accessToken = new GithubToken(authResponse.githubToken());
         User user = new User(authResponse.providerId(), authResponse.nickname(), authResponse.profileImageUrl(), accessToken);
         User savedUser = userService.save(user);
-        UserTokenResponse userTokens = authService.issueToken(String.valueOf(savedUser.getId()));
+        UserTokenResponse userTokens = authService.issueToken2(savedUser.getId());
         return new UserSaveResponse(savedUser, userTokens.accessToken(), userTokens.refreshToken());
     }
 
     public UserTokenRefreshResponse refresh(RefreshToken refreshToken) {
-        UserTokenResponse userTokenResponse = authService.reissueToken(refreshToken);
+        UserTokenResponse userTokenResponse = authService.reissueToken2(refreshToken.getToken());
         return new UserTokenRefreshResponse(userTokenResponse.accessToken(), userTokenResponse.refreshToken());
     }
 
