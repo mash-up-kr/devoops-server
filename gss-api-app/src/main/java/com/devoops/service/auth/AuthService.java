@@ -1,7 +1,7 @@
 package com.devoops.service.auth;
 
 import com.devoops.client.GithubOAuthClient;
-import com.devoops.domain.entity.auth.RefreshToken2;
+import com.devoops.domain.entity.auth.RefreshToken;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.response.AuthResponse;
 import com.devoops.dto.response.UserInfoResponse;
@@ -31,13 +31,13 @@ public class AuthService {
 
     public UserTokenResponse issueToken(long userId) {
         AccessToken accessToken = jwtTokenManager.createAccessToken(userId);
-        RefreshToken2 refreshToken = jwtTokenManager.createRefreshToken(userId);
+        RefreshToken refreshToken = jwtTokenManager.createRefreshToken(userId);
         Duration refreshTokenExpiration = jwtTokenManager.getTokenExpiration(TokenType.REFRESH_TOKEN);
         return new UserTokenResponse(accessToken.getToken(), refreshToken.getValue(), refreshTokenExpiration);
     }
 
     public UserTokenResponse reissueToken(String refreshTokenValue) {
-        RefreshToken2 refreshToken = jwtTokenManager.refresh(refreshTokenValue);
+        RefreshToken refreshToken = jwtTokenManager.refresh(refreshTokenValue);
         AccessToken accessToken = jwtTokenManager.createAccessToken(refreshToken.getUserId());
         Duration refreshTokenExpiration = jwtTokenManager.getTokenExpiration(TokenType.REFRESH_TOKEN);
         return new UserTokenResponse(accessToken.getToken(), refreshToken.getValue(), refreshTokenExpiration);
@@ -48,7 +48,7 @@ public class AuthService {
     }
 
     public void logout(String refreshToken, User user) {
-        RefreshToken2 token = jwtTokenManager.getRefreshToken(refreshToken);
+        RefreshToken token = jwtTokenManager.getRefreshToken(refreshToken);
         if (!user.isSameUser(token.getUserId())) {
             throw new GssException(ErrorCode.UNAUTHORIZED_EXCEPTION);
         }

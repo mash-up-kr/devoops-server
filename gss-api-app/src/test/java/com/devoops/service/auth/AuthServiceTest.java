@@ -3,7 +3,7 @@ package com.devoops.service.auth;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.devoops.BaseServiceTest;
-import com.devoops.domain.entity.auth.RefreshToken2;
+import com.devoops.domain.entity.auth.RefreshToken;
 import com.devoops.dto.response.UserTokenResponse;
 import com.devoops.service.auth.jwt.AccessToken;
 import org.junit.jupiter.api.Nested;
@@ -37,7 +37,7 @@ class AuthServiceTest extends BaseServiceTest {
         void 토큰을_재발급할_수_있다() {
             long userId = 1L;
             AccessToken token = tokenManager.createAccessToken(userId);
-            RefreshToken2 refreshToken = tokenManager.createRefreshToken(userId);
+            RefreshToken refreshToken = tokenManager.createRefreshToken(userId);
 
             UserTokenResponse reissuedTokens = authService.reissueToken(refreshToken.getValue());
 

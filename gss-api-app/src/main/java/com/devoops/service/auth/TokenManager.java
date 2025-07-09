@@ -1,6 +1,6 @@
 package com.devoops.service.auth;
 
-import com.devoops.domain.entity.auth.RefreshToken2;
+import com.devoops.domain.entity.auth.RefreshToken;
 import com.devoops.domain.repository.auth.RefreshTokenDomainRepository;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
@@ -23,25 +23,25 @@ public class TokenManager {
         return new AccessToken(String.valueOf(userId), expiration, jwtProperties.getSecretKey());
     }
 
-    public RefreshToken2 createRefreshToken(long userId) {
+    public RefreshToken createRefreshToken(long userId) {
         Duration expiration = jwtProperties.getExpirationByTokenType(TokenType.REFRESH_TOKEN);
-        RefreshToken2 refreshToken2 = new RefreshToken2(userId, expiration);
-        return refreshTokenDomainRepository.save(refreshToken2);
+        RefreshToken refreshToken = new RefreshToken(userId, expiration);
+        return refreshTokenDomainRepository.save(refreshToken);
     }
 
-    public RefreshToken2 refresh(String tokenValue) {
-        RefreshToken2 refreshToken = getRefreshToken(tokenValue);
+    public RefreshToken refresh(String tokenValue) {
+        RefreshToken refreshToken = getRefreshToken(tokenValue);
         refreshTokenDomainRepository.delete(refreshToken.getValue());
-        RefreshToken2 renewedToken = refreshToken.refresh();
+        RefreshToken renewedToken = refreshToken.refresh();
         refreshTokenDomainRepository.save(renewedToken);
         return renewedToken;
     }
 
-    public RefreshToken2 getRefreshToken(String tokenValue) {
+    public RefreshToken getRefreshToken(String tokenValue) {
         if (!refreshTokenDomainRepository.exists(tokenValue)) {
             throw new GssException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
-        RefreshToken2 refreshToken = refreshTokenDomainRepository.getRefreshToken(tokenValue);
+        RefreshToken refreshToken = refreshTokenDomainRepository.getRefreshToken(tokenValue);
         if (refreshToken.isExpired()) {
             throw new GssException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
@@ -49,7 +49,7 @@ public class TokenManager {
     }
 
     public void deleteRefreshToken(String tokenValue) {
-        RefreshToken2 refreshToken = getRefreshToken(tokenValue);
+        RefreshToken refreshToken = getRefreshToken(tokenValue);
         refreshTokenDomainRepository.delete(refreshToken.getValue());
     }
 

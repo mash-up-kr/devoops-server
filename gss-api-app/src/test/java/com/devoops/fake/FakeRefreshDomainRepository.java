@@ -1,6 +1,6 @@
 package com.devoops.fake;
 
-import com.devoops.domain.entity.auth.RefreshToken2;
+import com.devoops.domain.entity.auth.RefreshToken;
 import com.devoops.domain.repository.auth.RefreshTokenDomainRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class FakeRefreshDomainRepository implements RefreshTokenDomainRepository {
 
-    private final List<RefreshToken2> refreshTokens = new ArrayList<>();
+    private final List<RefreshToken> refreshTokens = new ArrayList<>();
 
     @Override
-    public RefreshToken2 save(RefreshToken2 refreshToken) {
+    public RefreshToken save(RefreshToken refreshToken) {
         System.out.println("===========안 들어옴");
         refreshTokens.add(refreshToken);
         return refreshToken;
@@ -27,7 +27,7 @@ public class FakeRefreshDomainRepository implements RefreshTokenDomainRepository
     }
 
     @Override
-    public RefreshToken2 getRefreshToken(String tokenValue) {
+    public RefreshToken getRefreshToken(String tokenValue) {
         return refreshTokens.stream()
                 .filter(token -> token.getValue().equals(tokenValue))
                 .findAny()

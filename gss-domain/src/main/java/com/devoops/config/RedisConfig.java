@@ -1,6 +1,6 @@
 package com.devoops.config;
 
-import com.devoops.domain.entity.auth.RefreshToken2;
+import com.devoops.domain.entity.auth.RefreshToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -16,11 +16,11 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
 
     @Bean(name = "defaultRedisTemplate")
-    public RedisTemplate<String, RefreshToken2> refreshToken2RedisTemplate(
+    public RedisTemplate<String, RefreshToken> refreshToken2RedisTemplate(
             RedisConnectionFactory redisConnectionFactory,
             @Qualifier("redisObjectMapper") ObjectMapper objectMapper
     ) {
-        RedisTemplate<String, RefreshToken2> redisTemplate = new RedisTemplate<>();
+        RedisTemplate<String, RefreshToken> redisTemplate = new RedisTemplate<>();
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper));
         redisTemplate.setConnectionFactory(redisConnectionFactory);

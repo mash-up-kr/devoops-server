@@ -3,7 +3,7 @@ package com.devoops.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.devoops.BaseControllerTest;
-import com.devoops.domain.entity.auth.RefreshToken2;
+import com.devoops.domain.entity.auth.RefreshToken;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.UserSaveRequest;
 import com.devoops.dto.response.UserSaveResponse;
@@ -64,7 +64,7 @@ class AuthControllerTest extends BaseControllerTest {
         @Test
         void 회원의_토큰을_재발급할_수_있다() {
             User saveUser = userGenerator.generate("김건우");
-            RefreshToken2 refreshToken = tokenManager.createRefreshToken(saveUser.getId());
+            RefreshToken refreshToken = tokenManager.createRefreshToken(saveUser.getId());
 
             UserTokenResponse userTokenResponse = RestAssured.given()
                     .contentType(ContentType.JSON)
@@ -83,7 +83,7 @@ class AuthControllerTest extends BaseControllerTest {
         @Test
         void 재발급한_토큰은_기존의_토큰과_일치하지_않는다() {
             User saveUser = userGenerator.generate("김건우");
-            RefreshToken2 refreshToken = tokenManager.createRefreshToken(saveUser.getId());
+            RefreshToken refreshToken = tokenManager.createRefreshToken(saveUser.getId());
 
             UserTokenResponse userTokenResponse = RestAssured.given()
                     .contentType(ContentType.JSON)
@@ -106,7 +106,7 @@ class AuthControllerTest extends BaseControllerTest {
         void 로그아웃_할_수_있다() {
             User saveUser = userGenerator.generate("김건우");
             AccessToken accessToken = tokenManager.createAccessToken(saveUser.getId());
-            RefreshToken2 refreshToken = tokenManager.createRefreshToken(saveUser.getId());
+            RefreshToken refreshToken = tokenManager.createRefreshToken(saveUser.getId());
 
             RestAssured.given()
                     .contentType(ContentType.JSON)
@@ -121,7 +121,7 @@ class AuthControllerTest extends BaseControllerTest {
             User saveUser1 = userGenerator.generate("김건우1");
             User saveUser2 = userGenerator.generate("김건우2");
             AccessToken accessToken = tokenManager.createAccessToken(saveUser1.getId());
-            RefreshToken2 refreshToken = tokenManager.createRefreshToken(saveUser2.getId());
+            RefreshToken refreshToken = tokenManager.createRefreshToken(saveUser2.getId());
 
             RestAssured.given()
                     .contentType(ContentType.JSON)
@@ -134,7 +134,7 @@ class AuthControllerTest extends BaseControllerTest {
         @Test
         void 엑세스_토큰이_없으면_401에러가_발생한다() {
             User saveUser = userGenerator.generate("김건우1");
-            RefreshToken2 refreshToken = tokenManager.createRefreshToken(saveUser.getId());
+            RefreshToken refreshToken = tokenManager.createRefreshToken(saveUser.getId());
 
             RestAssured.given()
                     .contentType(ContentType.JSON)

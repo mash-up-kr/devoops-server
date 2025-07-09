@@ -1,14 +1,14 @@
 package com.devoops.domain.repository.auth;
 
-import com.devoops.domain.entity.auth.RefreshToken2;
+import com.devoops.domain.entity.auth.RefreshToken;
 
 public interface RefreshTokenDomainRepository {
 
-    RefreshToken2 save(RefreshToken2 refreshToken);
+    RefreshToken save(RefreshToken refreshToken);
 
     boolean exists(String tokenValue);
 
-    RefreshToken2 getRefreshToken(String tokenValue);
+    RefreshToken getRefreshToken(String tokenValue);
 
     void delete(String tokenValue);
 }

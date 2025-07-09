@@ -11,18 +11,18 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class RefreshToken2 {
+public class RefreshToken {
 
     private long userId;
     private String value;
     private Duration ttl;
 
-    public RefreshToken2(long userId, Duration ttl) {
+    public RefreshToken(long userId, Duration ttl) {
         this(userId, UUID.randomUUID().toString(), ttl);
     }
 
-    public RefreshToken2 refresh() {
-        return new RefreshToken2(this.userId, UUID.randomUUID().toString(), this.ttl);
+    public RefreshToken refresh() {
+        return new RefreshToken(this.userId, UUID.randomUUID().toString(), this.ttl);
     }
 
     public boolean isExpired() {

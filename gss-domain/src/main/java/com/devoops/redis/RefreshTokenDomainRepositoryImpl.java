@@ -1,6 +1,6 @@
 package com.devoops.redis;
 
-import com.devoops.domain.entity.auth.RefreshToken2;
+import com.devoops.domain.entity.auth.RefreshToken;
 import com.devoops.domain.repository.auth.RefreshTokenDomainRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -12,9 +12,9 @@ public class RefreshTokenDomainRepositoryImpl implements RefreshTokenDomainRepos
 
     private static final String REFRESH_TOKEN_KEY_PREFIX = "refresh:";
 
-    private final RedisTemplate<String, RefreshToken2> redisTemplate;
+    private final RedisTemplate<String, RefreshToken> redisTemplate;
 
-    public RefreshToken2 save(RefreshToken2 refreshToken) {
+    public RefreshToken save(RefreshToken refreshToken) {
         String key = REFRESH_TOKEN_KEY_PREFIX + refreshToken.getValue();
         System.out.println("=============impl로 저장됨");
         redisTemplate.opsForValue().set(key, refreshToken, refreshToken.getTtl());
@@ -27,7 +27,7 @@ public class RefreshTokenDomainRepositoryImpl implements RefreshTokenDomainRepos
         return redisTemplate.hasKey(key);
     }
 
-    public RefreshToken2 getRefreshToken(String tokenValue) {
+    public RefreshToken getRefreshToken(String tokenValue) {
         String key = REFRESH_TOKEN_KEY_PREFIX + tokenValue;
         return redisTemplate.opsForValue().get(key);
     }
