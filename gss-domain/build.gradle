@@ -25,6 +25,10 @@ dependencies {
 	testFixturesImplementation 'org.springframework.boot:spring-boot-starter-test' // includes SpringExtension, DataJpaTest, etc.
 	testFixturesImplementation 'org.junit.jupiter:junit-jupiter'
 
+	// Testcontainers for Redis
+	testImplementation("org.testcontainers:testcontainers:1.19.3")
+	testImplementation("org.testcontainers:junit-jupiter:1.19.3")
+
 	// DB
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'

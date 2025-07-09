@@ -1,5 +1,6 @@
 package com.devoops.domain.entity.auth;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -25,6 +26,7 @@ public class RefreshToken {
         return new RefreshToken(this.userId, UUID.randomUUID().toString(), this.ttl);
     }
 
+    @JsonIgnore
     public boolean isExpired() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime expiredAt = now.plusSeconds(ttl.getSeconds());

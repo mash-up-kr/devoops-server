@@ -16,7 +16,6 @@ public class RefreshTokenDomainRepositoryImpl implements RefreshTokenDomainRepos
 
     public RefreshToken save(RefreshToken refreshToken) {
         String key = REFRESH_TOKEN_KEY_PREFIX + refreshToken.getValue();
-        System.out.println("=============impl로 저장됨");
         redisTemplate.opsForValue().set(key, refreshToken, refreshToken.getTtl());
         return refreshToken;
     }
