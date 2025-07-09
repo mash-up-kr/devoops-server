@@ -4,21 +4,21 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class RefreshToken2 {
 
-    private final long userId;
-    private final String value;
-    private final Duration ttl;
+    private long userId;
+    private String value;
+    private Duration ttl;
 
     public RefreshToken2(long userId, Duration ttl) {
-        this.userId = userId;
-        this.value = UUID.randomUUID().toString();
-        this.ttl = ttl;
+        this(userId, UUID.randomUUID().toString(), ttl);
     }
 
     public RefreshToken2 refresh() {

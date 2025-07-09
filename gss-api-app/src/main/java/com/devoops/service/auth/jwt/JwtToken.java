@@ -21,10 +21,7 @@ public abstract class JwtToken {
             TokenType type,
             SecretKey secretKey
     ) {
-        if (type.isAccess()) {
-            return new AccessToken(value, expiration, secretKey);
-        }
-        return new RefreshToken(value, expiration, secretKey);
+        return new AccessToken(value, expiration, secretKey);
     }
 
     protected String makeJwtTokenValue(Date expiredDate, String value, TokenType type, SecretKey secretKey) {

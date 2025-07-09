@@ -15,6 +15,7 @@ public class FakeRefreshDomainRepository implements RefreshTokenDomainRepository
 
     @Override
     public RefreshToken2 save(RefreshToken2 refreshToken) {
+        System.out.println("===========안 들어옴");
         refreshTokens.add(refreshToken);
         return refreshToken;
     }
@@ -34,9 +35,9 @@ public class FakeRefreshDomainRepository implements RefreshTokenDomainRepository
     }
 
     @Override
-    public void delete(long userId) {
+    public void delete(String tokenValue) {
         refreshTokens.stream()
-                .filter(token -> token.getUserId() == userId)
+                .filter(token -> token.getValue().equals(tokenValue))
                 .findAny()
                 .ifPresent(refreshTokens::remove);
     }

@@ -1,12 +1,11 @@
 package com.devoops.service.auth;
 
 import com.devoops.domain.entity.auth.RefreshToken2;
+import com.devoops.domain.repository.auth.RefreshTokenDomainRepository;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
-import com.devoops.redis.RefreshTokenDomainRepositoryImpl;
 import com.devoops.service.auth.jwt.JwtProperties;
 import com.devoops.service.auth.jwt.JwtToken;
-import com.devoops.service.auth.jwt.RefreshToken;
 import com.devoops.service.auth.jwt.TokenType;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
@@ -17,16 +16,16 @@ import org.springframework.stereotype.Component;
 public class TokenManager {
 
     private final JwtProperties jwtProperties;
-    private final RefreshTokenDomainRepositoryImpl refreshTokenDomainRepository;
+    private final RefreshTokenDomainRepository refreshTokenDomainRepository;
 
     public JwtToken createToken(String value, TokenType type) {
         Duration expiration = jwtProperties.getExpirationByTokenType(type);
         return JwtToken.from(value, expiration, type, jwtProperties.getSecretKey());
     }
 
-    public JwtToken createAccessToken(String value) {
+    public JwtToken createAccessToken(long userId) {
         Duration expiration = jwtProperties.getExpirationByTokenType(TokenType.ACCESS_TOKEN);
-        return JwtToken.from(value, expiration, TokenType.ACCESS_TOKEN, jwtProperties.getSecretKey());
+        return JwtToken.from(String.valueOf(userId), expiration, TokenType.ACCESS_TOKEN, jwtProperties.getSecretKey());
     }
 
     public RefreshToken2 createRefreshToken(long userId) {
@@ -37,21 +36,26 @@ public class TokenManager {
 
     public RefreshToken2 refresh(String tokenValue) {
         RefreshToken2 refreshToken = getRefreshToken(tokenValue);
-        refreshTokenDomainRepository.delete(refreshToken.getUserId());
+        refreshTokenDomainRepository.delete(refreshToken.getValue());
         RefreshToken2 renewedToken = refreshToken.refresh();
         refreshTokenDomainRepository.save(renewedToken);
         return renewedToken;
     }
 
-    private RefreshToken2 getRefreshToken(String tokenValue) {
-        if(!refreshTokenDomainRepository.exists(tokenValue)) {
+    public RefreshToken2 getRefreshToken(String tokenValue) {
+        if (!refreshTokenDomainRepository.exists(tokenValue)) {
             throw new GssException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
         RefreshToken2 refreshToken = refreshTokenDomainRepository.getRefreshToken(tokenValue);
-        if(refreshToken.isExpired()) {
+        if (refreshToken.isExpired()) {
             throw new GssException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
         return refreshToken;
+    }
+
+    public void deleteRefreshToken(String tokenValue) {
+        RefreshToken2 refreshToken = getRefreshToken(tokenValue);
+        refreshTokenDomainRepository.delete(refreshToken.getValue());
     }
 
     public String resolveToken(JwtToken token) {

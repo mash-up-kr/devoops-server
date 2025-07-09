@@ -8,7 +8,6 @@ import com.devoops.dto.response.UserSaveResponse;
 import com.devoops.dto.response.UserTokenRefreshResponse;
 import com.devoops.dto.response.UserTokenResponse;
 import com.devoops.service.auth.AuthService;
-import com.devoops.service.auth.jwt.RefreshToken;
 import com.devoops.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,19 +22,19 @@ public class AuthFacadeService {
     public UserSaveResponse issueToken(UserSaveRequest saveRequest) {
         AuthResponse authResponse = authService.getUserInfo(saveRequest.githubAccessToken());
         GithubToken accessToken = new GithubToken(authResponse.githubToken());
-        User user = new User(authResponse.providerId(), authResponse.nickname(), authResponse.profileImageUrl(), accessToken);
+        User user = new User(authResponse.providerId(), authResponse.nickname(), authResponse.profileImageUrl(),
+                accessToken);
         User savedUser = userService.save(user);
-        UserTokenResponse userTokens = authService.issueToken2(savedUser.getId());
+        UserTokenResponse userTokens = authService.issueToken(savedUser.getId());
         return new UserSaveResponse(savedUser, userTokens.accessToken(), userTokens.refreshToken());
     }
 
-    public UserTokenRefreshResponse refresh(RefreshToken refreshToken) {
-        UserTokenResponse userTokenResponse = authService.reissueToken2(refreshToken.getToken());
+    public UserTokenRefreshResponse refresh(String refreshToken) {
+        UserTokenResponse userTokenResponse = authService.reissueToken(refreshToken);
         return new UserTokenRefreshResponse(userTokenResponse.accessToken(), userTokenResponse.refreshToken());
     }
 
-    public void logout(RefreshToken refreshToken, User user) {
-        String userId = authService.resolveToken(refreshToken);
-        authService.logout(user, Long.parseLong(userId));
+    public void logout(String refreshToken, User user) {
+        authService.logout(refreshToken, user);
     }
 }

@@ -1,15 +1,13 @@
 package com.devoops.service.auth;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.devoops.BaseServiceTest;
+import com.devoops.domain.entity.auth.RefreshToken2;
 import com.devoops.dto.response.UserTokenResponse;
 import com.devoops.service.auth.jwt.AccessToken;
 import com.devoops.service.auth.jwt.JwtToken;
-import com.devoops.service.auth.jwt.RefreshToken;
-import com.devoops.service.auth.jwt.TokenType;
-import java.util.UUID;
+import java.time.Duration;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,29 +29,26 @@ class AuthServiceTest extends BaseServiceTest {
         void 토큰을_발급할_수_있다() {
             long userId = 1L;
 
-            UserTokenResponse issuedTokens = authService.issueToken2(userId);
+            UserTokenResponse issuedTokens = authService.issueToken(userId);
 
-            String resolvedAccessToken = resolveTokenValue(issuedTokens.accessToken(), TokenType.ACCESS_TOKEN);
-            assertThat(resolvedAccessToken).isEqualTo(userId);
+            String resolvedAccessToken = resolveAccessTokenValue(issuedTokens.accessToken());
+            assertThat(resolvedAccessToken).isEqualTo(String.valueOf(userId));
         }
 
         @Test
         void 토큰을_재발급할_수_있다() {
-            String value = UUID.randomUUID().toString();
-            JwtToken token = tokenManager.createToken(value, TokenType.REFRESH_TOKEN);
-            RefreshToken refreshToken = new RefreshToken(token.getToken());
+            long userId = 1L;
+            JwtToken token = tokenManager.createAccessToken(userId);
+            RefreshToken2 refreshToken = tokenManager.createRefreshToken(userId);
 
-            UserTokenResponse reissuedTokens = authService.reissueToken2(refreshToken.getToken());
+            UserTokenResponse reissuedTokens = authService.reissueToken(refreshToken.getValue());
 
-            String resolvedAccessToken = resolveTokenValue(reissuedTokens.accessToken(), TokenType.ACCESS_TOKEN);
-            assertThat(resolvedAccessToken).isEqualTo(value);
+            String resolvedAccessToken = resolveAccessTokenValue(reissuedTokens.accessToken());
+            assertThat(resolvedAccessToken).isEqualTo(String.valueOf(userId));
         }
 
-        private String resolveTokenValue(String tokenValue, TokenType tokenType) {
-            if(tokenType.isAccess()) {
-                return tokenManager.resolveToken(new AccessToken("Bearer " + tokenValue));
-            }
-            return tokenManager.resolveToken(new RefreshToken(tokenValue));
+        private String resolveAccessTokenValue(String tokenValue) {
+            return tokenManager.resolveToken(new AccessToken("Bearer " + tokenValue));
         }
     }
 }

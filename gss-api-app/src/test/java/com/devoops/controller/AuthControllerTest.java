@@ -3,6 +3,7 @@ package com.devoops.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.devoops.BaseControllerTest;
+import com.devoops.domain.entity.auth.RefreshToken2;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.user.UserDomainRepository;
 import com.devoops.dto.request.UserSaveRequest;
@@ -21,9 +22,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
 class AuthControllerTest extends BaseControllerTest {
-
-    @Autowired
-    private UserDomainRepository userDomainRepository;
 
     @Autowired
     private TokenManager tokenManager;
@@ -69,12 +67,11 @@ class AuthControllerTest extends BaseControllerTest {
         @Test
         void 회원의_토큰을_재발급할_수_있다() {
             User saveUser = userGenerator.generate("김건우");
-            JwtToken refreshToken = tokenManager.createToken(String.valueOf(saveUser.getId()),
-                    TokenType.REFRESH_TOKEN);
+            RefreshToken2 refreshToken = tokenManager.createRefreshToken(saveUser.getId());
 
             UserTokenResponse userTokenResponse = RestAssured.given()
                     .contentType(ContentType.JSON)
-                    .header(HttpHeaders.COOKIE, "refreshToken=" + refreshToken.getToken())
+                    .header(HttpHeaders.COOKIE, "refreshToken=" + refreshToken.getValue())
                     .when().post("/api/auth/github/refresh")
                     .then().statusCode(HttpStatus.CREATED.value())
                     .extract()
@@ -85,6 +82,24 @@ class AuthControllerTest extends BaseControllerTest {
             String resolvedToken = tokenManager.resolveToken(accessToken);
             assertThat(resolvedToken).isEqualTo(String.valueOf(saveUser.getId()));
         }
+
+        @Test
+        void 재발급한_토큰은_기존의_토큰과_일치하지_않는다() {
+            User saveUser = userGenerator.generate("김건우");
+            RefreshToken2 refreshToken = tokenManager.createRefreshToken(saveUser.getId());
+
+            UserTokenResponse userTokenResponse = RestAssured.given()
+                    .contentType(ContentType.JSON)
+                    .header(HttpHeaders.COOKIE, "refreshToken=" + refreshToken.getValue())
+                    .when().post("/api/auth/github/refresh")
+                    .then().statusCode(HttpStatus.CREATED.value())
+                    .extract()
+                    .body()
+                    .as(UserTokenResponse.class);
+
+            String refreshedRefreshToken = userTokenResponse.refreshToken();
+            assertThat(refreshToken.getValue()).isNotEqualTo(refreshedRefreshToken);
+        }
     }
 
     @Nested
@@ -93,15 +108,13 @@ class AuthControllerTest extends BaseControllerTest {
         @Test
         void 로그아웃_할_수_있다() {
             User saveUser = userGenerator.generate("김건우");
-            JwtToken accessToken = tokenManager.createToken(String.valueOf(saveUser.getId()),
-                    TokenType.ACCESS_TOKEN);
-            JwtToken refreshToken = tokenManager.createToken(String.valueOf(saveUser.getId()),
-                    TokenType.REFRESH_TOKEN);
+            JwtToken accessToken = tokenManager.createAccessToken(saveUser.getId());
+            RefreshToken2 refreshToken = tokenManager.createRefreshToken(saveUser.getId());
 
             RestAssured.given()
                     .contentType(ContentType.JSON)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken.getToken())
-                    .header(HttpHeaders.COOKIE, "refreshToken=" + refreshToken.getToken())
+                    .header(HttpHeaders.COOKIE, "refreshToken=" + refreshToken.getValue())
                     .when().post("/api/auth/logout")
                     .then().statusCode(HttpStatus.NO_CONTENT.value());
         }
@@ -110,30 +123,28 @@ class AuthControllerTest extends BaseControllerTest {
         void 로그아웃_시도대상과_리프레시_토큰값이_불일치하면_에러가_발생한다() {
             User saveUser1 = userGenerator.generate("김건우1");
             User saveUser2 = userGenerator.generate("김건우2");
-            JwtToken accessToken = tokenManager.createToken(String.valueOf(saveUser1.getId()),
-                    TokenType.ACCESS_TOKEN);
-            JwtToken refreshToken = tokenManager.createToken(String.valueOf(saveUser2.getId()),
-                    TokenType.REFRESH_TOKEN);
+            JwtToken accessToken = tokenManager.createAccessToken(saveUser1.getId());
+            RefreshToken2 refreshToken = tokenManager.createRefreshToken(saveUser2.getId());
 
             RestAssured.given()
                     .contentType(ContentType.JSON)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken.getToken())
-                    .header(HttpHeaders.COOKIE, "refreshToken=" + refreshToken.getToken())
+                    .header(HttpHeaders.COOKIE, "refreshToken=" + refreshToken.getValue())
                     .when().post("/api/auth/logout")
-                    .then().statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value()); //TODO 추후 401로 변경
+                    .then().statusCode(HttpStatus.UNAUTHORIZED.value());
         }
 
         @Test
-        void 토큰이_없으면_400에러가_발생한다() {
+        void 엑세스_토큰이_없으면_401에러가_발생한다() {
             User saveUser = userGenerator.generate("김건우1");
-            JwtToken accessToken = tokenManager.createToken(String.valueOf(saveUser.getId()), TokenType.ACCESS_TOKEN);
+            RefreshToken2 refreshToken = tokenManager.createRefreshToken(saveUser.getId());
 
             RestAssured.given()
                     .contentType(ContentType.JSON)
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken.getToken())
+                    .header(HttpHeaders.COOKIE, "refreshToken=" + refreshToken.getValue())
                     .when().post("/api/auth/logout")
                     .then()
-                    .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value()); //TODO 추후 400으로 변경
+                    .statusCode(HttpStatus.UNAUTHORIZED.value());
         }
     }
 }

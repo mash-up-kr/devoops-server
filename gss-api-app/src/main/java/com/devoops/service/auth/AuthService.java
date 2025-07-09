@@ -6,9 +6,10 @@ import com.devoops.domain.entity.user.User;
 import com.devoops.dto.response.AuthResponse;
 import com.devoops.dto.response.UserInfoResponse;
 import com.devoops.dto.response.UserTokenResponse;
+import com.devoops.exception.custom.GssException;
+import com.devoops.exception.errorcode.ErrorCode;
 import com.devoops.service.auth.jwt.JwtProperties;
 import com.devoops.service.auth.jwt.JwtToken;
-import com.devoops.service.auth.jwt.RefreshToken;
 import com.devoops.service.auth.jwt.TokenType;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
@@ -28,23 +29,16 @@ public class AuthService {
         return new AuthResponse(token, userInfo.id(), userInfo.name(), userInfo.avatarUrl());
     }
 
-    public UserTokenResponse issueToken(String value) {
-        JwtToken accessToken = jwtTokenManager.createToken(value, TokenType.ACCESS_TOKEN);
-        JwtToken refreshToken = jwtTokenManager.createToken(value, TokenType.REFRESH_TOKEN);
-        Duration refreshTokenExpiration = jwtTokenManager.getTokenExpiration(TokenType.REFRESH_TOKEN);
-        return new UserTokenResponse(accessToken, refreshToken, refreshTokenExpiration);
-    }
-
-    public UserTokenResponse issueToken2(long userId) {
-        JwtToken accessToken = jwtTokenManager.createAccessToken(String.valueOf(userId));
+    public UserTokenResponse issueToken(long userId) {
+        JwtToken accessToken = jwtTokenManager.createAccessToken(userId);
         RefreshToken2 refreshToken = jwtTokenManager.createRefreshToken(userId);
         Duration refreshTokenExpiration = jwtTokenManager.getTokenExpiration(TokenType.REFRESH_TOKEN);
         return new UserTokenResponse(accessToken.getToken(), refreshToken.getValue(), refreshTokenExpiration);
     }
 
-    public UserTokenResponse reissueToken2(String refreshTokenValue) {
+    public UserTokenResponse reissueToken(String refreshTokenValue) {
         RefreshToken2 refreshToken = jwtTokenManager.refresh(refreshTokenValue);
-        JwtToken accessToken = jwtTokenManager.createAccessToken(String.valueOf(refreshToken.getUserId()));
+        JwtToken accessToken = jwtTokenManager.createAccessToken(refreshToken.getUserId());
         Duration refreshTokenExpiration = jwtTokenManager.getTokenExpiration(TokenType.REFRESH_TOKEN);
         return new UserTokenResponse(accessToken.getToken(), refreshToken.getValue(), refreshTokenExpiration);
     }
@@ -53,9 +47,11 @@ public class AuthService {
         return jwtTokenManager.resolveToken(token);
     }
 
-    public void logout(User user, long id) {
-        if (!user.isSameUser(id)) {
-            throw new RuntimeException("401 인증 에러");
+    public void logout(String refreshToken, User user) {
+        RefreshToken2 token = jwtTokenManager.getRefreshToken(refreshToken);
+        if (!user.isSameUser(token.getUserId())) {
+            throw new GssException(ErrorCode.UNAUTHORIZED_EXCEPTION);
         }
+        jwtTokenManager.deleteRefreshToken(refreshToken);
     }
 }
