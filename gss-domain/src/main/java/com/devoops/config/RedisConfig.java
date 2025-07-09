@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -15,6 +16,7 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
+@EnableConfigurationProperties(RedisProperties.class)
 public class RedisConfig {
 
     @Bean(name = "defaultRedisTemplate")
@@ -30,11 +32,8 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisConnectionFactory redisConnectionFactory(
-            @Value("${spring.data.redis.host}") String host,
-            @Value("${spring.data.redis.port}") int port
-    ) {
-        return new LettuceConnectionFactory(host, port);
+    public RedisConnectionFactory redisConnectionFactory(RedisProperties properties) {
+        return new LettuceConnectionFactory(properties.host(), properties.port());
     }
 
     @Bean(name = "redisObjectMapper")
