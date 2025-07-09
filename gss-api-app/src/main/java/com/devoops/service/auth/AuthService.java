@@ -1,15 +1,15 @@
 package com.devoops.service.auth;
 
 import com.devoops.client.GithubOAuthClient;
+import com.devoops.domain.entity.auth.RefreshToken2;
 import com.devoops.domain.entity.user.User;
-import com.devoops.domain.repository.auth.RefreshTokenDomainRepository;
 import com.devoops.dto.response.AuthResponse;
+import com.devoops.dto.response.UserInfoResponse;
 import com.devoops.dto.response.UserTokenResponse;
 import com.devoops.service.auth.jwt.JwtProperties;
 import com.devoops.service.auth.jwt.JwtToken;
 import com.devoops.service.auth.jwt.RefreshToken;
 import com.devoops.service.auth.jwt.TokenType;
-import com.devoops.dto.response.UserInfoResponse;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -22,7 +22,6 @@ public class AuthService {
 
     private final GithubOAuthClient authClient;
     private final TokenManager jwtTokenManager;
-    private final RefreshTokenDomainRepository refreshTokenDomainRepository;
 
     public AuthResponse getUserInfo(String token) {
         UserInfoResponse userInfo = authClient.getUserInfo(token);
@@ -36,9 +35,23 @@ public class AuthService {
         return new UserTokenResponse(accessToken, refreshToken, refreshTokenExpiration);
     }
 
+    public UserTokenResponse issueToken2(long userId) {
+        JwtToken accessToken = jwtTokenManager.createAccessToken(String.valueOf(userId));
+        RefreshToken2 refreshToken = jwtTokenManager.createRefreshToken(userId);
+        Duration refreshTokenExpiration = jwtTokenManager.getTokenExpiration(TokenType.REFRESH_TOKEN);
+        return new UserTokenResponse(accessToken.getToken(), refreshToken.getValue(), refreshTokenExpiration);
+    }
+
     public UserTokenResponse reissueToken(RefreshToken refreshToken) {
         String resolvedValue = jwtTokenManager.resolveToken(refreshToken);
         return issueToken(resolvedValue);
+    }
+
+    public UserTokenResponse reissueToken2(String refreshTokenValue) {
+        RefreshToken2 refreshToken = jwtTokenManager.refresh(refreshTokenValue);
+        JwtToken accessToken = jwtTokenManager.createAccessToken(String.valueOf(refreshToken.getUserId()));
+        Duration refreshTokenExpiration = jwtTokenManager.getTokenExpiration(TokenType.REFRESH_TOKEN);
+        return new UserTokenResponse(accessToken.getToken(), refreshToken.getValue(), refreshTokenExpiration);
     }
 
     public String resolveToken(JwtToken token) {

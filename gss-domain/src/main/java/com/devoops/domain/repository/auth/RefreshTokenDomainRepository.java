@@ -4,7 +4,7 @@ import com.devoops.domain.entity.auth.RefreshToken2;
 
 public interface RefreshTokenDomainRepository {
 
-    void save(RefreshToken2 refreshToken);
+    RefreshToken2 save(RefreshToken2 refreshToken);
 
     boolean exists(String refreshToken);
 

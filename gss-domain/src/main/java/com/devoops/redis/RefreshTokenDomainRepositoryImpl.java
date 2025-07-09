@@ -2,6 +2,7 @@ package com.devoops.redis;
 
 import com.devoops.domain.entity.auth.RefreshToken2;
 import com.devoops.domain.repository.auth.RefreshTokenDomainRepository;
+import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -14,9 +15,10 @@ public class RefreshTokenDomainRepositoryImpl implements RefreshTokenDomainRepos
 
     private final RedisTemplate<String, RefreshToken2> redisTemplate;
 
-    public void save(RefreshToken2 refreshToken) {
+    public RefreshToken2 save(RefreshToken2 refreshToken) {
         String key = REFRESH_TOKEN_KEY_PREFIX + refreshToken.getValue();
         redisTemplate.opsForValue().set(key, refreshToken, refreshToken.getTtl());
+        return refreshToken;
     }
 
     @Override
