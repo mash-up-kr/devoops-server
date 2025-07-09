@@ -13,9 +13,8 @@ public class UserService {
 
     public User save(User user) {
         long providerId = user.getProviderId();
-        Long userId = user.getId();
         if (userDomainRepository.existsByProviderId(providerId)) {
-            return userDomainRepository.findByProviderId(userId);
+            return userDomainRepository.findByProviderId(providerId);
         }
         return userDomainRepository.saveUser(user);
     }

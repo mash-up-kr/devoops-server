@@ -42,6 +42,25 @@ class AuthControllerTest extends BaseControllerTest {
                     .then().statusCode(HttpStatus.CREATED.value())
                     .extract().as(UserSaveResponse.class);
         }
+
+        @Test
+        void 같은_회원을_대상으로_토큰을_생성_및_발급을_할_수_있다() {
+            UserSaveRequest request = new UserSaveRequest("testAccessToken");
+
+            RestAssured.given()
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/api/auth/github")
+                    .then().statusCode(HttpStatus.CREATED.value())
+                    .extract().as(UserSaveResponse.class);
+
+            RestAssured.given()
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/api/auth/github")
+                    .then().statusCode(HttpStatus.CREATED.value())
+                    .extract().as(UserSaveResponse.class);
+        }
     }
 
     @Nested
