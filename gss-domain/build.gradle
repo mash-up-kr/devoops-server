@@ -16,6 +16,10 @@ dependencies {
 	//redis
 	implementation"org.springframework.boot:spring-boot-starter-data-redis"
 
+	//Jackson
+	implementation("com.fasterxml.jackson.core:jackson-databind")
+	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+
 	// testFixtures
 	testFixturesImplementation 'org.springframework.boot:spring-boot-starter-data-jpa' // includes EntityManager, TX
 	testFixturesImplementation 'org.springframework.boot:spring-boot-starter-test' // includes SpringExtension, DataJpaTest, etc.

@@ -2,6 +2,7 @@ package com.devoops.service.auth;
 
 import com.devoops.client.GithubOAuthClient;
 import com.devoops.domain.entity.user.User;
+import com.devoops.domain.repository.auth.RefreshTokenDomainRepository;
 import com.devoops.dto.request.UserSaveRequest;
 import com.devoops.dto.response.AuthResponse;
 import com.devoops.dto.response.UserTokenResponse;
@@ -25,6 +26,7 @@ public class AuthService {
 
     private final GithubOAuthClient authClient;
     private final JwtTokenManager jwtTokenManager;
+    private final RefreshTokenDomainRepository refreshTokenDomainRepository;
 
     public AuthResponse getUserInfo(String token) {
         UserInfoResponse userInfo = authClient.getUserInfo(token);
