@@ -3,20 +3,45 @@ package com.devoops.dto.response;
 import com.devoops.domain.entity.github.PullRequest;
 import com.devoops.domain.entity.github.QuestionAnswer;
 import com.devoops.domain.entity.github.RecordStatus;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public record PullRequestDetailReadResponse(
+
+        @Schema(description = "풀 리퀘스트 id", example = "1")
         long id,
-        @NotNull String title,
-        @NotNull String tag,
-        @NotNull RecordStatus recordStatus,
-        @NotNull LocalDateTime mergedAt,
-        @NotBlank String summary,
-        @NotNull List<String> categories,
-        @NotNull List<QuestionAnswerResponse> questions
+
+        @NotNull
+        @Schema(description = "회고 제목", example = "서비스 장애 회고")
+        String title,
+
+        @NotNull
+        @Schema(description = "회고 라밸", example = "feat")
+        String tag,
+
+        @NotNull
+        @Schema(description = "회고 기록 상태", example = "PROGRESS")
+        RecordStatus recordStatus,
+
+        @NotNull
+        @Schema(description = "머지 시각", example = "2025-07-07T13:45:30")
+        LocalDateTime mergedAt,
+
+        @NotBlank
+        @Schema(description = "PR 2줄 요약", example = "이 PR은 ~~를 위해 만들어진 PR입니다")
+        String summary,
+
+        @NotNull
+        @ArraySchema(schema = @Schema(description = "회고 카테고리 모음", example = "{성능, 안전성}"))
+        List<String> categories,
+
+        @NotNull
+        @ArraySchema(schema = @Schema(description = "회고-질문과 답변 내역", implementation = QuestionAnswerResponse.class))
+        List<QuestionAnswerResponse> questions
 ) {
 
     public static PullRequestDetailReadResponse from(
