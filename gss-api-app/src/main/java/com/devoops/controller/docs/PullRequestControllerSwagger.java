@@ -1,9 +1,8 @@
 package com.devoops.controller.docs;
 
-import com.devoops.controller.auth.AuthUser;
-import com.devoops.domain.entity.github.RecordStatus;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.response.PullRequestDetailReadResponse;
+import com.devoops.dto.response.PullRequestRankingResponse;
 import com.devoops.dto.response.PullRequestRankingResponses;
 import com.devoops.dto.response.PullRequestReadResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,9 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Tag(name = "Pull Request API")
 @SecurityRequirement(name = "Authorization")
@@ -58,7 +54,14 @@ public interface PullRequestControllerSwagger {
             long pullRequestId
     );
 
-    ResponseEntity<PullRequestRankingResponses> getPullRequestRanking(@Parameter(hidden = true)User user);
+    @Operation(
+            summary = "PR 회고 이어하기",
+            responses = {@ApiResponse(
+                    responseCode = "200",
+                    description = "최근 회고 내역 조회",
+                    content = @Content(schema = @Schema(implementation = PullRequestRankingResponses.class)))}
+    )
+    ResponseEntity<PullRequestRankingResponses> getPullRequestRanking(@Parameter(hidden = true) User user);
 }
 
 
