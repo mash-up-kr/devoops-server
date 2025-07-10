@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,8 +21,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @EnableConfigurationProperties(RedisProperties.class)
 public class RedisConfig {
 
-    @Bean(name = "defaultRedisTemplate")
-    public RedisTemplate<String, RefreshToken> refreshToken2RedisTemplate(
+    @Bean
+    public RedisTemplate<String, RefreshToken> refreshTokenRedisTemplate(
             RedisConnectionFactory redisConnectionFactory,
             @Qualifier("redisObjectMapper") ObjectMapper objectMapper
     ) {
