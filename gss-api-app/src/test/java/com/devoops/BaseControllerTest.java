@@ -1,6 +1,7 @@
 package com.devoops;
 
 import com.devoops.config.TestConfig;
+import com.devoops.fake.FakeBlackListRepository;
 import com.devoops.fake.FakeRefreshDomainRepository;
 import com.devoops.generator.GithubRepoGenerator;
 import com.devoops.generator.PullRequestGenerator;
@@ -39,6 +40,9 @@ public abstract class BaseControllerTest {
     @Autowired
     private FakeRefreshDomainRepository refreshDomainRepository;
 
+    @Autowired
+    private FakeBlackListRepository blackListRepository;
+
     @BeforeEach
     void setEnvironment() {
         RestAssured.port = port;
@@ -47,5 +51,6 @@ public abstract class BaseControllerTest {
     @BeforeEach
     void setup() {
         refreshDomainRepository.clear();
+        blackListRepository.clear();
     }
 }

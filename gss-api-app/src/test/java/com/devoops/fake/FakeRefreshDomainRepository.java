@@ -15,7 +15,6 @@ public class FakeRefreshDomainRepository implements RefreshTokenDomainRepository
 
     @Override
     public RefreshToken save(RefreshToken refreshToken) {
-        System.out.println("===========안 들어옴");
         refreshTokens.add(refreshToken);
         return refreshToken;
     }
