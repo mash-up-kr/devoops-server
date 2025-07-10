@@ -46,7 +46,7 @@ class AuthServiceTest extends BaseServiceTest {
         }
 
         private String resolveAccessTokenValue(String tokenValue) {
-            return tokenManager.resolveToken(new AccessToken("Bearer " + tokenValue));
+            return tokenManager.resolveToken(new AccessToken(tokenValue));
         }
     }
 }

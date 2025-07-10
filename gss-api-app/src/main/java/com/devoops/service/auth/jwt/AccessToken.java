@@ -9,8 +9,10 @@ import java.time.Duration;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public class AccessToken {
 
     private static final String TOKEN_TYPE_CLAIMS_NAME = "type";
@@ -19,11 +21,12 @@ public class AccessToken {
 
     private final String token;
 
-    public AccessToken(String token) {
+    public static AccessToken bearerAuth(String token) {
         if (!token.startsWith(ACCESS_TOKEN_PREFIX)) {
             throw new GssException(ErrorCode.UNAUTHORIZED_EXCEPTION);
         }
-        this.token = token.substring(ACCESS_TOKEN_PREFIX.length()).trim();
+        String parsedToken = token.substring(ACCESS_TOKEN_PREFIX.length()).trim();
+        return new AccessToken(parsedToken);
     }
 
     public AccessToken(
@@ -50,6 +53,15 @@ public class AccessToken {
 
     public String resolveToken(SecretKey secretKey) {
         return resolveJwtToken(secretKey, token);
+    }
+
+    public Date resolveExpiration(SecretKey secretKey) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getExpiration();
     }
 
     private String resolveJwtToken(SecretKey secretKey, String token) throws JwtException {

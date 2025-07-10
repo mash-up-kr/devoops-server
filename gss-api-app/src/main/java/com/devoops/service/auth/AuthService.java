@@ -3,6 +3,7 @@ package com.devoops.service.auth;
 import com.devoops.client.GithubOAuthClient;
 import com.devoops.domain.entity.auth.RefreshToken;
 import com.devoops.domain.entity.user.User;
+import com.devoops.domain.repository.auth.BlackListRepository;
 import com.devoops.dto.response.AuthResponse;
 import com.devoops.dto.response.UserInfoResponse;
 import com.devoops.dto.response.UserTokenResponse;
@@ -23,6 +24,7 @@ public class AuthService {
 
     private final GithubOAuthClient authClient;
     private final TokenManager jwtTokenManager;
+    private final BlackListRepository blackListRepository;
 
     public AuthResponse getUserInfo(String token) {
         UserInfoResponse userInfo = authClient.getUserInfo(token);
@@ -53,5 +55,14 @@ public class AuthService {
             throw new GssException(ErrorCode.UNAUTHORIZED_EXCEPTION);
         }
         jwtTokenManager.deleteRefreshToken(refreshToken);
+    }
+
+    public void logoutV1(String accessToken, String refreshToken, User user) {
+        RefreshToken token = jwtTokenManager.getRefreshToken(refreshToken);
+        if (!user.isSameUser(token.getUserId())) {
+            throw new GssException(ErrorCode.UNAUTHORIZED_EXCEPTION);
+        }
+        jwtTokenManager.deleteRefreshToken(refreshToken);
+        jwtTokenManager.addBlackList(new AccessToken(accessToken));
     }
 }

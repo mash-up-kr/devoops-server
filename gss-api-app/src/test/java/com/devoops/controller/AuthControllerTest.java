@@ -75,7 +75,7 @@ class AuthControllerTest extends BaseControllerTest {
                     .body()
                     .as(UserTokenResponse.class);
 
-            AccessToken accessToken = new AccessToken("Bearer " + userTokenResponse.accessToken());
+            AccessToken accessToken = new AccessToken(userTokenResponse.accessToken());
             String resolvedToken = tokenManager.resolveToken(accessToken);
             assertThat(resolvedToken).isEqualTo(String.valueOf(saveUser.getId()));
         }

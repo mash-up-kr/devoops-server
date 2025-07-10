@@ -39,7 +39,8 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
         if (StringUtils.isBlank(accessToken)) {
             throw new GssException(ErrorCode.UNAUTHORIZED_EXCEPTION);
         }
-        String providerId = authService.resolveToken(new AccessToken(accessToken));
+        AccessToken bearerToken = AccessToken.bearerAuth(accessToken);
+        String providerId = authService.resolveToken(bearerToken);
         return userService.findById(Long.parseLong(providerId));
     }
 }

@@ -1,6 +1,7 @@
 package com.devoops.service.auth;
 
 import com.devoops.domain.entity.auth.RefreshToken;
+import com.devoops.domain.repository.auth.BlackListRepository;
 import com.devoops.domain.repository.auth.RefreshTokenDomainRepository;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
@@ -8,6 +9,7 @@ import com.devoops.service.auth.jwt.AccessToken;
 import com.devoops.service.auth.jwt.JwtProperties;
 import com.devoops.service.auth.jwt.TokenType;
 import java.time.Duration;
+import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +19,7 @@ public class TokenManager {
 
     private final JwtProperties jwtProperties;
     private final RefreshTokenDomainRepository refreshTokenDomainRepository;
+    private final BlackListRepository blackListRepository;
 
     public AccessToken createAccessToken(long userId) {
         Duration expiration = jwtProperties.getExpirationByTokenType(TokenType.ACCESS_TOKEN);
@@ -54,10 +57,18 @@ public class TokenManager {
     }
 
     public String resolveToken(AccessToken token) {
+        if(blackListRepository.isExists(token.getToken())) {
+            throw new GssException(ErrorCode.UNAUTHORIZED_EXCEPTION);
+        }
         return token.resolveToken(jwtProperties.getSecretKey());
     }
 
     public Duration getTokenExpiration(TokenType type) {
         return jwtProperties.getExpirationByTokenType(type);
+    }
+
+    public void addBlackList(AccessToken accessToken) {
+        Date expiration = accessToken.resolveExpiration(jwtProperties.getSecretKey());
+        blackListRepository.addBlackList(accessToken.getToken(), expiration);
     }
 }
