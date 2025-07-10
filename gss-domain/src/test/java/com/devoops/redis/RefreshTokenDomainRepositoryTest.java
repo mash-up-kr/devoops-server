@@ -8,6 +8,7 @@ import com.devoops.config.BaseRedisTest;
 import com.devoops.config.RedisConfig;
 import com.devoops.domain.entity.auth.RefreshToken;
 import com.devoops.domain.repository.auth.RefreshTokenDomainRepository;
+import com.devoops.redis.auth.RefreshTokenDomainRepositoryImpl;
 import java.time.Duration;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;

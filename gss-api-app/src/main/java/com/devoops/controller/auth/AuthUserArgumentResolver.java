@@ -20,8 +20,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @RequiredArgsConstructor
 public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private static final String BEARER = "Bearer ";
-
     private final AuthService authService;
     private final UserService userService;
 

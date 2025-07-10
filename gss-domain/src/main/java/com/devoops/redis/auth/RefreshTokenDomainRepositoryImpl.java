@@ -1,4 +1,4 @@
-package com.devoops.redis;
+package com.devoops.redis.auth;
 
 import com.devoops.domain.entity.auth.RefreshToken;
 import com.devoops.domain.repository.auth.RefreshTokenDomainRepository;
