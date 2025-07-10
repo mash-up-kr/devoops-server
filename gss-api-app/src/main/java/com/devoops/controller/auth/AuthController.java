@@ -41,6 +41,7 @@ public class AuthController implements AuthControllerSwagger {
                 .body(response);
     }
 
+    @Override
     @PostMapping("/api/v1/auth/github/refresh")
     public ResponseEntity<UserTokenRefreshResponse> reIssueTokenV1(
             @RequestBody RefreshTokenV1Request refreshTokenV1Request
@@ -53,6 +54,7 @@ public class AuthController implements AuthControllerSwagger {
                 .body(response);
     }
 
+    @Override
     @PostMapping("/api/auth/logout")
     public ResponseEntity<Void> logout(
             @AuthUser User user,
@@ -62,10 +64,11 @@ public class AuthController implements AuthControllerSwagger {
         return ResponseEntity.ok().build();
     }
 
+    @Override
     @PostMapping("/api/v1/auth/logout")
-    public ResponseEntity<Void> logout(
+    public ResponseEntity<Void> logoutV1(
             @AuthUser User user,
-            @RequestBody LogoutV1Request request
+            @RequestBody @Valid LogoutV1Request request
     ) {
         authFacadeService.logoutV1(request.accessToken(), request.refreshToken(), user);
         return ResponseEntity.ok().build();
