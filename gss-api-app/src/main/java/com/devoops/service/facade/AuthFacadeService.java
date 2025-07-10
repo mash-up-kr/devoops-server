@@ -34,7 +34,16 @@ public class AuthFacadeService {
         return new UserTokenRefreshResponse(userTokenResponse.accessToken(), userTokenResponse.refreshToken());
     }
 
+    public UserTokenRefreshResponse refreshV1(String accessToken, String refreshToken) {
+        UserTokenResponse userTokenResponse = authService.refreshTokenV1(accessToken, refreshToken);
+        return new UserTokenRefreshResponse(userTokenResponse.accessToken(), userTokenResponse.refreshToken());
+    }
+
     public void logout(String refreshToken, User user) {
         authService.logout(refreshToken, user);
+    }
+
+    public void logoutV1(String accessToken, String refreshToken, User user) {
+        authService.logoutV1(accessToken, refreshToken, user);
     }
 }

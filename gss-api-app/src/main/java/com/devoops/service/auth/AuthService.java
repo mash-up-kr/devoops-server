@@ -45,6 +45,14 @@ public class AuthService {
         return new UserTokenResponse(accessToken.getToken(), refreshToken.getValue(), refreshTokenExpiration);
     }
 
+    public UserTokenResponse refreshTokenV1(String requestAccessToken, String requestRefreshToken) {
+        RefreshToken refreshToken = jwtTokenManager.refresh(requestRefreshToken);
+        jwtTokenManager.addBlackList(new AccessToken(requestAccessToken));
+        AccessToken accessToken = jwtTokenManager.createAccessToken(refreshToken.getUserId());
+        Duration refreshTokenExpiration = jwtTokenManager.getTokenExpiration(TokenType.REFRESH_TOKEN);
+        return new UserTokenResponse(accessToken.getToken(), refreshToken.getValue(), refreshTokenExpiration);
+    }
+
     public String resolveToken(AccessToken token) {
         return jwtTokenManager.resolveToken(token);
     }

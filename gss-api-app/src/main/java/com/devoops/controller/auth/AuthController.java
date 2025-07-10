@@ -2,6 +2,8 @@ package com.devoops.controller.auth;
 
 import com.devoops.controller.docs.AuthControllerSwagger;
 import com.devoops.domain.entity.user.User;
+import com.devoops.dto.request.LogoutV1Request;
+import com.devoops.dto.request.RefreshTokenV1Request;
 import com.devoops.dto.request.UserSaveRequest;
 import com.devoops.dto.response.UserSaveResponse;
 import com.devoops.dto.response.UserTokenRefreshResponse;
@@ -39,12 +41,33 @@ public class AuthController implements AuthControllerSwagger {
                 .body(response);
     }
 
+    @PostMapping("/api/v1/auth/github/refresh")
+    public ResponseEntity<UserTokenRefreshResponse> reIssueTokenV1(
+            @RequestBody RefreshTokenV1Request refreshTokenV1Request
+    ) {
+        UserTokenRefreshResponse response = authFacadeService.refreshV1(
+                refreshTokenV1Request.accessToken(),
+                refreshTokenV1Request.refreshToken()
+        );
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(response);
+    }
+
     @PostMapping("/api/auth/logout")
     public ResponseEntity<Void> logout(
             @AuthUser User user,
             @CookieValue(REFRESH_TOKEN) String token
     ) {
         authFacadeService.logout(token, user);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/api/v1/auth/logout")
+    public ResponseEntity<Void> logout(
+            @AuthUser User user,
+            @RequestBody LogoutV1Request request
+    ) {
+        authFacadeService.logoutV1(request.accessToken(), request.refreshToken(), user);
+        return ResponseEntity.ok().build();
     }
 }
