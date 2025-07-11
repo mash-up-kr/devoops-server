@@ -27,6 +27,7 @@ public class RepositoryController implements RepositoryControllerSwagger {
     private final RepositoryFacadeService repositoryFacadeService;
     private final RepositoryService repositoryService;
 
+    @Override
     @GetMapping("/{repositoryId}/pull-requests")
     public ResponseEntity<RepositoryPullRequestResponses> getRepositoryPullRequests(
             @AuthUser User user,
@@ -34,11 +35,24 @@ public class RepositoryController implements RepositoryControllerSwagger {
             @RequestParam(name = "size") int size,
             @RequestParam(name = "page") int page
     ) {
-        PullRequests pullRequests = repositoryFacadeService.findAllPullRequests(user, repositoryId, size, page);
+        PullRequests pullRequests = repositoryFacadeService.findAllPullRequestsByRepository(user, repositoryId, size, page);
         RepositoryPullRequestResponses response = RepositoryPullRequestResponses.from(pullRequests);
         return ResponseEntity.ok(response);
     }
 
+    @Override
+    @GetMapping("/pull-requests")
+    public ResponseEntity<RepositoryPullRequestResponses> getRepositoryEntirePullRequests(
+            @AuthUser User user,
+            @RequestParam(name = "size") int size,
+            @RequestParam(name = "page") int page
+    ) {
+        PullRequests pullRequests = repositoryFacadeService.findAllPullRequests(user, size, page);
+        RepositoryPullRequestResponses response = RepositoryPullRequestResponses.from(pullRequests);
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
     @PostMapping
     public ResponseEntity<RepositorySaveResponse> saveRepository(
             @AuthUser User user,
@@ -50,6 +64,7 @@ public class RepositoryController implements RepositoryControllerSwagger {
                 .body(response);
     }
 
+    @Override
     @GetMapping("/me")
     public ResponseEntity<MyRepositoriesResponse> getMyRepositories(@AuthUser User user) {
         List<GithubRepository> repositories = repositoryService.getMyRepositories(user);

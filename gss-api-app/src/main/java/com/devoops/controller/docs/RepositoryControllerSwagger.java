@@ -1,8 +1,12 @@
 package com.devoops.controller.docs;
 
+import com.devoops.controller.auth.AuthUser;
+import com.devoops.domain.entity.github.GithubRepository;
+import com.devoops.domain.entity.github.PullRequests;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.RepositorySaveRequest;
 import com.devoops.dto.response.AnswerUpdateResponse;
+import com.devoops.dto.response.MyRepositoriesResponse;
 import com.devoops.dto.response.RepositoryPullRequestResponses;
 import com.devoops.dto.response.RepositorySaveResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,7 +17,10 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Repository API")
 @SecurityRequirement(name = "Authorization")
@@ -50,6 +57,30 @@ public interface RepositoryControllerSwagger {
     );
 
     @Operation(
+            summary = "회원의 PR 리스트 반환",
+            responses = {@ApiResponse(
+                    responseCode = "200",
+                    description = "회원 소유의 PR 리스트 반환 성공",
+                    content = @Content(schema = @Schema(implementation = RepositoryPullRequestResponses.class)))
+            }
+    )
+    ResponseEntity<RepositoryPullRequestResponses> getRepositoryEntirePullRequests(
+            @Parameter(hidden = true) User user,
+            @Parameter(
+                    name = "size",
+                    description = "페이지 사이즈 크기",
+                    example = "5"
+            )
+            int size,
+            @Parameter(
+                    name = "page",
+                    description = "페이지 숫자",
+                    example = "10"
+            )
+            int page
+    );
+
+    @Operation(
             summary = "신규 레포지토리 저장",
             requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = RepositorySaveRequest.class))),
             responses = {@ApiResponse(
@@ -62,4 +93,15 @@ public interface RepositoryControllerSwagger {
             @Parameter(hidden = true) User user,
             RepositorySaveRequest request
     );
+
+    @Operation(
+            summary = "나의 레포지토리 목록 조회",
+            requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = RepositorySaveRequest.class))),
+            responses = {@ApiResponse(
+                    responseCode = "200",
+                    description = "나의 레포지토리 목록 조회 성공",
+                    content = @Content(schema = @Schema(implementation = MyRepositoriesResponse.class)))
+            }
+    )
+    ResponseEntity<MyRepositoriesResponse> getMyRepositories(@Parameter(hidden = true) User user);
 }

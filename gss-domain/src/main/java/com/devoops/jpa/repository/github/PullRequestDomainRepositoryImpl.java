@@ -54,6 +54,16 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public PullRequests findUserPullRequestsOrderByMergedAt(long userId, int size, int page) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "mergedAt"));
+        return pullRequestRepository.findByUserId(userId, pageable)
+                .get()
+                .map(PullRequestEntity::toDomainEntity)
+                .collect(Collectors.collectingAndThen(Collectors.toList(), PullRequests::new));
+    }
+
+    @Override
     @Transactional
     public PullRequest updateStatus(long pullRequestId, RecordStatus status) {
         PullRequestEntity pullRequest = pullRequestRepository.findById(pullRequestId)

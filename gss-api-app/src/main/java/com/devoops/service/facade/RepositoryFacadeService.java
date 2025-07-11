@@ -41,8 +41,11 @@ public class RepositoryFacadeService {
         return repositoryService.save(createCommand);
     }
 
-    public PullRequests findAllPullRequests(User user, long repositoryId, int size, int page) {
+    public PullRequests findAllPullRequestsByRepository(User user, long repositoryId, int size, int page) {
         return repositoryService.getPullRequestsByRepository(user, repositoryId, size, page);
     }
 
+    public PullRequests findAllPullRequests(User user, int size, int page) {
+        return repositoryService.getPullRequests(user, size, page);
+    }
 }
