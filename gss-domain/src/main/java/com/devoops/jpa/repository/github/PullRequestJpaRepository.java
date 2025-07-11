@@ -13,5 +13,7 @@ public interface PullRequestJpaRepository extends JpaRepository<PullRequestEntit
 
     Page<PullRequestEntity> findByRepositoryId(long repositoryId, Pageable pageable);
 
+    Page<PullRequestEntity> findByUserId(long userId, Pageable pageable);
+
     Optional<PullRequestEntity> findById(long id);
 }

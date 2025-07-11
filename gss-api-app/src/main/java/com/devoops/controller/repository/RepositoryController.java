@@ -34,7 +34,18 @@ public class RepositoryController implements RepositoryControllerSwagger {
             @RequestParam(name = "size") int size,
             @RequestParam(name = "page") int page
     ) {
-        PullRequests pullRequests = repositoryFacadeService.findAllPullRequests(user, repositoryId, size, page);
+        PullRequests pullRequests = repositoryFacadeService.findAllPullRequestsByRepository(user, repositoryId, size, page);
+        RepositoryPullRequestResponses response = RepositoryPullRequestResponses.from(pullRequests);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/pull-requests")
+    public ResponseEntity<RepositoryPullRequestResponses> getRepositoryEntirePullRequests(
+            @AuthUser User user,
+            @RequestParam(name = "size") int size,
+            @RequestParam(name = "page") int page
+    ) {
+        PullRequests pullRequests = repositoryFacadeService.findAllPullRequests(user, size, page);
         RepositoryPullRequestResponses response = RepositoryPullRequestResponses.from(pullRequests);
         return ResponseEntity.ok(response);
     }
