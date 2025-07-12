@@ -36,6 +36,7 @@ public class GithubRepositoryEntity extends BaseTimeEntity {
 
     private int pullRequestCount;
 
+    @Column(unique = true)
     private long githubRepositoryId;
 
     public static GithubRepositoryEntity from(GithubRepository githubRepository, UserEntity user) {
@@ -45,7 +46,7 @@ public class GithubRepositoryEntity extends BaseTimeEntity {
             user,
             githubRepository.getName(),
             githubRepository.getUrl(),
-            githubRepository.getName(),
+            githubRepository.getOwner(),
             githubRepository.getPrCount(),
             githubRepository.getExternalId()
         );

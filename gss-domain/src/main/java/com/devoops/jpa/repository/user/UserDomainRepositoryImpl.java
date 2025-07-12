@@ -36,6 +36,12 @@ public class UserDomainRepositoryImpl implements UserDomainRepository {
         return userJpaRepository.existsById(id);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public boolean existsByProviderId(Long externalId) {
+        return userJpaRepository.existsByProviderId(externalId);
+    }
+
     @Transactional
     @Override
     public User saveUser(User user) {

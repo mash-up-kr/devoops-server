@@ -3,6 +3,7 @@ package com.devoops.service.facade;
 import com.devoops.domain.entity.github.AnswerRankings;
 import com.devoops.domain.entity.github.PullRequest;
 import com.devoops.domain.entity.github.QuestionAnswer;
+import com.devoops.domain.entity.github.RecordStatus;
 import com.devoops.dto.response.PullRequestDetailReadResponse;
 import com.devoops.dto.response.PullRequestRankingResponses;
 import com.devoops.dto.response.PullRequestReadResponse;
@@ -40,8 +41,8 @@ public class PullRequestFacadeService {
         return PullRequestRankingResponses.from(userRanking);
     }
 
-    public void updateToDone(long pullRequestId) {
-        pullRequestService.updateToDone(pullRequestId);
+    public void updateStatus(long pullRequestId, RecordStatus status) {
+        pullRequestService.updateStatus(pullRequestId, status);
     }
 
     private List<String> getUniqueCategories(List<QuestionAnswer> questionAnswers) {

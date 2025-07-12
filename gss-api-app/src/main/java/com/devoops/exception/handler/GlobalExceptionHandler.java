@@ -5,6 +5,7 @@ import com.devoops.exception.ErrorResponse;
 import com.devoops.exception.GssRepositoryException;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -78,6 +79,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleGssRepositoryException(GssRepositoryException exception) {
         log.error("GssRepositoryException occurred", exception);
         return toResponse(ErrorCode.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ErrorResponse> handleException(ExpiredJwtException exception) {
+        return toResponse(ErrorCode.TOKEN_EXPIRED);
     }
 
     @ExceptionHandler(Exception.class)

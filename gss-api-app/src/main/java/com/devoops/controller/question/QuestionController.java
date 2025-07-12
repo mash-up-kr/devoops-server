@@ -54,8 +54,6 @@ public class QuestionController implements QuestionControllerSwagger {
             @PathVariable(name = "answerId") long answerId,
             @Valid @RequestBody AnswerUpdateRequest request
     ) {
-
-        //TODO ranking 갱신
         Answer updatedAnswer = questionFacadeService.updateAnswer(answerId, request.content(), user.getId());
         AnswerUpdateResponse response = new AnswerUpdateResponse(updatedAnswer);
         return ResponseEntity.ok(response);

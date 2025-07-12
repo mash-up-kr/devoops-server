@@ -2,6 +2,7 @@ package com.devoops.controller.pullrequests;
 
 import com.devoops.controller.auth.AuthUser;
 import com.devoops.controller.docs.PullRequestControllerSwagger;
+import com.devoops.domain.entity.github.RecordStatus;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.response.PullRequestDetailReadResponse;
 import com.devoops.dto.response.PullRequestRankingResponses;
@@ -50,7 +51,7 @@ public class PullRequestController implements PullRequestControllerSwagger {
             @AuthUser User user,
             @PathVariable(name = "pullRequestId") long pullRequestId
     ) {
-        pullRequestFacadeService.updateToDone(pullRequestId);
+        pullRequestFacadeService.updateStatus(pullRequestId, RecordStatus.DONE);
         return ResponseEntity.ok().build();
     }
 }

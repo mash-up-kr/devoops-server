@@ -42,6 +42,25 @@ class AuthControllerTest extends BaseControllerTest {
                     .then().statusCode(HttpStatus.CREATED.value())
                     .extract().as(UserSaveResponse.class);
         }
+
+        @Test
+        void 같은_회원을_대상으로_토큰을_생성_및_발급을_할_수_있다() {
+            UserSaveRequest request = new UserSaveRequest("testAccessToken");
+
+            RestAssured.given()
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/api/auth/github")
+                    .then().statusCode(HttpStatus.CREATED.value())
+                    .extract().as(UserSaveResponse.class);
+
+            RestAssured.given()
+                    .contentType(ContentType.JSON)
+                    .body(request)
+                    .when().post("/api/auth/github")
+                    .then().statusCode(HttpStatus.CREATED.value())
+                    .extract().as(UserSaveResponse.class);
+        }
     }
 
     @Nested
@@ -62,7 +81,7 @@ class AuthControllerTest extends BaseControllerTest {
                     .body()
                     .as(UserTokenResponse.class);
 
-            AccessToken accessToken = new AccessToken(userTokenResponse.accessToken());
+            AccessToken accessToken = new AccessToken("Bearer " + userTokenResponse.accessToken());
             String resolvedToken = jwtTokenManager.resolveToken(accessToken);
             assertThat(resolvedToken).isEqualTo(String.valueOf(saveUser.getId()));
         }
@@ -81,7 +100,7 @@ class AuthControllerTest extends BaseControllerTest {
 
             RestAssured.given()
                     .contentType(ContentType.JSON)
-                    .header(HttpHeaders.AUTHORIZATION, accessToken.getToken())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken.getToken())
                     .header(HttpHeaders.COOKIE, "refreshToken=" + refreshToken.getToken())
                     .when().post("/api/auth/logout")
                     .then().statusCode(HttpStatus.NO_CONTENT.value());
@@ -98,7 +117,7 @@ class AuthControllerTest extends BaseControllerTest {
 
             RestAssured.given()
                     .contentType(ContentType.JSON)
-                    .header(HttpHeaders.AUTHORIZATION, accessToken.getToken())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken.getToken())
                     .header(HttpHeaders.COOKIE, "refreshToken=" + refreshToken.getToken())
                     .when().post("/api/auth/logout")
                     .then().statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value()); //TODO 추후 401로 변경
@@ -111,7 +130,7 @@ class AuthControllerTest extends BaseControllerTest {
 
             RestAssured.given()
                     .contentType(ContentType.JSON)
-                    .header(HttpHeaders.AUTHORIZATION, accessToken.getToken())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken.getToken())
                     .when().post("/api/auth/logout")
                     .then()
                     .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value()); //TODO 추후 400으로 변경

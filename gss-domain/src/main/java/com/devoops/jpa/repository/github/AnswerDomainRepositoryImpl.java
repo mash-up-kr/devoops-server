@@ -6,7 +6,6 @@ import com.devoops.exception.GssRepositoryException;
 import com.devoops.exception.RepositoryErrorCode;
 import com.devoops.jpa.entity.github.AnswerEntity;
 import com.devoops.jpa.entity.github.QuestionEntity;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +28,18 @@ public class AnswerDomainRepositoryImpl implements AnswerDomainRepository {
     }
 
     @Override
+    public Answer findById(long answerId) {
+        return answerJpaRepository.findById(answerId)
+                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.ANSWER_NOT_FOUND))
+                .toDomainEntity();
+    }
+
+    @Override
+    public long getAnswerCountByPullRequestId(long pullRequestId) {
+        return answerJpaRepository.getAnswerCountByPullRequestId(pullRequestId);
+    }
+
+    @Override
     @Transactional
     public Answer updateById(long answerId, String content) {
         AnswerEntity answerEntity = answerJpaRepository.findById(answerId)
@@ -39,7 +50,7 @@ public class AnswerDomainRepositoryImpl implements AnswerDomainRepository {
 
     @Override
     @Transactional
-    public void deleteById(long answerId){
+    public void deleteById(long answerId) {
         answerJpaRepository.deleteById(answerId);
     }
 }

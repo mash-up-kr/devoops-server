@@ -1,8 +1,11 @@
 package com.devoops.controller.auth;
 
+import com.devoops.exception.custom.GssException;
+import com.devoops.exception.errorcode.ErrorCode;
 import com.devoops.service.auth.AuthService;
 import com.devoops.service.auth.jwt.AccessToken;
 import com.devoops.service.user.UserService;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +19,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Slf4j
 @RequiredArgsConstructor
 public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
+
+    private static final String BEARER = "Bearer ";
 
     private final AuthService authService;
     private final UserService userService;
@@ -34,7 +39,7 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
     ) {
         String accessToken = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
         if (StringUtils.isBlank(accessToken)) {
-            throw new RuntimeException("401 인증 에러"); //TODO 추후 커스텀 에러로 수정
+            throw new GssException(ErrorCode.UNAUTHORIZED_EXCEPTION);
         }
         String providerId = authService.resolveToken(new AccessToken(accessToken));
         return userService.findById(Long.parseLong(providerId));
