@@ -2,6 +2,7 @@ package com.devoops.jpa.entity.user;
 
 import com.devoops.domain.entity.github.GithubToken;
 import com.devoops.domain.entity.user.User;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,6 +31,7 @@ public class UserEntity {
     @NotNull
     private String profileImageUrl;
 
+    @Column(unique = true)
     private long providerId;
 
     public static UserEntity from(User domainEntity) {

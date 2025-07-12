@@ -52,4 +52,9 @@ public class GithubRepoDomainRepositoryImpl implements GithubRepoDomainRepositor
             .map(GithubRepositoryEntity::toDomainEntity)
             .toList();
     }
+
+    @Override
+    public boolean existsByExternalId(long externalId) {
+        return repoJpaRepository.existsByGithubRepositoryId(externalId);
+    }
 }

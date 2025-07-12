@@ -21,6 +21,9 @@ public class RepositoryService {
     private final PullRequestDomainRepository pullRequestRepository;
 
     public GithubRepository save(RepositoryCreateCommand command) {
+        if(repoRepository.existsByExternalId(command.externalId())) {
+            throw new GssException(ErrorCode.ALREADY_SAVED_REPOSITORY);
+        }
         return repoRepository.save(command.toDomainEntity());
     }
 
