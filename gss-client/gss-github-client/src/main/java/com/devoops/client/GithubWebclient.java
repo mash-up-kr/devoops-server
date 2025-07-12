@@ -17,7 +17,7 @@ import java.time.Duration;
 public class GithubWebclient {
     private final WebClient webClient;
 
-    public String getCodeChangeHistory(String token, String diffUrl) {
+    public String getCodeChangeHistory(String diffUrl, String token) {
         return webClient.get()
                 .uri(diffUrl)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
