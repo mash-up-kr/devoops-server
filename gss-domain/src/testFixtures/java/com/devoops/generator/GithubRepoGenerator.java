@@ -1,9 +1,9 @@
 package com.devoops.generator;
 
-import ch.qos.logback.core.testUtil.RandomUtil;
 import com.devoops.domain.entity.github.GithubRepository;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.github.GithubRepoDomainRepository;
+import java.util.concurrent.ThreadLocalRandom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +21,7 @@ public class GithubRepoGenerator {
                 "url",
                 "owner",
                 0,
-                RandomUtil.getPositiveInt()
+                ThreadLocalRandom.current().nextLong()
         );
         return githubRepoDomainRepository.save(repository);
     }
