@@ -54,6 +54,7 @@ public class GithubRepoDomainRepositoryImpl implements GithubRepoDomainRepositor
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean existsByExternalId(long externalId) {
         return repoJpaRepository.existsByGithubRepositoryId(externalId);
     }
