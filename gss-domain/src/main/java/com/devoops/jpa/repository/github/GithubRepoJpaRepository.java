@@ -13,4 +13,6 @@ public interface GithubRepoJpaRepository extends JpaRepository<GithubRepositoryE
     Optional<GithubRepositoryEntity> findByIdAndUser_Id(Long id, Long userId);
 
     List<GithubRepositoryEntity> findAllByUser_Id(Long userId);
+
+    boolean existsByGithubRepositoryId(long externalId);
 }

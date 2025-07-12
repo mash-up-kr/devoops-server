@@ -3,6 +3,7 @@ package com.devoops.generator;
 import com.devoops.domain.entity.github.GithubRepository;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.github.GithubRepoDomainRepository;
+import java.util.concurrent.ThreadLocalRandom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,15 @@ public class GithubRepoGenerator {
     private GithubRepoDomainRepository githubRepoDomainRepository;
 
     public GithubRepository generate(User user, String repoName) {
-        GithubRepository repository = new GithubRepository(null, user.getId(), repoName, "url", "owner", 0, 1L);
+        GithubRepository repository = new GithubRepository(
+                null,
+                user.getId(),
+                repoName,
+                "url",
+                "owner",
+                0,
+                ThreadLocalRandom.current().nextLong()
+        );
         return githubRepoDomainRepository.save(repository);
     }
 }
