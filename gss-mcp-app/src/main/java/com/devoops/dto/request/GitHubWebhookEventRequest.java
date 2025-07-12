@@ -7,26 +7,13 @@ package com.devoops.dto.request;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * private final Long id;
- * private final long repositoryId;
- * private final long userId;
- * private final String title;
- * private final String description;
- * private final String summary;
- * private final long externalId;
- * private final RecordStatus recordStatus;
- * private final LocalDateTime mergedAt;
- * private final String tag;
- */
-
 public record GitHubWebhookEventRequest(
         String action,
         int number,
         PullRequest pullRequest,
         Repository repository
 ) {
-    public record PullRequest(
+    private record PullRequest(
             String url,
             long id,
             String diffUrl,
@@ -47,13 +34,13 @@ public record GitHubWebhookEventRequest(
     ) {
     }
 
-    public record User(
+    private record User(
             String login,
             long id
     ) {
     }
 
-    public record Repository(
+    private record Repository(
             long id,
             String name,
             boolean isPrivate,
@@ -61,7 +48,7 @@ public record GitHubWebhookEventRequest(
     ) {
     }
 
-    public record Label(
+    private record Label(
             long id,
             String name
     ) {
@@ -88,6 +75,7 @@ public record GitHubWebhookEventRequest(
     }
 
     public String getTag() {
+        if(pullRequest.labels.isEmpty()) return "NONE";
         return pullRequest.labels.getFirst().name;
     }
 
