@@ -43,7 +43,7 @@ public class WebhookFacadeService {
          *
          * 2. eventRequest로 내려오는 userId가 우리 userDomain의 id가 맞는지 확인 필요
          */
-        User triggerUser = userDomainRepository.findById(gitHubWebhookEventRequest.getUserId());
+        User triggerUser = userDomainRepository.findByProviderId(gitHubWebhookEventRequest.getUserId());
         GithubToken githubToken = githubTokenDomainRepository.findByUserId(triggerUser)
             .orElseThrow(() -> new RuntimeException("ErrorCode.NO_RESOURCE_FOUND"));
 //                .orElseThrow(() -> new GssException(ErrorCode.NO_RESOURCE_FOUND));
