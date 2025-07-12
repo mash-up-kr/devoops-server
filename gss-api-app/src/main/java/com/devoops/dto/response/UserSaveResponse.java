@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public record UserSaveResponse(
 
-        @Schema(description = "깃허브 회원 아이디", example = "234558")
+        @Schema(description = "애플리케이션 유저 아이디", example = "1")
         long id,
 
         @Schema(description = "깃허브 회원 닉네임", example = "my_nickname")
