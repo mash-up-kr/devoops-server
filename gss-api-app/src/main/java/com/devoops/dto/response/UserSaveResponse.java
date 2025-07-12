@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public record UserSaveResponse(
 
         @Schema(description = "깃허브 회원 아이디", example = "234558")
-        long providerId,
+        long id,
 
         @Schema(description = "깃허브 회원 닉네임", example = "my_nickname")
         String nickname,
@@ -22,6 +22,6 @@ public record UserSaveResponse(
 ) {
 
     public UserSaveResponse(User user, String accessToken, String refreshToken) {
-        this(user.getProviderId(), user.getNickname(), user.getProfileImageUrl(), accessToken, refreshToken);
+        this(user.getId(), user.getNickname(), user.getProfileImageUrl(), accessToken, refreshToken);
     }
 }
