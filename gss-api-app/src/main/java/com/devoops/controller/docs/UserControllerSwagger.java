@@ -1,5 +1,6 @@
 package com.devoops.controller.docs;
 
+import com.devoops.domain.entity.user.User;
 import com.devoops.dto.response.UserReadResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,12 +21,5 @@ public interface UserControllerSwagger {
                     content = @Content(schema = @Schema(implementation = UserReadResponse.class)))
             }
     )
-    ResponseEntity<UserReadResponse> getUserInfo(
-            @Parameter(
-                    name = "userId",
-                    description = "조회 대상인 유저 아이디",
-                    example = "5"
-            )
-            long userId
-    );
+    ResponseEntity<UserReadResponse> getUserInfo(@Parameter(hidden = true) User user);
 }

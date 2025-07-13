@@ -1,12 +1,12 @@
 package com.devoops.controller.user;
 
+import com.devoops.controller.auth.AuthUser;
 import com.devoops.controller.docs.UserControllerSwagger;
+import com.devoops.domain.entity.user.User;
 import com.devoops.dto.response.UserReadResponse;
-import com.devoops.service.facade.UserFacadeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,12 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController implements UserControllerSwagger {
 
-    private final UserFacadeService userFacadeService;
-
     @Override
-    @GetMapping("/{userId}")
-    public ResponseEntity<UserReadResponse> getUserInfo(@PathVariable("userId") long userId) {
-        UserReadResponse response = userFacadeService.getUser(userId);
+    @GetMapping
+    public ResponseEntity<UserReadResponse> getUserInfo(@AuthUser User user) {
+        UserReadResponse response = new UserReadResponse(user);
         return ResponseEntity.ok(response);
     }
 }
