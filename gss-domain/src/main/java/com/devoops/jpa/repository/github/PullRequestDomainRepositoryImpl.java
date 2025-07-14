@@ -9,13 +9,14 @@ import com.devoops.exception.RepositoryErrorCode;
 import com.devoops.jpa.entity.github.GithubRepositoryEntity;
 import com.devoops.jpa.entity.github.PullRequestEntity;
 import com.devoops.jpa.entity.github.QuestionEntity;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -69,6 +70,24 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
         PullRequestEntity pullRequest = pullRequestRepository.findById(pullRequestId)
                 .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.PULL_REQUEST_NOT_FOUND));
         pullRequest.updateStatus(status);
+        return pullRequest.toDomainEntity();
+    }
+
+    @Override
+    @Transactional
+    public PullRequest updateToDone(long pullRequestId) {
+        PullRequestEntity pullRequest = pullRequestRepository.findById(pullRequestId)
+                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.PULL_REQUEST_NOT_FOUND));
+        pullRequest.updateToDone();
+        return pullRequest.toDomainEntity();
+    }
+
+    @Override
+    @Transactional
+    public PullRequest updateAnalyzedResult(long pullRequestId, String summary) {
+        PullRequestEntity pullRequest = pullRequestRepository.findById(pullRequestId)
+                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.PULL_REQUEST_NOT_FOUND));
+        pullRequest.updateAnalyzeResult(summary);
         return pullRequest.toDomainEntity();
     }
 

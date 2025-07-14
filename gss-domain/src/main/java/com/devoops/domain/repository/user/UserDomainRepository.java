@@ -7,11 +7,11 @@ public interface UserDomainRepository {
 
     User findById(Long id);
 
-    User findByProviderId(Long providerId);
-
     boolean existsById(Long id);
 
     boolean existsByProviderId(Long externalId);
 
     User saveUser(User user);
+
+    User findByProviderId(Long providerId);
 }

@@ -2,7 +2,6 @@ package com.devoops.jpa.repository.user;
 
 import com.devoops.domain.entity.github.GithubToken;
 import com.devoops.domain.entity.user.User;
-import com.devoops.domain.repository.github.GithubTokenDomainRepository;
 import com.devoops.domain.repository.user.UserDomainRepository;
 import com.devoops.exception.GssRepositoryException;
 import com.devoops.exception.RepositoryErrorCode;
@@ -31,16 +30,6 @@ public class UserDomainRepositoryImpl implements UserDomainRepository {
                 .toDomainEntity(githubToken);
     }
 
-    @Override
-    public User findByProviderId(Long providerId) {
-        UserEntity userEntity = userJpaRepository.findByProviderId(providerId)
-                .orElseThrow(() -> new RuntimeException("EntityNotFound 공통 예외 처리 필요"));
-        GithubToken githubToken = githubTokenJpaRepository.findByUser_Id(userEntity.getId())
-                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.GITHUB_TOKEN_NOT_FOUND))
-                .toDomainEntity();
-        return userEntity.toDomainEntity(githubToken);
-    }
-
     @Transactional(readOnly = true)
     @Override
     public boolean existsById(Long id) {
@@ -61,5 +50,16 @@ public class UserDomainRepositoryImpl implements UserDomainRepository {
         GithubTokenEntity githubToken = GithubTokenEntity.from(savedUser, user.getGithubToken());
         GithubTokenEntity savedGithubToken = githubTokenJpaRepository.save(githubToken);
         return savedUser.toDomainEntity(savedGithubToken.toDomainEntity());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public User findByProviderId(Long providerId) {
+        UserEntity userEntity = userJpaRepository.findByProviderId(providerId)
+                .orElseThrow(() -> new RuntimeException("EntityNotFound 공통 예외 처리 필요"));
+        GithubToken githubToken = githubTokenJpaRepository.findByUser_Id(userEntity.getId())
+                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.GITHUB_TOKEN_NOT_FOUND))
+                .toDomainEntity();
+        return userEntity.toDomainEntity(githubToken);
     }
 }
