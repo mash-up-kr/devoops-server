@@ -63,4 +63,8 @@ public class GithubRepositoryEntity extends BaseTimeEntity {
             this.githubRepositoryId
         );
     }
+
+    public void plusPrCount() {
+        this.pullRequestCount++;
+    }
 }

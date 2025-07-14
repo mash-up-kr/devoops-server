@@ -31,6 +31,7 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
     public PullRequest save(PullRequest pullRequest) {
         GithubRepositoryEntity githubRepositoryEntity = githubRepoRepository.findById(pullRequest.getRepositoryId())
                 .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.GITHUB_REPOSITORY_NOT_FOUND));
+        githubRepositoryEntity.plusPrCount();
         PullRequestEntity pullRequestEntity = PullRequestEntity.from(pullRequest, githubRepositoryEntity);
         PullRequestEntity savedPullRequest = pullRequestRepository.save(pullRequestEntity);
         return savedPullRequest.toDomainEntity();
@@ -75,19 +76,10 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
 
     @Override
     @Transactional
-    public PullRequest updateToDone(long pullRequestId) {
+    public PullRequest updateAnalyzedResult(long pullRequestId, String summary, String detailSummary) {
         PullRequestEntity pullRequest = pullRequestRepository.findById(pullRequestId)
                 .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.PULL_REQUEST_NOT_FOUND));
-        pullRequest.updateToDone();
-        return pullRequest.toDomainEntity();
-    }
-
-    @Override
-    @Transactional
-    public PullRequest updateAnalyzedResult(long pullRequestId, String summary) {
-        PullRequestEntity pullRequest = pullRequestRepository.findById(pullRequestId)
-                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.PULL_REQUEST_NOT_FOUND));
-        pullRequest.updateAnalyzeResult(summary);
+        pullRequest.updateAnalyzeResult(summary, detailSummary);
         return pullRequest.toDomainEntity();
     }
 

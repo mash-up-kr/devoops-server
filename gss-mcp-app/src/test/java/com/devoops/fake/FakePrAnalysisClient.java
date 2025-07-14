@@ -4,22 +4,18 @@ import com.devoops.client.PrAnalysisClient;
 import com.devoops.dto.response.AnalyzePrResponse;
 import java.util.Arrays;
 import java.util.List;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
 
-@Primary
-@Component
 public class FakePrAnalysisClient implements PrAnalysisClient {
 
-    private static AnalyzePrResponse MOCK_RESPONSE = new AnalyzePrResponse(
+    public static AnalyzePrResponse MOCK_RESPONSE = new AnalyzePrResponse(
             "이 PR은 사용자 인증 로직에 JWT 기반의 토큰 갱신 기능을 추가했습니다.",
             List.of(
                     new AnalyzePrResponse.SummaryDetails(
-                            "1. JWT 리프레시 토큰 기능 추가",
+                            "JWT 리프레시 토큰 기능 추가",
                             "기존 로그인 로직에 리프레시 토큰 발급 및 재발급 기능을 추가하여, 사용자 인증 세션을 안전하게 유지할 수 있도록 개선했습니다."
                     ),
                     new AnalyzePrResponse.SummaryDetails(
-                            "2. 보안 강화 및 예외 처리 보완",
+                            "보안 강화 및 예외 처리 보완",
                             "토큰 유효성 검사 과정에서 발생할 수 있는 다양한 예외를 핸들링하며, 불필요한 정보 노출을 막기 위한 응답 구조도 정비했습니다."
                     )
             ),
