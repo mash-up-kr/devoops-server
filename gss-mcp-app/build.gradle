@@ -6,6 +6,7 @@ dependencies {
     implementation project(":gss-common")
     implementation project(":gss-domain")
     implementation project(":gss-client:gss-mcp-client")
+    implementation project(":gss-client:gss-github-client")
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
