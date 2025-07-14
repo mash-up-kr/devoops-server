@@ -2,14 +2,12 @@ package com.devoops.service.webhook;
 
 import com.devoops.adaptor.GithubAdaptor;
 import com.devoops.adaptor.PrAnalysisAdapter;
-import com.devoops.client.PrAnalysisClient;
 import com.devoops.command.request.PullRequestCreateCommand;
 import com.devoops.command.request.QuestionCreateCommand;
 import com.devoops.domain.entity.github.GithubRepository;
 import com.devoops.domain.entity.github.GithubToken;
 import com.devoops.domain.entity.github.PullRequest;
 import com.devoops.domain.entity.github.Question;
-import com.devoops.domain.entity.github.RecordStatus;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.github.GithubRepoDomainRepository;
 import com.devoops.domain.repository.github.PullRequestDomainRepository;
@@ -18,9 +16,8 @@ import com.devoops.domain.repository.user.UserDomainRepository;
 import com.devoops.dto.request.AdaptedAnalyzePrResponse;
 import com.devoops.dto.request.GitHubWebhookEventRequest;
 import com.devoops.dto.response.AnalyzePrResponse;
-import com.devoops.util.SummaryFormatter;
+import com.devoops.service.pullrequest.PullRequestService;
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,12 +26,12 @@ import org.springframework.stereotype.Service;
 public class WebhookFacadeService {
 
     private final GithubAdaptor githubAdaptor;
-    private final PrAnalysisClient prAnalysisClient;
     private final PrAnalysisAdapter prAnalysisAdapter;
     private final UserDomainRepository userDomainRepository;
     private final QuestionDomainRepository questionDomainRepository;
     private final GithubRepoDomainRepository githubRepoDomainRepository;
     private final PullRequestDomainRepository pullRequestDomainRepository;
+    private final PullRequestService pullRequestService;
 
     public void createQuestionWithWebhookEvent(GitHubWebhookEventRequest gitHubWebhookEventRequest) {
         if (!gitHubWebhookEventRequest.isMerged()) {
@@ -56,21 +53,10 @@ public class WebhookFacadeService {
         );
 
         // 레포 아이디를 기반으로 찾기 -> 풀리퀘 생성 -> prCount 올리기
-        GithubRepository githubRepository = githubRepoDomainRepository.findByExternalId(gitHubWebhookEventRequest.getRepositoryId());
-
-        PullRequest readyPullRequest = pullRequestDomainRepository.save(
-                new PullRequestCreateCommand(
-                        githubRepository.getId(),
-                        triggerUser.getId(),
-                        gitHubWebhookEventRequest.getTitle(),
-                        gitHubWebhookEventRequest.getDescription(),
-                        adaptedAnalyzePrResponse.summary(),
-                        adaptedAnalyzePrResponse.detailSummary(),
-                        gitHubWebhookEventRequest.getExternalId(),
-                        RecordStatus.PENDING,
-                        gitHubWebhookEventRequest.getMergedAt(),
-                        gitHubWebhookEventRequest.getTag()
-                ).toDomainEntity()
+        PullRequest readyPullRequest = savePullRequest(
+                triggerUser.getId(),
+                gitHubWebhookEventRequest,
+                adaptedAnalyzePrResponse
         );
 
         /**
@@ -80,24 +66,57 @@ public class WebhookFacadeService {
          * 이 로직에서 pullRequest create와 List<Question> create는 하나의 트랜잭션으로 보장되어야하지 않을까라는 생각
          * -> 그렇다면 하위 서비스에서 createCommand가 묶여야 함 (question domain은 항상 pull request create와 연결)
          */
-        PullRequest updatedPullRequest = pullRequestDomainRepository.updateAnalyzedResult(readyPullRequest.getId(),
-                adaptedAnalyzePrResponse.summary());
+        PullRequest updatedPullRequest = pullRequestDomainRepository.updateAnalyzedResult(
+                readyPullRequest.getId(),
+                adaptedAnalyzePrResponse.summary(),
+                adaptedAnalyzePrResponse.detailSummary()
+        );
 
-        questionDomainRepository.saveAll(
-                createQuestionListFromCategorizedQuestions(adaptedAnalyzePrResponse.questions(), updatedPullRequest.getId())
+        List<Question> createdQuestions = createQuestionListFromCategorizedQuestions(
+                adaptedAnalyzePrResponse.questions(), updatedPullRequest.getId()
+        );
+        questionDomainRepository.saveAll(createdQuestions, updatedPullRequest.getId());
+    }
+
+    private PullRequest savePullRequest(
+            long userId,
+            GitHubWebhookEventRequest request,
+            AdaptedAnalyzePrResponse prAnalyzeResponse
+    ) {
+        GithubRepository githubRepository = githubRepoDomainRepository.findByExternalId(request.getRepositoryId());
+        PullRequestCreateCommand prCreateCommand = resolvePRCreateCommand(request, githubRepository.getId(),
+                userId, prAnalyzeResponse);
+        return pullRequestService.save(prCreateCommand);
+    }
+
+    private PullRequestCreateCommand resolvePRCreateCommand(
+            GitHubWebhookEventRequest gitHubWebhookEventRequest,
+            long repositoryId,
+            long userId,
+            AdaptedAnalyzePrResponse adaptedAnalyzePrResponse
+    ) {
+        return new PullRequestCreateCommand(
+                repositoryId,
+                userId,
+                gitHubWebhookEventRequest.getTitle(),
+                gitHubWebhookEventRequest.getDescription(),
+                adaptedAnalyzePrResponse.summary(),
+                adaptedAnalyzePrResponse.detailSummary(),
+                gitHubWebhookEventRequest.getExternalId(),
+                gitHubWebhookEventRequest.getTag()
         );
     }
 
     private List<Question> createQuestionListFromCategorizedQuestions(
-            List<AnalyzePrResponse.CategorizedQuestion> questions, Long pulLRequestId) {
-        return questions.stream().flatMap(
-                        taggedQuestion -> taggedQuestion.question()
-                                .stream()
-                                .map(
-                                        question -> new QuestionCreateCommand(pulLRequestId, taggedQuestion.category(),
-                                                question)
-                                )
+            List<AnalyzePrResponse.CategorizedQuestion> questions,
+            Long pulLRequestId
+    ) {
+        return questions.stream()
+                .flatMap(taggedQuestion -> taggedQuestion.question()
+                        .stream()
+                        .map(question -> new QuestionCreateCommand(pulLRequestId, taggedQuestion.category(), question))
                 )
-                .map(QuestionCreateCommand::toDomainEntity).toList();
+                .map(QuestionCreateCommand::toDomainEntity)
+                .toList();
     }
 }
