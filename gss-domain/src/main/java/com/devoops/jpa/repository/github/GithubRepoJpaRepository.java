@@ -1,5 +1,6 @@
 package com.devoops.jpa.repository.github;
 
+import com.devoops.domain.entity.github.GithubRepository;
 import com.devoops.jpa.entity.github.GithubRepositoryEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -15,4 +16,6 @@ public interface GithubRepoJpaRepository extends JpaRepository<GithubRepositoryE
     List<GithubRepositoryEntity> findAllByUser_Id(Long userId);
 
     boolean existsByGithubRepositoryId(long externalId);
+
+    Optional<GithubRepositoryEntity> findByGithubRepositoryId(long externalId);
 }

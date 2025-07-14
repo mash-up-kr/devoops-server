@@ -15,4 +15,6 @@ public interface GithubRepoDomainRepository {
     List<GithubRepository> findByUserId(long userId);
 
     boolean existsByExternalId(long externalId);
+
+    GithubRepository findByExternalId(long externalId);
 }

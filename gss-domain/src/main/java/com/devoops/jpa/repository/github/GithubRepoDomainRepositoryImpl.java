@@ -58,4 +58,12 @@ public class GithubRepoDomainRepositoryImpl implements GithubRepoDomainRepositor
     public boolean existsByExternalId(long externalId) {
         return repoJpaRepository.existsByGithubRepositoryId(externalId);
     }
+
+    @Override
+    public GithubRepository findByExternalId(long externalId) {
+        return repoJpaRepository.findByGithubRepositoryId(externalId)
+                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.GITHUB_REPOSITORY_NOT_FOUND))
+                .toDomainEntity();
+
+    }
 }
