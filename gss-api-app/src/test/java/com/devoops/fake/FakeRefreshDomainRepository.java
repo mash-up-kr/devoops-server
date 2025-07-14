@@ -4,6 +4,7 @@ import com.devoops.domain.entity.auth.RefreshToken;
 import com.devoops.domain.repository.auth.RefreshTokenDomainRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
@@ -20,17 +21,10 @@ public class FakeRefreshDomainRepository implements RefreshTokenDomainRepository
     }
 
     @Override
-    public boolean exists(String refreshToken) {
-        return refreshTokens.stream()
-                .anyMatch(token -> token.getValue().equals(refreshToken));
-    }
-
-    @Override
-    public RefreshToken getRefreshToken(String tokenValue) {
+    public Optional<RefreshToken> getRefreshToken(String tokenValue) {
         return refreshTokens.stream()
                 .filter(token -> token.getValue().equals(tokenValue))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("리프레시 토큰이 존재하지 않습니다"));
+                .findAny();
     }
 
     @Override

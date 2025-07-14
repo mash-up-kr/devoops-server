@@ -2,6 +2,7 @@ package com.devoops.redis.auth;
 
 import com.devoops.domain.entity.auth.RefreshToken;
 import com.devoops.domain.repository.auth.RefreshTokenDomainRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -21,16 +22,12 @@ public class RefreshTokenDomainRepositoryImpl implements RefreshTokenDomainRepos
     }
 
     @Override
-    public boolean exists(String refreshToken) {
-        String key = REFRESH_TOKEN_KEY_PREFIX + refreshToken;
-        return redisTemplate.hasKey(key);
-    }
-
-    public RefreshToken getRefreshToken(String tokenValue) {
+    public Optional<RefreshToken> getRefreshToken(String tokenValue) {
         String key = REFRESH_TOKEN_KEY_PREFIX + tokenValue;
-        return redisTemplate.opsForValue().get(key);
+        return Optional.ofNullable(redisTemplate.opsForValue().get(key));
     }
 
+    @Override
     public void delete(String tokenValue) {
         String key = REFRESH_TOKEN_KEY_PREFIX + tokenValue;
         redisTemplate.delete(key);

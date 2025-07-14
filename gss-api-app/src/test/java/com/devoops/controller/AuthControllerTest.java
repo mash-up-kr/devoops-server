@@ -138,7 +138,7 @@ class AuthControllerTest extends BaseControllerTest {
                     .body()
                     .as(UserTokenResponse.class);
 
-            boolean isRefreshTokenExists = refreshTokenDomainRepository.exists(refreshToken.getValue());
+            boolean isRefreshTokenExists = refreshTokenDomainRepository.getRefreshToken(refreshToken.getValue()).isPresent();
             boolean isBlackListExists = blackListRepository.isExists(accessToken.getToken());
             assertAll(
                     () -> assertThat(isRefreshTokenExists).isFalse(),

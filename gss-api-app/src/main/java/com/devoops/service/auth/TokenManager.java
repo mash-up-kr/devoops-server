@@ -10,6 +10,7 @@ import com.devoops.service.auth.jwt.JwtProperties;
 import com.devoops.service.auth.jwt.TokenType;
 import java.time.Duration;
 import java.util.Date;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -41,10 +42,11 @@ public class TokenManager {
     }
 
     public RefreshToken getRefreshToken(String tokenValue) {
-        if (!refreshTokenDomainRepository.exists(tokenValue)) {
+        Optional<RefreshToken> refreshToken = refreshTokenDomainRepository.getRefreshToken(tokenValue);
+        if (refreshToken.isEmpty()) {
             throw new GssException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
-        return refreshTokenDomainRepository.getRefreshToken(tokenValue);
+        return refreshToken.get();
     }
 
     public void deleteRefreshToken(String tokenValue) {

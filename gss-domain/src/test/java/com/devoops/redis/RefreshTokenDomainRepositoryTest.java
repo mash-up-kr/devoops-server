@@ -36,8 +36,8 @@ class RefreshTokenDomainRepositoryTest extends BaseRedisTest {
             RefreshToken refreshToken = new RefreshToken(1L, Duration.ofSeconds(1L));
             refreshTokenDomainRepository.save(refreshToken);
 
-            boolean exists = refreshTokenDomainRepository.exists(refreshToken.getValue());
-            boolean nonExists = refreshTokenDomainRepository.exists(UUID.randomUUID().toString());
+            boolean exists = refreshTokenDomainRepository.getRefreshToken(refreshToken.getValue()).isPresent();
+            boolean nonExists = refreshTokenDomainRepository.getRefreshToken(UUID.randomUUID().toString()).isPresent();
 
             assertAll(
                     () -> assertThat(exists).isTrue(),
@@ -50,7 +50,7 @@ class RefreshTokenDomainRepositoryTest extends BaseRedisTest {
             RefreshToken refreshToken = new RefreshToken(1L, Duration.ofSeconds(1L));
             refreshTokenDomainRepository.save(refreshToken);
 
-            RefreshToken foundToken = refreshTokenDomainRepository.getRefreshToken(refreshToken.getValue());
+            RefreshToken foundToken = refreshTokenDomainRepository.getRefreshToken(refreshToken.getValue()).get();
 
             assertThat(foundToken).usingRecursiveComparison()
                     .isEqualTo(refreshToken);
@@ -63,7 +63,7 @@ class RefreshTokenDomainRepositoryTest extends BaseRedisTest {
 
             refreshTokenDomainRepository.delete(refreshToken.getValue());
 
-            boolean exists = refreshTokenDomainRepository.exists(refreshToken.getValue());
+            boolean exists = refreshTokenDomainRepository.getRefreshToken(refreshToken.getValue()).isPresent();
 
             assertThat(exists).isFalse();
         }
