@@ -3,6 +3,7 @@ package com.devoops.controller.user;
 import com.devoops.BaseControllerTest;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.response.UserReadResponse;
+import com.devoops.service.auth.jwt.AccessToken;
 import com.devoops.service.auth.jwt.JwtToken;
 import com.devoops.service.auth.jwt.TokenType;
 import io.restassured.RestAssured;
@@ -24,8 +25,7 @@ class UserControllerTest extends BaseControllerTest {
         @Test
         void 유저_정보를_조회할_수_있다() {
             User user = userGenerator.generate("김건우");
-            JwtToken accessToken = jwtTokenManager.createToken(String.valueOf(user.getId()),
-                TokenType.ACCESS_TOKEN);
+            AccessToken accessToken = tokenManager.createAccessToken(user.getId());
 
             UserReadResponse readResponse = RestAssured.given()
                     .contentType(ContentType.JSON)
