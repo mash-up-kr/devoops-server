@@ -11,4 +11,6 @@ public interface QuestionDomainRepository {
     Question save(Question question);
 
     List<QuestionAnswer> findAllPrQuestions(long pullRequestId);
+
+    void saveAll(List<Question> questions);
 }

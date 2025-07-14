@@ -21,7 +21,14 @@ public class RepositoryService {
     private final PullRequestDomainRepository pullRequestRepository;
 
     public GithubRepository save(RepositoryCreateCommand command) {
+        if(repoRepository.existsByExternalId(command.externalId())) {
+            throw new GssException(ErrorCode.ALREADY_SAVED_REPOSITORY);
+        }
         return repoRepository.save(command.toDomainEntity());
+    }
+
+    public PullRequests getPullRequests(User user, int size, int page) {
+        return pullRequestRepository.findUserPullRequestsOrderByMergedAt(user.getId(), size, page);
     }
 
     public PullRequests getPullRequestsByRepository(User user, long repositoryId, int size, int page) {

@@ -9,13 +9,14 @@ import com.devoops.exception.RepositoryErrorCode;
 import com.devoops.jpa.entity.github.GithubRepositoryEntity;
 import com.devoops.jpa.entity.github.PullRequestEntity;
 import com.devoops.jpa.entity.github.QuestionEntity;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -54,11 +55,39 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public PullRequests findUserPullRequestsOrderByMergedAt(long userId, int size, int page) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "mergedAt"));
+        return pullRequestRepository.findByUserId(userId, pageable)
+                .get()
+                .map(PullRequestEntity::toDomainEntity)
+                .collect(Collectors.collectingAndThen(Collectors.toList(), PullRequests::new));
+    }
+
+    @Override
     @Transactional
     public PullRequest updateStatus(long pullRequestId, RecordStatus status) {
         PullRequestEntity pullRequest = pullRequestRepository.findById(pullRequestId)
                 .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.PULL_REQUEST_NOT_FOUND));
         pullRequest.updateStatus(status);
+        return pullRequest.toDomainEntity();
+    }
+
+    @Override
+    @Transactional
+    public PullRequest updateToDone(long pullRequestId) {
+        PullRequestEntity pullRequest = pullRequestRepository.findById(pullRequestId)
+                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.PULL_REQUEST_NOT_FOUND));
+        pullRequest.updateToDone();
+        return pullRequest.toDomainEntity();
+    }
+
+    @Override
+    @Transactional
+    public PullRequest updateAnalyzedResult(long pullRequestId, String summary) {
+        PullRequestEntity pullRequest = pullRequestRepository.findById(pullRequestId)
+                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.PULL_REQUEST_NOT_FOUND));
+        pullRequest.updateAnalyzeResult(summary);
         return pullRequest.toDomainEntity();
     }
 
