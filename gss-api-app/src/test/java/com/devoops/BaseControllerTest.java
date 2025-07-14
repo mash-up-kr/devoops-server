@@ -4,8 +4,10 @@ import com.devoops.config.TestConfig;
 import com.devoops.domain.repository.github.GithubRepoDomainRepository;
 import com.devoops.domain.repository.github.PullRequestDomainRepository;
 import com.devoops.domain.repository.user.UserDomainRepository;
+import com.devoops.generator.AnswerGenerator;
 import com.devoops.generator.GithubRepoGenerator;
 import com.devoops.generator.PullRequestGenerator;
+import com.devoops.generator.QuestionGenerator;
 import com.devoops.generator.UserGenerator;
 import com.devoops.service.auth.jwt.JwtTokenManager;
 import io.restassured.RestAssured;
@@ -37,6 +39,12 @@ public abstract class BaseControllerTest {
 
     @Autowired
     protected PullRequestGenerator pullRequestGenerator;
+
+    @Autowired
+    protected QuestionGenerator questionGenerator;
+
+    @Autowired
+    protected AnswerGenerator answerGenerator;
 
     @BeforeEach
     void setEnvironment() {
