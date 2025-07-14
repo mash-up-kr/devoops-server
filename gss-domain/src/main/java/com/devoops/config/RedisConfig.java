@@ -14,7 +14,6 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -42,7 +41,8 @@ public class RedisConfig {
                 .disablePeerVerification() //AWS에서는 신뢰기관인지 검증이 필요 X
                 .build();
 
-        RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration(properties.host(), properties.port());
+        RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration(properties.host(),
+                properties.port());
         return new LettuceConnectionFactory(redisConfig, clientConfig);
     }
 
@@ -52,14 +52,15 @@ public class RedisConfig {
         LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
                 .build();
 
-        RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration(properties.host(), properties.port());
+        RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration(properties.host(),
+                properties.port());
         return new LettuceConnectionFactory(redisConfig, clientConfig);
     }
 
     @Bean(name = "redisObjectMapper")
     public ObjectMapper redisObjectMapper() {
         BasicPolymorphicTypeValidator validator = BasicPolymorphicTypeValidator.builder()
-                .allowIfSubType(Object.class)
+                .allowIfSubType(RefreshToken.class)
                 .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
