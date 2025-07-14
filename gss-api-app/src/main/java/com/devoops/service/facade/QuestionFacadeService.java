@@ -8,7 +8,7 @@ import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.AnswerPutRequests;
 import com.devoops.service.answer.AnswerService;
 import com.devoops.service.answerranking.AnswerRankingService;
-import com.devoops.service.pullrequests.PullRequestService;
+import com.devoops.service.pullrequest.PullRequestService;
 import com.devoops.service.question.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

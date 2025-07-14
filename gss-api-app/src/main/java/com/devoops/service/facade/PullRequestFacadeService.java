@@ -8,7 +8,7 @@ import com.devoops.dto.response.PullRequestDetailReadResponse;
 import com.devoops.dto.response.PullRequestRankingResponses;
 import com.devoops.dto.response.PullRequestReadResponse;
 import com.devoops.service.answerranking.AnswerRankingService;
-import com.devoops.service.pullrequests.PullRequestService;
+import com.devoops.service.pullrequest.PullRequestService;
 import com.devoops.service.question.QuestionService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

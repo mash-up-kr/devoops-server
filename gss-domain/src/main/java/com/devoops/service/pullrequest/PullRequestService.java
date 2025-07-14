@@ -1,4 +1,4 @@
-package com.devoops.service.pullrequests;
+package com.devoops.service.pullrequest;
 
 import com.devoops.domain.entity.github.PullRequest;
 import com.devoops.domain.entity.github.RecordStatus;
@@ -24,3 +24,4 @@ public class PullRequestService {
         return pullRequestRepository.findById(pullRequestId);
     }
 }
+
