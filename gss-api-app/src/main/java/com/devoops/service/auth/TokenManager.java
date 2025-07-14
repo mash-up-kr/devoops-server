@@ -44,11 +44,7 @@ public class TokenManager {
         if (!refreshTokenDomainRepository.exists(tokenValue)) {
             throw new GssException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
-        RefreshToken refreshToken = refreshTokenDomainRepository.getRefreshToken(tokenValue);
-        if (refreshToken.isExpired()) {
-            throw new GssException(ErrorCode.INVALID_REFRESH_TOKEN);
-        }
-        return refreshToken;
+        return refreshTokenDomainRepository.getRefreshToken(tokenValue);
     }
 
     public void deleteRefreshToken(String tokenValue) {
