@@ -1,17 +1,21 @@
 package com.devoops.service.webhook;
 
 import com.devoops.adaptor.GithubAdaptor;
+import com.devoops.adaptor.PrAnalysisAdapter;
 import com.devoops.client.PrAnalysisClient;
 import com.devoops.command.request.PullRequestCreateCommand;
 import com.devoops.command.request.QuestionCreateCommand;
+import com.devoops.domain.entity.github.GithubRepository;
 import com.devoops.domain.entity.github.GithubToken;
 import com.devoops.domain.entity.github.PullRequest;
 import com.devoops.domain.entity.github.Question;
 import com.devoops.domain.entity.github.RecordStatus;
 import com.devoops.domain.entity.user.User;
+import com.devoops.domain.repository.github.GithubRepoDomainRepository;
 import com.devoops.domain.repository.github.PullRequestDomainRepository;
 import com.devoops.domain.repository.github.QuestionDomainRepository;
 import com.devoops.domain.repository.user.UserDomainRepository;
+import com.devoops.dto.request.AdaptedAnalyzePrResponse;
 import com.devoops.dto.request.GitHubWebhookEventRequest;
 import com.devoops.dto.response.AnalyzePrResponse;
 import com.devoops.util.SummaryFormatter;
@@ -26,8 +30,10 @@ public class WebhookFacadeService {
 
     private final GithubAdaptor githubAdaptor;
     private final PrAnalysisClient prAnalysisClient;
+    private final PrAnalysisAdapter prAnalysisAdapter;
     private final UserDomainRepository userDomainRepository;
     private final QuestionDomainRepository questionDomainRepository;
+    private final GithubRepoDomainRepository githubRepoDomainRepository;
     private final PullRequestDomainRepository pullRequestDomainRepository;
 
     public void createQuestionWithWebhookEvent(GitHubWebhookEventRequest gitHubWebhookEventRequest) {
@@ -35,13 +41,6 @@ public class WebhookFacadeService {
             return;
         }
 
-        /**
-         * FIXME
-         * 1. 예전에 이야기했던대로 ErrorCode를 Common으로 내리면 해결
-         * 현재 api 모듈에 에러코드가 정의되어 있어서 token domain level의 errorCode를 mcp module에서 사용 불가
-         *
-         * 2. eventRequest로 내려오는 userId가 우리 userDomain의 id가 맞는지 확인 필요
-         */
         User triggerUser = userDomainRepository.findByProviderId(gitHubWebhookEventRequest.getUserId());
         GithubToken githubToken = triggerUser.getGithubToken();
 
@@ -50,25 +49,23 @@ public class WebhookFacadeService {
                 githubToken.getToken());
 
         // 분석 결과
-        AnalyzePrResponse analyzePrResponse = prAnalysisClient.analyze(
+        AdaptedAnalyzePrResponse adaptedAnalyzePrResponse = prAnalysisAdapter.analyze(
                 gitHubWebhookEventRequest.getTitle(),
                 gitHubWebhookEventRequest.getDescription(),
                 diff
         );
 
-        List<Map.Entry<String, String>> converted = analyzePrResponse.summaryDetails().stream()
-                .map(sd -> Map.entry(sd.title(), sd.description()))
-                .toList();
+        // 레포 아이디를 기반으로 찾기 -> 풀리퀘 생성 -> prCount 올리기
+        GithubRepository githubRepository = githubRepoDomainRepository.findByExternalId(gitHubWebhookEventRequest.getRepositoryId());
 
-        // pull request ready
         PullRequest readyPullRequest = pullRequestDomainRepository.save(
                 new PullRequestCreateCommand(
-                        gitHubWebhookEventRequest.getRepositoryId(),
-                        gitHubWebhookEventRequest.getUserId(),
+                        githubRepository.getId(),
+                        triggerUser.getId(),
                         gitHubWebhookEventRequest.getTitle(),
                         gitHubWebhookEventRequest.getDescription(),
-                        analyzePrResponse.summary(),
-                        SummaryFormatter.formatWithNumbering(converted),
+                        adaptedAnalyzePrResponse.summary(),
+                        adaptedAnalyzePrResponse.detailSummary(),
                         gitHubWebhookEventRequest.getExternalId(),
                         RecordStatus.PENDING,
                         gitHubWebhookEventRequest.getMergedAt(),
@@ -84,10 +81,10 @@ public class WebhookFacadeService {
          * -> 그렇다면 하위 서비스에서 createCommand가 묶여야 함 (question domain은 항상 pull request create와 연결)
          */
         PullRequest updatedPullRequest = pullRequestDomainRepository.updateAnalyzedResult(readyPullRequest.getId(),
-                analyzePrResponse.summary());
+                adaptedAnalyzePrResponse.summary());
 
         questionDomainRepository.saveAll(
-                createQuestionListFromCategorizedQuestions(analyzePrResponse.questions(), updatedPullRequest.getId())
+                createQuestionListFromCategorizedQuestions(adaptedAnalyzePrResponse.questions(), updatedPullRequest.getId())
         );
     }
 
