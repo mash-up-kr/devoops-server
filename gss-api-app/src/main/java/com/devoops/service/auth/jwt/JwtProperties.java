@@ -4,15 +4,19 @@ import io.jsonwebtoken.security.Keys;
 import java.time.Duration;
 import javax.crypto.SecretKey;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Getter
+@Setter
+@NoArgsConstructor
 @ConfigurationProperties(prefix = "jwt")
 public class JwtProperties {
 
-    private final String secretKey;
-    private final Duration accessTokenExpiration;
-    private final Duration refreshTokenExpiration;
+    private String secretKey;
+    private Duration accessTokenExpiration;
+    private Duration refreshTokenExpiration;
 
     public JwtProperties(String secretKey, Duration accessTokenExpiration, Duration refreshTokenExpiration) {
         this.secretKey = secretKey;

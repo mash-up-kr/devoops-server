@@ -17,7 +17,6 @@ import com.devoops.service.auth.jwt.AccessToken;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -50,9 +49,10 @@ class QuestionControllerTest extends BaseControllerTest {
 
             AnswerPutResponses responses = RestAssured.given()
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken.getToken())
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .contentType(ContentType.JSON)
+                    .when()
                     .body(putRequests)
-                    .when().put("/api/questions/answer")
+                    .put("/api/questions/answer")
                     .then().statusCode(HttpStatus.OK.value())
                     .extract()
                     .as(AnswerPutResponses.class);

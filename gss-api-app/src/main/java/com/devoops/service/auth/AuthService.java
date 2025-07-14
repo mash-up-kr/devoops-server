@@ -24,7 +24,6 @@ public class AuthService {
 
     private final GithubOAuthClient authClient;
     private final TokenManager jwtTokenManager;
-    private final BlackListRepository blackListRepository;
 
     public AuthResponse getUserInfo(String token) {
         UserInfoResponse userInfo = authClient.getUserInfo(token);
