@@ -1,6 +1,6 @@
 package com.devoops;
 
-import com.devoops.client.PrAnalysisClient;
+import com.devoops.client.PrAnalysisClientImpl;
 import com.devoops.dto.response.AnalyzePrResponse;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -9,10 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @Disabled
-class PrAnalysisClientTest {
+class PrAnalysisClientImplTest {
 
     @Autowired
-    PrAnalysisClient prAnalysisClient;
+    PrAnalysisClientImpl prAnalysisClient;
 
     @Test
     void analyzePr_shouldReturnSummaryAndQuestions() {
