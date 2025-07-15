@@ -15,14 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class AnswerDomainRepositoryImpl implements AnswerDomainRepository {
 
     private final AnswerJpaRepository answerJpaRepository;
-    private final QuestionJpaRepository questionJpaRepository;
 
     @Override
     @Transactional
     public Answer save(Answer answer) {
-        QuestionEntity question = questionJpaRepository.findById(answer.getQuestionId())
-                .orElseThrow(() -> new GssException(ErrorCode.QUESTION_NOT_FOUND));
-        AnswerEntity answerEntity = AnswerEntity.from(answer, question);
+        AnswerEntity answerEntity = AnswerEntity.from(answer);
         AnswerEntity savedAnswer = answerJpaRepository.save(answerEntity);
         return savedAnswer.toDomainEntity();
     }

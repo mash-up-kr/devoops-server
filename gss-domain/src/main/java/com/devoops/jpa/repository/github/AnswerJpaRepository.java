@@ -10,10 +10,10 @@ public interface AnswerJpaRepository extends JpaRepository<AnswerEntity, Long> {
     @Query("""
             select count(ae)
             from AnswerEntity ae
-                        where ae.question.id in (
+                        where ae.questionId in (
                                     select qe.id
                                     from QuestionEntity qe
-                                    where qe.pullRequest.id = :pullRequestId
+                                    where qe.pullRequestId = :pullRequestId
                               )
             """)
     long getAnswerCountByPullRequestId(@Param(value = "pullRequestId") long pullRequestId);

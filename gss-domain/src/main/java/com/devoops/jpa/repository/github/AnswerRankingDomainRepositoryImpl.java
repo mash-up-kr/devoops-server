@@ -21,12 +21,14 @@ public class AnswerRankingDomainRepositoryImpl implements AnswerRankingDomainRep
 
     private final AnswerRankingJpaRepository answerRankingJpaRepository;
     private final QuestionJpaRepository questionJpaRepository;
+    private final PullRequestJpaRepository pullRequestJpaRepository;
 
     @Override
     @Transactional
     public AnswerRanking save(Answer answer, long userId) {
         QuestionEntity questionEntity = findQuestionById(answer.getQuestionId());
-        PullRequestEntity pullRequestEntity = questionEntity.getPullRequest();
+        PullRequestEntity pullRequestEntity = pullRequestJpaRepository.findById(questionEntity.getPullRequestId())
+                .orElseThrow(() -> new GssException(ErrorCode.PULL_REQUEST_NOT_FOUND));
         AnswerRanking answerRanking = new AnswerRanking(
                 null,
                 pullRequestEntity.getId(),

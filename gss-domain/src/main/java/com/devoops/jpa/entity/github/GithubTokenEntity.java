@@ -29,18 +29,16 @@ public class GithubTokenEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private UserEntity user;
+    private long userId;
 
     @Nonnull
     @Column(length = 50)
     private String token;
 
-    public static GithubTokenEntity from(UserEntity user, GithubToken githubToken) {
+    public static GithubTokenEntity from(long userId, GithubToken githubToken) {
         return new GithubTokenEntity(
                 null,
-                user,
+                userId,
                 githubToken.getToken()
         );
     }

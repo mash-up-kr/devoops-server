@@ -23,7 +23,7 @@ public class UserDomainRepositoryImpl implements UserDomainRepository {
     @Transactional(readOnly = true)
     @Override
     public User findById(Long id) {
-        GithubToken githubToken = githubTokenJpaRepository.findByUser_Id(id)
+        GithubToken githubToken = githubTokenJpaRepository.findByUserId(id)
                 .orElseThrow(() -> new GssException(ErrorCode.GITHUB_TOKEN_NOT_FOUND))
                 .toDomainEntity();
         return userJpaRepository.findById(id)
@@ -48,7 +48,7 @@ public class UserDomainRepositoryImpl implements UserDomainRepository {
     public User saveUser(User user) {
         UserEntity userEntity = UserEntity.from(user);
         UserEntity savedUser = userJpaRepository.save(userEntity);
-        GithubTokenEntity githubToken = GithubTokenEntity.from(savedUser, user.getGithubToken());
+        GithubTokenEntity githubToken = GithubTokenEntity.from(savedUser.getId(), user.getGithubToken());
         GithubTokenEntity savedGithubToken = githubTokenJpaRepository.save(githubToken);
         return savedUser.toDomainEntity(savedGithubToken.toDomainEntity());
     }
@@ -58,7 +58,7 @@ public class UserDomainRepositoryImpl implements UserDomainRepository {
     public User findByProviderId(Long providerId) {
         UserEntity userEntity = userJpaRepository.findByProviderId(providerId)
                 .orElseThrow(() -> new RuntimeException("EntityNotFound 공통 예외 처리 필요"));
-        GithubToken githubToken = githubTokenJpaRepository.findByUser_Id(userEntity.getId())
+        GithubToken githubToken = githubTokenJpaRepository.findByUserId(userEntity.getId())
                 .orElseThrow(() -> new GssException(ErrorCode.GITHUB_TOKEN_NOT_FOUND))
                 .toDomainEntity();
         return userEntity.toDomainEntity(githubToken);

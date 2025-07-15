@@ -31,7 +31,7 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
         GithubRepositoryEntity githubRepositoryEntity = githubRepoRepository.findById(pullRequest.getRepositoryId())
                 .orElseThrow(() -> new GssException(ErrorCode.GITHUB_REPOSITORY_NOT_FOUND));
         githubRepositoryEntity.plusPrCount();
-        PullRequestEntity pullRequestEntity = PullRequestEntity.from(pullRequest, githubRepositoryEntity);
+        PullRequestEntity pullRequestEntity = PullRequestEntity.from(pullRequest);
         PullRequestEntity savedPullRequest = pullRequestRepository.save(pullRequestEntity);
         return savedPullRequest.toDomainEntity();
     }
@@ -87,7 +87,8 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
     public PullRequest findByQuestionId(long questionId) {
         QuestionEntity questionEntity = questionJpaRepository.findById(questionId)
                 .orElseThrow(() -> new GssException(ErrorCode.QUESTION_NOT_FOUND));
-        return questionEntity.getPullRequest()
+        return pullRequestRepository.findById(questionEntity.getPullRequestId())
+                .orElseThrow(() -> new GssException(ErrorCode.PULL_REQUEST_NOT_FOUND))
                 .toDomainEntity();
     }
 }

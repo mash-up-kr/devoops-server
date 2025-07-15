@@ -30,9 +30,7 @@ public class QuestionEntity extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pull_request_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private PullRequestEntity pullRequest;
+    private long pullRequestId;
 
     @NotNull
     private String category;
@@ -43,15 +41,15 @@ public class QuestionEntity extends BaseTimeEntity {
 
     private boolean isAnswered;
 
-    public static QuestionEntity from(Question question, PullRequestEntity pullRequest) {
-        return new QuestionEntity(question.getId(), pullRequest, question.getCategory(), question.getContent(),
+    public static QuestionEntity from(Question question) {
+        return new QuestionEntity(question.getId(), question.getPullRequestId(), question.getCategory(), question.getContent(),
             question.isAnswered());
     }
 
     public Question toDomainEntity() {
         return new Question(
             this.id,
-            pullRequest.getId(),
+            pullRequestId,
             this.category,
             this.content,
             this.isAnswered
