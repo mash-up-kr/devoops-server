@@ -22,13 +22,10 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
 
     @Bean
-    public RedisTemplate<String, RefreshToken> refreshTokenRedisTemplate(
-            RedisConnectionFactory redisConnectionFactory,
-            @Qualifier("redisObjectMapper") ObjectMapper objectMapper
-    ) {
+    public RedisTemplate<String, RefreshToken> refreshTokenRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, RefreshToken> redisTemplate = new RedisTemplate<>();
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper));
+        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer(redisObjectMapper()));
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         return redisTemplate;
     }
@@ -57,10 +54,9 @@ public class RedisConfig {
         return new LettuceConnectionFactory(redisConfig, clientConfig);
     }
 
-    @Bean(name = "redisObjectMapper")
-    public ObjectMapper redisObjectMapper() {
+    private ObjectMapper redisObjectMapper() {
         BasicPolymorphicTypeValidator validator = BasicPolymorphicTypeValidator.builder()
-                .allowIfSubType(RefreshToken.class)
+                .allowIfSubType(ObjectMapper.class)
                 .build();
 
         ObjectMapper objectMapper = new ObjectMapper();

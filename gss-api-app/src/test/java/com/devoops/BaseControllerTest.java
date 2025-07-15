@@ -43,16 +43,16 @@ public abstract class BaseControllerTest {
     protected PullRequestGenerator pullRequestGenerator;
 
     @Autowired
-    private FakeRefreshDomainRepository refreshDomainRepository;
-
-    @Autowired
-    private FakeBlackListRepository blackListRepository;
-  
-    @Autowired
     protected QuestionGenerator questionGenerator;
 
     @Autowired
     protected AnswerGenerator answerGenerator;
+
+    @Autowired
+    private FakeRefreshDomainRepository refreshDomainRepository;
+
+    @Autowired
+    private FakeBlackListRepository blackListRepository;
 
     @BeforeEach
     void setEnvironment() {
