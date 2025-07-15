@@ -56,7 +56,7 @@ public class RedisConfig {
 
     private ObjectMapper redisObjectMapper() {
         BasicPolymorphicTypeValidator validator = BasicPolymorphicTypeValidator.builder()
-                .allowIfSubType(ObjectMapper.class)
+                .allowIfSubType(RefreshToken.class)
                 .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
