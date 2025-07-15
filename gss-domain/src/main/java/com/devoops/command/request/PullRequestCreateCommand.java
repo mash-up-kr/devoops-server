@@ -26,9 +26,10 @@ public record PullRequestCreateCommand(
             String summary,
             String summaryDetail,
             long externalId,
-            String tag
+            String tag,
+            LocalDateTime mergedAt
     ) {
-        this(repositoryId, userId, title, description, summary, summaryDetail, externalId, RecordStatus.PENDING, LocalDateTime.now(), tag);
+        this(repositoryId, userId, title, description, summary, summaryDetail, externalId, RecordStatus.PENDING, mergedAt, tag);
     }
 
     public PullRequest toDomainEntity() {

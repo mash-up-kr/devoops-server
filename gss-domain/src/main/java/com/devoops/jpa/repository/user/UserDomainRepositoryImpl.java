@@ -57,7 +57,7 @@ public class UserDomainRepositoryImpl implements UserDomainRepository {
     @Override
     public User findByProviderId(Long providerId) {
         UserEntity userEntity = userJpaRepository.findByProviderId(providerId)
-                .orElseThrow(() -> new RuntimeException("EntityNotFound 공통 예외 처리 필요"));
+                .orElseThrow(() -> new GssException(ErrorCode.USER_NOT_FOUND));
         GithubToken githubToken = githubTokenJpaRepository.findByUserId(userEntity.getId())
                 .orElseThrow(() -> new GssException(ErrorCode.GITHUB_TOKEN_NOT_FOUND))
                 .toDomainEntity();

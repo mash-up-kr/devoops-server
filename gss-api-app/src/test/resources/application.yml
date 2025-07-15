@@ -16,6 +16,10 @@ spring:
   config:
     activate:
       on-profile: test
+  data:
+    redis:
+      host: localhost
+      port: 6379
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:database
@@ -35,3 +39,8 @@ spring:
 dev-oops:
   mcp:
     webhook-url: https://test.dev-oops.kr/api/webhooks
+  webclient:
+    github:
+      url: https://api.github.com
+      connect-timeout: 3000
+      read-timeout: 3000
