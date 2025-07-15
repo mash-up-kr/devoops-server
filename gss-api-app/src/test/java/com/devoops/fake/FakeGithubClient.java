@@ -4,6 +4,7 @@ import com.devoops.client.GitHubClient;
 import com.devoops.dto.request.GitHubWebhookRequest;
 import com.devoops.dto.response.GithubPrResponse;
 import com.devoops.dto.response.GithubPrResponse.Label;
+import com.devoops.dto.response.GithubPrResponse.Repository;
 import com.devoops.dto.response.GithubRepoInfoResponse;
 import com.devoops.dto.response.OwnerResponse;
 import java.time.LocalDateTime;
@@ -32,7 +33,7 @@ public class FakeGithubClient implements GitHubClient {
                 "title",
                 "body",
                 new GithubPrResponse.User(1L, "login"),
-                new GithubPrResponse.Repository(1L, "login"),
+                new GithubPrResponse.Head(new Repository(1L, "login")),
                 List.of(new Label(1L, "feat")),
                 "diffUrl",
                 LocalDateTime.now()
