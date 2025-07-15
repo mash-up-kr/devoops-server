@@ -6,6 +6,7 @@ spring:
     include:
       - db
       - github-client
+      - redis
 
 server:
   port: 8080

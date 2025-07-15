@@ -1,6 +1,7 @@
 package com.devoops.service.facade;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.devoops.BaseServiceTest;
 import com.devoops.domain.entity.github.Answer;
@@ -10,7 +11,10 @@ import com.devoops.domain.entity.github.Question;
 import com.devoops.domain.entity.github.RecordStatus;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.github.PullRequestDomainRepository;
+import com.devoops.dto.request.AnswerPutRequest;
+import com.devoops.dto.request.AnswerPutRequests;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +74,34 @@ class QuestionFacadeServiceTest extends BaseServiceTest {
 
             PullRequest progressPullRequest = pullRequestDomainRepository.findById(pullRequest.getId());
             assertThat(progressPullRequest.getRecordStatus()).isEqualTo(RecordStatus.PENDING);
+        }
+    }
+
+    @Nested
+    class UpdateAllAnswers {
+
+        @Test
+        void 다수_회고를_업데이트한다() {
+            User user = userGenerator.generate("김건우");
+            GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
+            PullRequest pr1 = pullRequestGenerator.generate("PR1", RecordStatus.PENDING, repo, LocalDateTime.now());
+            Question question1 = questionGenerator.generate(pr1, "질문1");
+            Question question2 = questionGenerator.generate(pr1, "질문2");
+            Answer answer1 = answerGenerator.generate(question1, "answer1");
+            Answer answer2 = answerGenerator.generate(question2, "answer2");
+
+            AnswerPutRequests putRequests = new AnswerPutRequests(
+                    List.of(
+                            new AnswerPutRequest(answer1.getId(), "new answer1"),
+                            new AnswerPutRequest(answer2.getId(), "new answer2")
+                    )
+            );
+
+            List<Answer> responses = questionFacadeService.updateAllAnswers(putRequests).getValues();
+            assertAll(
+                    () -> assertThat(responses.get(0).getContent()).isEqualTo("new answer1"),
+                    () -> assertThat(responses.get(1).getContent()).isEqualTo("new answer2")
+            );
         }
     }
 }

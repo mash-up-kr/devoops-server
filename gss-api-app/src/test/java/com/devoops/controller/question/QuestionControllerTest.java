@@ -1,7 +1,7 @@
 package com.devoops.controller.question;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.devoops.BaseControllerTest;
 import com.devoops.domain.entity.github.Answer;
@@ -13,8 +13,7 @@ import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.AnswerPutRequest;
 import com.devoops.dto.request.AnswerPutRequests;
 import com.devoops.dto.response.AnswerPutResponses;
-import com.devoops.service.auth.jwt.JwtToken;
-import com.devoops.service.auth.jwt.TokenType;
+import com.devoops.service.auth.jwt.AccessToken;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.time.LocalDateTime;
@@ -38,7 +37,7 @@ class QuestionControllerTest extends BaseControllerTest {
             Question question2 = questionGenerator.generate(pr1, "질문2");
             Answer answer1 = answerGenerator.generate(question1, "answer1");
             Answer answer2 = answerGenerator.generate(question2, "answer2");
-            JwtToken accessToken = jwtTokenManager.createToken(String.valueOf(user.getId()), TokenType.ACCESS_TOKEN);
+            AccessToken accessToken = tokenManager.createAccessToken(user.getId());
 
             AnswerPutRequests putRequests = new AnswerPutRequests(
                     List.of(
@@ -48,10 +47,11 @@ class QuestionControllerTest extends BaseControllerTest {
             );
 
             AnswerPutResponses responses = RestAssured.given()
-                    .contentType(ContentType.JSON)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken.getToken())
+                    .contentType(ContentType.JSON)
+                    .when()
                     .body(putRequests)
-                    .when().put("/api/questions/answer")
+                    .put("/api/questions/answer")
                     .then().statusCode(HttpStatus.OK.value())
                     .extract()
                     .as(AnswerPutResponses.class);
