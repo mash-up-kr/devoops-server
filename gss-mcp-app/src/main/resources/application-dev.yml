@@ -1,0 +1,7 @@
+spring:
+  config:
+    import: 'aws-secretsmanager:dev/devoops/secrets'
+  data:
+    redis:
+      host: ${redis.host}
+      port: ${redis.port}

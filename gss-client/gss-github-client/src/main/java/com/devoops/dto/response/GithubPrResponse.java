@@ -49,10 +49,6 @@ public record GithubPrResponse(
         return body;
     }
 
-    public long getExternalId() {
-        return id;
-    }
-
     public String getTag() {
         if(labels.isEmpty()) return "NONE";
         return labels.getFirst().name;

@@ -10,7 +10,7 @@ import com.devoops.domain.entity.github.QuestionAnswer;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.github.PullRequestDomainRepository;
 import com.devoops.domain.repository.github.QuestionDomainRepository;
-import com.devoops.dto.request.AppWebhookEventRequest;
+import com.devoops.dto.AppWebhookEventRequest;
 import com.devoops.dto.request.GitHubWebhookEventRequest;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,7 +42,7 @@ class WebhookFacadeServiceTest extends BaseMcpTest {
             GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
             GitHubWebhookEventRequest request = createClosedMergedPullRequest(user.getProviderId(),
                     repo.getExternalId());
-            AppWebhookEventRequest appRequest = new AppWebhookEventRequest(request);
+            AppWebhookEventRequest appRequest = createWebhookEventRequest(request);
             webhookFacadeService.createQuestionWithWebhookEvent(appRequest);
 
             PullRequests pullRequests = pullRequestDomainRepository.findUserPullRequestsOrderByMergedAt(user.getId(), 2,
@@ -51,6 +51,20 @@ class WebhookFacadeServiceTest extends BaseMcpTest {
             List<QuestionAnswer> questions = questionDomainRepository.findAllPrQuestions(savedPrId);
             assertThat(questions).hasSize(4);
         }
+    }
+
+    private AppWebhookEventRequest createWebhookEventRequest(GitHubWebhookEventRequest request) {
+        return new AppWebhookEventRequest(
+                request.isMerged(),
+                request.getExternalId(),
+                request.getPullRequestDiffUrl(),
+                request.getTitle(),
+                request.getDescription(),
+                request.getTag(),
+                request.getRepositoryId(),
+                request.getUserId(),
+                request.getMergedAt()
+        );
     }
 
     public static GitHubWebhookEventRequest createClosedMergedPullRequest(long userProviderId, long repoId) {
