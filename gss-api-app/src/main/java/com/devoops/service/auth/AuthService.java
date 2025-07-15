@@ -3,7 +3,6 @@ package com.devoops.service.auth;
 import com.devoops.client.GithubOAuthClient;
 import com.devoops.domain.entity.auth.RefreshToken;
 import com.devoops.domain.entity.user.User;
-import com.devoops.domain.repository.auth.BlackListRepository;
 import com.devoops.dto.response.AuthResponse;
 import com.devoops.dto.response.UserInfoResponse;
 import com.devoops.dto.response.UserTokenResponse;

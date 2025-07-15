@@ -1,8 +1,5 @@
-package com.devoops.exception.handler;
+package com.devoops.exception;
 
-
-import com.devoops.exception.ErrorResponse;
-import com.devoops.exception.GssRepositoryException;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -73,12 +70,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleGssException(GssException exception) {
         log.error("Custom GssException occurred: {}", exception.getMessage(), exception);
         return toResponse(exception.getErrorCode());
-    }
-
-    @ExceptionHandler(GssRepositoryException.class)
-    public ResponseEntity<ErrorResponse> handleGssRepositoryException(GssRepositoryException exception) {
-        log.error("GssRepositoryException occurred", exception);
-        return toResponse(ErrorCode.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
