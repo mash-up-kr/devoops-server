@@ -12,19 +12,18 @@ import javax.crypto.SecretKey;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-class JwtTokenTest {
+class AccessTokenTest {
 
     @Nested
     class Create {
 
         @Test
-        void jwt토큰을_만들_수_있다() {
+        void 엑세스_토큰을_만들_수_있다() {
             String value = "test";
-            TokenType type = TokenType.ACCESS_TOKEN;
             Duration expiration = Duration.ofSeconds(1L);
             SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-            assertThatCode(() -> JwtToken.from(value, expiration, type, secretKey))
+            assertThatCode(() -> new AccessToken(value, expiration, secretKey))
                     .doesNotThrowAnyException();
         }
     }
@@ -33,12 +32,12 @@ class JwtTokenTest {
     class Resolve {
 
         @Test
-        void jwt토큰을_추출할_수_있다() {
+        void 엑세스_토큰을_추출할_수_있다() {
             String value = "test";
             TokenType type = TokenType.ACCESS_TOKEN;
             Duration expiration = Duration.ofSeconds(1L);
             SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-            JwtToken token = JwtToken.from(value, expiration, type, secretKey);
+            AccessToken token =  new AccessToken(value, expiration, secretKey);
 
             String resolvedToken = token.resolveToken(secretKey);
 
@@ -46,16 +45,15 @@ class JwtTokenTest {
         }
 
         @Test
-        void 만료된_jwt토큰에_추출을_시도하면_에러가_발생한다() {
+        void 만료된_엑세스_토큰에_추출을_시도하면_에러가_발생한다() {
             String value = "test";
             Duration expiration = Duration.ZERO;
             TokenType type = TokenType.ACCESS_TOKEN;
             SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-            JwtToken expiredToken = JwtToken.from(value, expiration, type, secretKey);
+            AccessToken expiredToken =  new AccessToken(value, expiration, secretKey);
 
             assertThatThrownBy(() -> expiredToken.resolveToken(secretKey))
-                    .isInstanceOf(ExpiredJwtException.class); //TODO 커스텀 에러로 전환
+                    .isInstanceOf(ExpiredJwtException.class);
         }
     }
-
 }

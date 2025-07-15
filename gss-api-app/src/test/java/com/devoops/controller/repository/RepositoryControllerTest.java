@@ -1,17 +1,12 @@
 package com.devoops.controller.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.devoops.BaseControllerTest;
-import com.devoops.command.request.RepositoryCreateCommand;
 import com.devoops.domain.entity.github.GithubRepository;
 import com.devoops.domain.entity.github.PullRequest;
 import com.devoops.domain.entity.github.RecordStatus;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.RepositorySaveRequest;
-import com.devoops.dto.response.UserSaveResponse;
-import com.devoops.service.auth.jwt.JwtToken;
-import com.devoops.service.auth.jwt.TokenType;
+import com.devoops.service.auth.jwt.AccessToken;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.time.LocalDateTime;
@@ -19,7 +14,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 class RepositoryControllerTest extends BaseControllerTest {
 
@@ -30,7 +24,7 @@ class RepositoryControllerTest extends BaseControllerTest {
         void 레포지토리의_풀_리퀘스트_목록을_가져온다() {
             LocalDateTime now = LocalDateTime.now();
             User user = userGenerator.generate("김건우");
-            JwtToken accessToken = jwtTokenManager.createToken(String.valueOf(user.getId()), TokenType.ACCESS_TOKEN);
+            AccessToken accessToken = tokenManager.createAccessToken(user.getId());
             GithubRepository repo = repoGenerator.generate(user, "김건우의 레포지토리");
 
             PullRequest pr1 = pullRequestGenerator.generate("5분전 PR", RecordStatus.PENDING, repo, now.minusMinutes(5L));
@@ -52,7 +46,7 @@ class RepositoryControllerTest extends BaseControllerTest {
             LocalDateTime now = LocalDateTime.now();
             User beomgeun = userGenerator.generate("범근이 형");
             User seonwoo = userGenerator.generate("선우 누나");
-            JwtToken accessToken = jwtTokenManager.createToken(String.valueOf(seonwoo.getId()), TokenType.ACCESS_TOKEN);
+            AccessToken accessToken = tokenManager.createAccessToken(seonwoo.getId());
             GithubRepository repo = repoGenerator.generate(beomgeun, "범근형의 레포지토리");
 
             PullRequest pr1 = pullRequestGenerator.generate("5분전 PR", RecordStatus.PENDING, repo, now.minusMinutes(5L));
@@ -74,7 +68,7 @@ class RepositoryControllerTest extends BaseControllerTest {
         @Test
         void 레포지토리를_생성할_수_있다() {
             User user = userGenerator.generate("김건우");
-            JwtToken accessToken = jwtTokenManager.createToken(String.valueOf(user.getId()), TokenType.ACCESS_TOKEN);
+            AccessToken accessToken = tokenManager.createAccessToken(user.getId());
             RepositorySaveRequest request = new RepositorySaveRequest("https://github.com/octocat/Hello-World");
 
             RestAssured.given()

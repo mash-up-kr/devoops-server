@@ -10,6 +10,9 @@ public enum ErrorCode {
     REPOSITORY_NOT_FOUND(HttpStatus.BAD_REQUEST, "레포지토리를 찾을 수 없습니다"),
     MALFORMED_GITHUB_REPOSITORY_URL(HttpStatus.BAD_REQUEST, "잘못된 형식의 레포지토리 url입니다"),
     UNAUTHORIZED_EXCEPTION(HttpStatus.UNAUTHORIZED, "잘못된 유저 접근입니다"),
+    INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "잘못된 리프레시 토큰입니다"),
+    TOKEN_TYPE_MISMATCH(HttpStatus.BAD_REQUEST, "토큰 타입이 일치하지 않습니다"),
+    EXPIRED_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "만료된 리프레시 토큰입니다"),
     ALREADY_SAVED_REPOSITORY(HttpStatus.BAD_REQUEST, "이미 저장된 레포지토리입니다"),
 
     FIELD_ERROR(HttpStatus.BAD_REQUEST, "입력이 잘못되었습니다."),

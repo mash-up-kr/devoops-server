@@ -1,0 +1,28 @@
+package com.devoops.domain.entity.auth;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class RefreshToken {
+
+    private long userId;
+    private String value;
+    private Duration ttl;
+
+    public RefreshToken(long userId, Duration ttl) {
+        this(userId, UUID.randomUUID().toString(), ttl);
+    }
+
+    public RefreshToken refresh() {
+        return new RefreshToken(this.userId, UUID.randomUUID().toString(), this.ttl);
+    }
+}

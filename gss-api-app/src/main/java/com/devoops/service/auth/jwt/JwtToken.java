@@ -3,7 +3,6 @@ package com.devoops.service.auth.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import java.time.Duration;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import lombok.Getter;
@@ -14,18 +13,6 @@ import lombok.RequiredArgsConstructor;
 public abstract class JwtToken {
 
     private static final String TOKEN_TYPE_CLAIMS_NAME = "type";
-
-    public static JwtToken from(
-            String value,
-            Duration expiration,
-            TokenType type,
-            SecretKey secretKey
-    ) {
-        if (type.isAccess()) {
-            return new AccessToken(value, expiration, secretKey);
-        }
-        return new RefreshToken(value, expiration, secretKey);
-    }
 
     protected String makeJwtTokenValue(Date expiredDate, String value, TokenType type, SecretKey secretKey) {
         Date now = new Date();
