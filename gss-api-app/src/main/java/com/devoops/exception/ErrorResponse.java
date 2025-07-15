@@ -1,6 +1,7 @@
 package com.devoops.exception;
 
 import com.devoops.exception.errorcode.ErrorCode;
+import org.springframework.http.HttpStatus;
 
 public record ErrorResponse(
         String code,
@@ -11,7 +12,7 @@ public record ErrorResponse(
     public ErrorResponse(ErrorCode errorCode) {
         this(
                 errorCode.name(),
-                errorCode.getStatus().name(),
+                HttpStatus.valueOf(errorCode.getStatusCode()).name(),
                 errorCode.getMessage()
         );
     }
