@@ -1,5 +1,6 @@
 package com.devoops.service.question;
 
+import com.devoops.command.request.AnswerUpdateCommand;
 import com.devoops.domain.entity.github.Answer;
 import com.devoops.domain.entity.github.Answers;
 import com.devoops.domain.entity.github.Question;
@@ -7,8 +8,6 @@ import com.devoops.domain.entity.github.QuestionAnswer;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.github.AnswerDomainRepository;
 import com.devoops.domain.repository.github.QuestionDomainRepository;
-import com.devoops.dto.request.AnswerPutRequest;
-import com.devoops.dto.request.AnswerPutRequests;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +33,9 @@ public class QuestionService {
         return answerRepository.updateById(answerId, updateContent);
     }
 
-    public Answers updateAllAnswers(AnswerPutRequests updateRequests) {
+    public Answers updateAllAnswers(List<AnswerUpdateCommand> updateCommands) {
         List<Answer> answers = new ArrayList<>();
-        for(AnswerPutRequest request : updateRequests.answers()) {
+        for (AnswerUpdateCommand request : updateCommands) {
             Answer uppdatedAnswer = answerRepository.updateById(request.answerId(), request.content());
             answers.add(uppdatedAnswer); //TODO 쿼리 반복호출 말고, in절을 활용해 쿼리 2개로 줄이기
         }
