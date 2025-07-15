@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 @ExtendWith(DataBaseCleaner.class)
-@Import(TestConfig.class)
+@Import({TestConfig.class, RedisTestConfiguration.class})
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public abstract class BaseMcpTest {
