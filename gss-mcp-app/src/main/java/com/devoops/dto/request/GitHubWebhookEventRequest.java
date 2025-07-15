@@ -4,6 +4,7 @@ package com.devoops.dto.request;
  * docs : https://docs.github.com/ko/webhooks/webhook-events-and-payloads#pull_request
  */
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,11 +14,10 @@ public record GitHubWebhookEventRequest(
         PullRequest pullRequest,
         Repository repository
 ) {
-    private record PullRequest(
+    public record PullRequest(
             String url,
             long id,
-            String diffUrl,
-            int number,
+            @JsonProperty("diff_url") String diffUrl,
             // open, closed
             String state,
             // PR 제목
@@ -26,29 +26,27 @@ public record GitHubWebhookEventRequest(
             String body,
             List<Label> labels,
             User user,
-            String createdAt,
-            String updatedAt,
             String closedAt,
             Boolean merged,
             LocalDateTime mergedAt
     ) {
     }
 
-    private record User(
+    public record User(
             String login,
             long id
     ) {
     }
 
-    private record Repository(
+    public record Repository(
             long id,
             String name,
-            boolean isPrivate,
+            @JsonProperty("private") boolean isPrivate,
             User owner
     ) {
     }
 
-    private record Label(
+    public record Label(
             long id,
             String name
     ) {

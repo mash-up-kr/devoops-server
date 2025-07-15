@@ -18,6 +18,19 @@ public record PullRequestCreateCommand(
     String tag
 ) {
 
+    public PullRequestCreateCommand(
+            long repositoryId,
+            long userId,
+            String title,
+            String description,
+            String summary,
+            String summaryDetail,
+            long externalId,
+            String tag
+    ) {
+        this(repositoryId, userId, title, description, summary, summaryDetail, externalId, RecordStatus.PENDING, LocalDateTime.now(), tag);
+    }
+
     public PullRequest toDomainEntity() {
         return new PullRequest(
             null,

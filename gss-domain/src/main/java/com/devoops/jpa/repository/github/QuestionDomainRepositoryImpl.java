@@ -8,6 +8,7 @@ import com.devoops.exception.RepositoryErrorCode;
 import com.devoops.jpa.entity.github.PullRequestEntity;
 import com.devoops.jpa.entity.github.QuestionEntity;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,10 +43,12 @@ public class QuestionDomainRepositoryImpl implements QuestionDomainRepository {
 
     @Override
     @Transactional
-    public void saveAll(List<Question> questions) {
-        List<QuestionEntity> questionEntityList = questions.stream().map(
-                QuestionEntity::toJpaEntity
-        ).toList();
+    public void saveAll(List<Question> question, long pullRequestId) {
+        PullRequestEntity pullRequest = pullRequestRepository.findById(pullRequestId)
+                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.PULL_REQUEST_NOT_FOUND));
+        List<QuestionEntity> questionEntityList = question.stream()
+                .map(q -> QuestionEntity.from(q, pullRequest))
+                .toList();
         questionRepository.saveAll(questionEntityList);
     }
 }

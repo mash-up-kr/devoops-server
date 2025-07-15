@@ -48,11 +48,6 @@ public class QuestionEntity extends BaseTimeEntity {
             question.isAnswered());
     }
 
-    public static QuestionEntity toJpaEntity(Question question) {
-        // FIXME: 연관관계 삭제 시 pullRequestId만 넣도록
-        return new QuestionEntity(question.getId(), null, question.getCategory(), question.getContent(), question.isAnswered());
-    }
-
     public Question toDomainEntity() {
         return new Question(
             this.id,

@@ -7,6 +7,7 @@ import com.devoops.domain.entity.github.GithubRepository;
 import com.devoops.domain.entity.github.PullRequest;
 import com.devoops.domain.entity.github.RecordStatus;
 import com.devoops.domain.entity.user.User;
+import com.devoops.service.pullrequest.PullRequestService;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

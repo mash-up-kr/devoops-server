@@ -12,9 +12,7 @@ public interface PullRequestDomainRepository {
 
     PullRequests findPullRequestsByRepositoryIdOrderByMergedAt(long repositoryId, int size, int page);
 
-    PullRequest updateToDone(long pullRequestId);
-
-    PullRequest updateAnalyzedResult(long pullRequestId, String summary);
+    PullRequest updateAnalyzedResult(long pullRequestId, String summary, String detailSummary);
 
     PullRequests findUserPullRequestsOrderByMergedAt(long userId, int size, int page);
 
