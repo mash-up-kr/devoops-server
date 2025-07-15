@@ -8,9 +8,11 @@ import com.devoops.domain.repository.github.GithubRepoDomainRepository;
 import com.devoops.domain.repository.github.GithubTokenDomainRepository;
 import com.devoops.dto.request.GitHubWebhookRequest;
 import com.devoops.dto.request.GithubRepoUrl;
+import com.devoops.dto.response.GithubPrResponse;
 import com.devoops.dto.response.GithubRepoInfoResponse;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,9 @@ import org.springframework.stereotype.Service;
 public class GitHubService {
 
     private static final String BEARER_PREFIX = "Bearer ";
+    private static final int MAX_USER_PR_LIMIT = 3;
+    private static final int MAX_PER_PAGE_PULL_REQUEST = 10;
+    private static final String REQUEST_PULL_REQUEST_STATUS = "closed";
 
     @Value("${dev-oops.mcp.webhook-url}")
     private String mcpWebhookUrl;
@@ -40,6 +45,25 @@ public class GitHubService {
                 githubRepository.getName(),
                 GitHubWebhookRequest.ofPullRequestEvent(mcpWebhookUrl)
         );
+    }
+
+    public List<GithubPrResponse> getUserPullRequests(
+            GithubRepoUrl repoUrl,
+            GithubToken token,
+            long userExternalId
+    ) {
+        List<GithubPrResponse> closedPullRequests = gitHubClient.getPullRequests(
+                BEARER_PREFIX + token.getToken(),
+                repoUrl.getOwner(),
+                repoUrl.getRepoName(),
+                REQUEST_PULL_REQUEST_STATUS,
+                MAX_PER_PAGE_PULL_REQUEST,
+                1
+        );
+        return closedPullRequests.stream()
+                .filter(pr -> pr.isUserPr(userExternalId))
+                .limit(MAX_USER_PR_LIMIT)
+                .toList();
     }
 
     public GithubRepoInfoResponse getRepositoryInfo(GithubRepoUrl repoUrl, GithubToken token) {

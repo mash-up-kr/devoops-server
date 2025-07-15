@@ -27,6 +27,8 @@ public class GithubClientConfig {
     @Bean
     public GitHubClient gitHubApiClient() {
 
+        System.out.println(properties.url());
+
         return HttpServiceProxyFactory
             .builderFor(WebClientAdapter.create(createGitHubWebClient()))
             .build()

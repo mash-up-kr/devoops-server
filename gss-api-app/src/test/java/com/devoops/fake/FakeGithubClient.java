@@ -2,8 +2,12 @@ package com.devoops.fake;
 
 import com.devoops.client.GitHubClient;
 import com.devoops.dto.request.GitHubWebhookRequest;
+import com.devoops.dto.response.GithubPrResponse;
+import com.devoops.dto.response.GithubPrResponse.Label;
 import com.devoops.dto.response.GithubRepoInfoResponse;
 import com.devoops.dto.response.OwnerResponse;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +23,20 @@ public class FakeGithubClient implements GitHubClient {
                 "testUrl",
                 new OwnerResponse("owner")
         );
+    }
+
+    @Override
+    public List<GithubPrResponse> getPullRequests(String authorization, String owner, String repo, String state, long perPage, long page) {
+        return List.of(new GithubPrResponse(
+                1L,
+                "title",
+                "body",
+                new GithubPrResponse.User(1L, "login"),
+                new GithubPrResponse.Repository(1L, "login"),
+                List.of(new Label(1L, "feat")),
+                "diffUrl",
+                LocalDateTime.now()
+        ));
     }
 
     @Override

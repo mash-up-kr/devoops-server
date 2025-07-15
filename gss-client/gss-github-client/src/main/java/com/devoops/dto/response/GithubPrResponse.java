@@ -32,6 +32,10 @@ public record GithubPrResponse(
     ) {
     }
 
+    public boolean isUserPr(long userExternalId) {
+        return userExternalId == user.id;
+    }
+
     public long getRepositoryId() {
         return repo.id;
     }

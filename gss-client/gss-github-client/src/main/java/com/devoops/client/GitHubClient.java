@@ -49,7 +49,9 @@ public interface GitHubClient {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @PathVariable("owner") String owner,
             @PathVariable("repo") String repo,
-            @RequestParam(name = "state", required = false) String state
+            @RequestParam(name = "state", required = false) String state,
+            @RequestParam(name = "per_page", required = false) long perPage,
+            @RequestParam(name = "page", required = false) long page
     );
 
     /**
