@@ -26,7 +26,6 @@ dependencies {
 	testFixturesImplementation 'org.junit.jupiter:junit-jupiter'
 
 	testFixturesImplementation 'org.testcontainers:testcontainers:1.19.1'
-	testFixturesImplementation 'org.testcontainers:redis:1.19.1'
 	testFixturesImplementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 
