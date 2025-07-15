@@ -5,7 +5,10 @@ spring:
     default: local
     include:
       - db
+      - github-client
       - mcp-client
+      - redis
+
 
 server:
   port: 8090

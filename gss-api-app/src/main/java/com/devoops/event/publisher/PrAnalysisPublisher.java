@@ -6,6 +6,7 @@ import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.PostConstruct;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -17,13 +18,13 @@ import org.springframework.stereotype.Component;
 public class PrAnalysisPublisher {
 
     private final RedisTemplate<String, Object> redisTemplate;
-    private final ChannelTopic webhookTopic;
+    private final ChannelTopic channelTopic;
     private final ObjectMapper objectMapper;
 
     public void publish(List<AppWebhookEventRequest> eventList) {
         try {
             String message = objectMapper.writeValueAsString(eventList);
-            redisTemplate.convertAndSend(webhookTopic.getTopic(), message);
+            redisTemplate.convertAndSend(channelTopic.getTopic(), message);
         } catch (JsonProcessingException e) {
             throw new GssException(ErrorCode.REDIS_PUBLISH_ERROR);
         }

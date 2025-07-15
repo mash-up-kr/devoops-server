@@ -13,23 +13,23 @@ public class RefreshTokenDomainRepositoryImpl implements RefreshTokenDomainRepos
 
     private static final String REFRESH_TOKEN_KEY_PREFIX = "refresh:";
 
-    private final RedisTemplate<String, RefreshToken> redisTemplate;
+    private final RedisTemplate<String, RefreshToken> redisRefreshTokenTemplate;
 
     public RefreshToken save(RefreshToken refreshToken) {
         String key = REFRESH_TOKEN_KEY_PREFIX + refreshToken.getValue();
-        redisTemplate.opsForValue().set(key, refreshToken, refreshToken.getTtl());
+        redisRefreshTokenTemplate.opsForValue().set(key, refreshToken, refreshToken.getTtl());
         return refreshToken;
     }
 
     @Override
     public Optional<RefreshToken> getRefreshToken(String tokenValue) {
         String key = REFRESH_TOKEN_KEY_PREFIX + tokenValue;
-        return Optional.ofNullable(redisTemplate.opsForValue().get(key));
+        return Optional.ofNullable(redisRefreshTokenTemplate.opsForValue().get(key));
     }
 
     @Override
     public void delete(String tokenValue) {
         String key = REFRESH_TOKEN_KEY_PREFIX + tokenValue;
-        redisTemplate.delete(key);
+        redisRefreshTokenTemplate.delete(key);
     }
 }
