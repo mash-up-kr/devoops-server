@@ -11,8 +11,8 @@ import java.util.List;
 public record GitHubWebhookEventRequest(
         String action,
         int number,
-        PullRequest pullRequest,
-        Repository repository
+        @JsonProperty("pull_request") PullRequest pullRequest,
+        @JsonProperty("repo") Repository repository
 ) {
     public record PullRequest(
             String url,
