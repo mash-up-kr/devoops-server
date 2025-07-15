@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.devoops.BaseServiceTest;
+import com.devoops.command.request.AnswerUpdateCommand;
 import com.devoops.domain.entity.github.Answer;
 import com.devoops.domain.entity.github.Answers;
 import com.devoops.domain.entity.github.GithubRepository;
@@ -74,15 +75,14 @@ class QuestionServiceTest extends BaseServiceTest {
             Answer answer1 = answerGenerator.generate(question1, "before1");
             Answer answer2 = answerGenerator.generate(question2, "before2");
             Answer answer3 = answerGenerator.generate(question3, "before3");
-            AnswerPutRequests answerPutRequests = new AnswerPutRequests(
-                    List.of(
-                            new AnswerPutRequest(answer1.getId(), "after1"),
-                            new AnswerPutRequest(answer2.getId(), "after2"),
-                            new AnswerPutRequest(answer3.getId(), "after3")
-                    )
+            List<AnswerUpdateCommand> answerUpdateCommands = List.of(
+                            new AnswerUpdateCommand(answer1.getId(), "after1"),
+                            new AnswerUpdateCommand(answer2.getId(), "after2"),
+                            new AnswerUpdateCommand(answer3.getId(), "after3")
+
             );
 
-            List<Answer> updatedAllAnswers = questionService.updateAllAnswers(answerPutRequests).getValues();
+            List<Answer> updatedAllAnswers = questionService.updateAllAnswers(answerUpdateCommands).getValues();
 
             assertAll(
                     () -> assertThat(updatedAllAnswers.get(0).getContent()).isEqualTo("after1"),

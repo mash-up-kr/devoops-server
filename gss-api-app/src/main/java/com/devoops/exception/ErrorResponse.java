@@ -1,18 +1,18 @@
 package com.devoops.exception;
 
 import com.devoops.exception.errorcode.ErrorCode;
-import jakarta.annotation.Nonnull;
+import org.springframework.http.HttpStatus;
 
 public record ErrorResponse(
-        @Nonnull String code,
-        @Nonnull String status,
-        @Nonnull String message
+        String code,
+        String status,
+        String message
 ) {
 
     public ErrorResponse(ErrorCode errorCode) {
         this(
                 errorCode.name(),
-                errorCode.getStatus().name(),
+                HttpStatus.valueOf(errorCode.getStatusCode()).name(),
                 errorCode.getMessage()
         );
     }

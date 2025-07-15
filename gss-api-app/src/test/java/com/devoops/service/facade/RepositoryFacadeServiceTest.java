@@ -13,7 +13,6 @@ import com.devoops.client.GitHubClient;
 import com.devoops.domain.entity.github.GithubRepository;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.github.GithubRepoDomainRepository;
-import com.devoops.dto.request.GithubRepoUrl;
 import com.devoops.dto.request.RepositorySaveRequest;
 import com.devoops.dto.response.GithubRepoInfoResponse;
 import com.devoops.dto.response.OwnerResponse;

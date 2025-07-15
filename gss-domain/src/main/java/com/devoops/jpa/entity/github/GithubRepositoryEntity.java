@@ -21,9 +21,7 @@ public class GithubRepositoryEntity extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private UserEntity user;
+    private long userId;
 
     @NotNull
     private String name;
@@ -39,11 +37,11 @@ public class GithubRepositoryEntity extends BaseTimeEntity {
     @Column(unique = true)
     private long githubRepositoryId;
 
-    public static GithubRepositoryEntity from(GithubRepository githubRepository, UserEntity user) {
+    public static GithubRepositoryEntity from(GithubRepository githubRepository) {
 
         return new GithubRepositoryEntity(
             githubRepository.getId(),
-            user,
+            githubRepository.getUserId(),
             githubRepository.getName(),
             githubRepository.getUrl(),
             githubRepository.getOwner(),
@@ -55,7 +53,7 @@ public class GithubRepositoryEntity extends BaseTimeEntity {
     public GithubRepository toDomainEntity() {
         return new GithubRepository(
             this.id,
-            this.user.getId(),
+            this.userId,
             this.name,
             this.url,
             this.owner,

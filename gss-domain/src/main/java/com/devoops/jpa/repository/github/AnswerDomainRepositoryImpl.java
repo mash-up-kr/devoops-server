@@ -2,8 +2,8 @@ package com.devoops.jpa.repository.github;
 
 import com.devoops.domain.entity.github.Answer;
 import com.devoops.domain.repository.github.AnswerDomainRepository;
-import com.devoops.exception.GssRepositoryException;
-import com.devoops.exception.RepositoryErrorCode;
+import com.devoops.exception.custom.GssException;
+import com.devoops.exception.errorcode.ErrorCode;
 import com.devoops.jpa.entity.github.AnswerEntity;
 import com.devoops.jpa.entity.github.QuestionEntity;
 import lombok.RequiredArgsConstructor;
@@ -15,14 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class AnswerDomainRepositoryImpl implements AnswerDomainRepository {
 
     private final AnswerJpaRepository answerJpaRepository;
-    private final QuestionJpaRepository questionJpaRepository;
 
     @Override
     @Transactional
     public Answer save(Answer answer) {
-        QuestionEntity question = questionJpaRepository.findById(answer.getQuestionId())
-                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.QUESTION_NOT_FOUND));
-        AnswerEntity answerEntity = AnswerEntity.from(answer, question);
+        AnswerEntity answerEntity = AnswerEntity.from(answer);
         AnswerEntity savedAnswer = answerJpaRepository.save(answerEntity);
         return savedAnswer.toDomainEntity();
     }
@@ -30,7 +27,7 @@ public class AnswerDomainRepositoryImpl implements AnswerDomainRepository {
     @Override
     public Answer findById(long answerId) {
         return answerJpaRepository.findById(answerId)
-                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.ANSWER_NOT_FOUND))
+                .orElseThrow(() -> new GssException(ErrorCode.ANSWER_NOT_FOUND))
                 .toDomainEntity();
     }
 
@@ -43,7 +40,7 @@ public class AnswerDomainRepositoryImpl implements AnswerDomainRepository {
     @Transactional
     public Answer updateById(long answerId, String content) {
         AnswerEntity answerEntity = answerJpaRepository.findById(answerId)
-                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.ANSWER_NOT_FOUND));
+                .orElseThrow(() -> new GssException(ErrorCode.ANSWER_NOT_FOUND));
         answerEntity.update(content);
         return answerEntity.toDomainEntity();
     }

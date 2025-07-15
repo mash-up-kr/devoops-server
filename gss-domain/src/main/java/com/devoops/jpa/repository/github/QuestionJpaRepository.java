@@ -24,8 +24,8 @@ public interface QuestionJpaRepository extends JpaRepository<QuestionEntity, Int
                         ae.updatedAt
               )
               from QuestionEntity qe
-              left outer join AnswerEntity ae on qe.id = ae.question.id
-              where qe.pullRequest.id = :pullRequestId
+              left outer join AnswerEntity ae on qe.id = ae.questionId
+              where qe.pullRequestId = :pullRequestId
             """)
     List<QuestionAnswer> findByPullRequestId(@Param("pullRequestId") long pullRequestId);
 }

@@ -1,5 +1,6 @@
 package com.devoops.service.facade;
 
+import com.devoops.command.request.AnswerUpdateCommand;
 import com.devoops.domain.entity.github.Answer;
 import com.devoops.domain.entity.github.Answers;
 import com.devoops.domain.entity.github.PullRequest;
@@ -10,6 +11,7 @@ import com.devoops.service.answer.AnswerService;
 import com.devoops.service.answerranking.AnswerRankingService;
 import com.devoops.service.pullrequest.PullRequestService;
 import com.devoops.service.question.QuestionService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,14 +39,18 @@ public class QuestionFacadeService {
     }
 
     public Answers updateAllAnswers(AnswerPutRequests updateRequests) {
-        return questionService.updateAllAnswers(updateRequests);
+        List<AnswerUpdateCommand> updateCommands = updateRequests.answers()
+                .stream()
+                .map(request -> new AnswerUpdateCommand(request.answerId(), request.content()))
+                .toList();
+        return questionService.updateAllAnswers(updateCommands);
     }
 
     public void deleteAnswer(long answerId) {
         Answer answer = answerService.findById(answerId);
         PullRequest pullRequest = pullRequestService.findByQuestionId(answer.getQuestionId());
         long answerCount = answerService.getAnswerCountByPullRequestId(pullRequest.getId());
-        if(answerCount == 1) {
+        if (answerCount == 1) {
             pullRequestService.updateStatus(pullRequest.getId(), RecordStatus.PENDING);
         }
         questionService.deleteAnswer(answerId);

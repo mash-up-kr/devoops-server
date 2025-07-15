@@ -32,9 +32,7 @@ public class AnswerEntity extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private QuestionEntity question;
+    private long questionId;
 
     @NotNull
     @Column(columnDefinition = "TEXT")
@@ -44,10 +42,10 @@ public class AnswerEntity extends BaseTimeEntity {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public static AnswerEntity from(Answer answer, QuestionEntity question) {
+    public static AnswerEntity from(Answer answer) {
         return new AnswerEntity(
                 answer.getId(),
-                question,
+                answer.getQuestionId(),
                 answer.getContent(),
                 LocalDateTime.now()
         );
@@ -60,7 +58,7 @@ public class AnswerEntity extends BaseTimeEntity {
     public Answer toDomainEntity() {
         return new Answer(
                 this.id,
-                question.getId(),
+                questionId,
                 content
         );
     }

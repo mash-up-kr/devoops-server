@@ -4,19 +4,18 @@ import com.devoops.domain.entity.github.PullRequest;
 import com.devoops.domain.entity.github.PullRequests;
 import com.devoops.domain.entity.github.RecordStatus;
 import com.devoops.domain.repository.github.PullRequestDomainRepository;
-import com.devoops.exception.GssRepositoryException;
-import com.devoops.exception.RepositoryErrorCode;
+import com.devoops.exception.custom.GssException;
+import com.devoops.exception.errorcode.ErrorCode;
 import com.devoops.jpa.entity.github.GithubRepositoryEntity;
 import com.devoops.jpa.entity.github.PullRequestEntity;
 import com.devoops.jpa.entity.github.QuestionEntity;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -30,9 +29,9 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
     @Transactional
     public PullRequest save(PullRequest pullRequest) {
         GithubRepositoryEntity githubRepositoryEntity = githubRepoRepository.findById(pullRequest.getRepositoryId())
-                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.GITHUB_REPOSITORY_NOT_FOUND));
+                .orElseThrow(() -> new GssException(ErrorCode.GITHUB_REPOSITORY_NOT_FOUND));
         githubRepositoryEntity.plusPrCount();
-        PullRequestEntity pullRequestEntity = PullRequestEntity.from(pullRequest, githubRepositoryEntity);
+        PullRequestEntity pullRequestEntity = PullRequestEntity.from(pullRequest);
         PullRequestEntity savedPullRequest = pullRequestRepository.save(pullRequestEntity);
         return savedPullRequest.toDomainEntity();
     }
@@ -41,7 +40,7 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
     @Transactional(readOnly = true)
     public PullRequest findById(long pullRequestId) {
         PullRequestEntity pullRequestEntity = pullRequestRepository.findById(pullRequestId)
-                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.PULL_REQUEST_NOT_FOUND));
+                .orElseThrow(() -> new GssException(ErrorCode.PULL_REQUEST_NOT_FOUND));
         return pullRequestEntity.toDomainEntity();
     }
 
@@ -69,7 +68,7 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
     @Transactional
     public PullRequest updateStatus(long pullRequestId, RecordStatus status) {
         PullRequestEntity pullRequest = pullRequestRepository.findById(pullRequestId)
-                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.PULL_REQUEST_NOT_FOUND));
+                .orElseThrow(() -> new GssException(ErrorCode.PULL_REQUEST_NOT_FOUND));
         pullRequest.updateStatus(status);
         return pullRequest.toDomainEntity();
     }
@@ -78,7 +77,7 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
     @Transactional
     public PullRequest updateAnalyzedResult(long pullRequestId, String summary, String detailSummary) {
         PullRequestEntity pullRequest = pullRequestRepository.findById(pullRequestId)
-                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.PULL_REQUEST_NOT_FOUND));
+                .orElseThrow(() -> new GssException(ErrorCode.PULL_REQUEST_NOT_FOUND));
         pullRequest.updateAnalyzeResult(summary, detailSummary);
         return pullRequest.toDomainEntity();
     }
@@ -87,8 +86,9 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
     @Transactional(readOnly = true)
     public PullRequest findByQuestionId(long questionId) {
         QuestionEntity questionEntity = questionJpaRepository.findById(questionId)
-                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.QUESTION_NOT_FOUND));
-        return questionEntity.getPullRequest()
+                .orElseThrow(() -> new GssException(ErrorCode.QUESTION_NOT_FOUND));
+        return pullRequestRepository.findById(questionEntity.getPullRequestId())
+                .orElseThrow(() -> new GssException(ErrorCode.PULL_REQUEST_NOT_FOUND))
                 .toDomainEntity();
     }
 }

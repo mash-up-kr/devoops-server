@@ -4,8 +4,8 @@ import com.devoops.domain.entity.github.Answer;
 import com.devoops.domain.entity.github.AnswerRanking;
 import com.devoops.domain.entity.github.AnswerRankings;
 import com.devoops.domain.repository.github.AnswerRankingDomainRepository;
-import com.devoops.exception.GssRepositoryException;
-import com.devoops.exception.RepositoryErrorCode;
+import com.devoops.exception.custom.GssException;
+import com.devoops.exception.errorcode.ErrorCode;
 import com.devoops.jpa.entity.github.AnswerRankingEntity;
 import com.devoops.jpa.entity.github.PullRequestEntity;
 import com.devoops.jpa.entity.github.QuestionEntity;
@@ -21,12 +21,14 @@ public class AnswerRankingDomainRepositoryImpl implements AnswerRankingDomainRep
 
     private final AnswerRankingJpaRepository answerRankingJpaRepository;
     private final QuestionJpaRepository questionJpaRepository;
+    private final PullRequestJpaRepository pullRequestJpaRepository;
 
     @Override
     @Transactional
     public AnswerRanking save(Answer answer, long userId) {
         QuestionEntity questionEntity = findQuestionById(answer.getQuestionId());
-        PullRequestEntity pullRequestEntity = questionEntity.getPullRequest();
+        PullRequestEntity pullRequestEntity = pullRequestJpaRepository.findById(questionEntity.getPullRequestId())
+                .orElseThrow(() -> new GssException(ErrorCode.PULL_REQUEST_NOT_FOUND));
         AnswerRanking answerRanking = new AnswerRanking(
                 null,
                 pullRequestEntity.getId(),
@@ -55,7 +57,7 @@ public class AnswerRankingDomainRepositoryImpl implements AnswerRankingDomainRep
     @Transactional
     public AnswerRanking update(long pullRequestId, long questionId) {
         AnswerRankingEntity answerRankingEntity = answerRankingJpaRepository.findByPullRequestId(pullRequestId)
-                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.ANSWER_RANKING_NOT_FOUND));
+                .orElseThrow(() -> new GssException(ErrorCode.ANSWER_RANKING_NOT_FOUND));
         QuestionEntity questionEntity = findQuestionById(questionId);
         answerRankingEntity.update(questionEntity);
         return answerRankingEntity.toDomainEntity();
@@ -69,6 +71,6 @@ public class AnswerRankingDomainRepositoryImpl implements AnswerRankingDomainRep
 
     private QuestionEntity findQuestionById(long questionId) {
         return questionJpaRepository.findById(questionId)
-                .orElseThrow(() -> new GssRepositoryException(RepositoryErrorCode.QUESTION_NOT_FOUND));
+                .orElseThrow(() -> new GssException(ErrorCode.QUESTION_NOT_FOUND));
     }
 }
