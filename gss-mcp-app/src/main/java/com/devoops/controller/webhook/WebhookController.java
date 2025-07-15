@@ -1,5 +1,6 @@
 package com.devoops.controller.webhook;
 
+import com.devoops.dto.request.AppWebhookEventRequest;
 import com.devoops.dto.request.GitHubWebhookEventRequest;
 import com.devoops.service.webhook.WebhookFacadeService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,8 @@ public class WebhookController {
     public ResponseEntity<Void> getWebhookPullRequest(
             @RequestBody GitHubWebhookEventRequest gitHubWebhookEventRequest
     ) {
-        webhookFacadeService.createQuestionWithWebhookEvent(gitHubWebhookEventRequest);
+        AppWebhookEventRequest request = new AppWebhookEventRequest(gitHubWebhookEventRequest);
+        webhookFacadeService.createQuestionWithWebhookEvent(request);
         return ResponseEntity.ok().build();
     }
 }

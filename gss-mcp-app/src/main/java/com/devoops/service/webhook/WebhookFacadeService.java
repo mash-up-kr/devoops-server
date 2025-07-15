@@ -14,6 +14,7 @@ import com.devoops.domain.repository.github.PullRequestDomainRepository;
 import com.devoops.domain.repository.github.QuestionDomainRepository;
 import com.devoops.domain.repository.user.UserDomainRepository;
 import com.devoops.dto.request.AdaptedAnalyzePrResponse;
+import com.devoops.dto.request.AppWebhookEventRequest;
 import com.devoops.dto.request.GitHubWebhookEventRequest;
 import com.devoops.dto.response.AnalyzePrResponse;
 import com.devoops.service.pullrequest.PullRequestService;
@@ -33,29 +34,22 @@ public class WebhookFacadeService {
     private final PullRequestDomainRepository pullRequestDomainRepository;
     private final PullRequestService pullRequestService;
 
-    public void createQuestionWithWebhookEvent(GitHubWebhookEventRequest gitHubWebhookEventRequest) {
-        if (!gitHubWebhookEventRequest.isMerged()) {
+    public void createQuestionWithWebhookEvent(AppWebhookEventRequest request) {
+        if (!request.isMerged()) {
             return;
         }
 
-        User triggerUser = userDomainRepository.findByProviderId(gitHubWebhookEventRequest.getUserId());
+        User triggerUser = userDomainRepository.findByProviderId(request.userId());
         GithubToken githubToken = triggerUser.getGithubToken();
 
-        // take diff code
-        String diff = githubAdaptor.getCodeChangeHistory(gitHubWebhookEventRequest.getPullRequestDiffUrl(),
-                githubToken.getToken());
-
-        // 분석 결과
-        AdaptedAnalyzePrResponse adaptedAnalyzePrResponse = prAnalysisAdapter.analyze(
-                gitHubWebhookEventRequest.getTitle(),
-                gitHubWebhookEventRequest.getDescription(),
-                diff
-        );
+        // take diff code -> 분석
+        String diff = githubAdaptor.getCodeChangeHistory(request.diffUrl(), githubToken.getToken());
+        AdaptedAnalyzePrResponse adaptedAnalyzePrResponse = prAnalysisAdapter.analyze(request.title(), request.description(), diff);
 
         // 레포 아이디를 기반으로 찾기 -> 풀리퀘 생성 -> prCount 올리기
         PullRequest readyPullRequest = savePullRequest(
                 triggerUser.getId(),
-                gitHubWebhookEventRequest,
+                request,
                 adaptedAnalyzePrResponse
         );
 
@@ -80,17 +74,16 @@ public class WebhookFacadeService {
 
     private PullRequest savePullRequest(
             long userId,
-            GitHubWebhookEventRequest request,
+            AppWebhookEventRequest request,
             AdaptedAnalyzePrResponse prAnalyzeResponse
     ) {
-        GithubRepository githubRepository = githubRepoDomainRepository.findByExternalId(request.getRepositoryId());
-        PullRequestCreateCommand prCreateCommand = resolvePRCreateCommand(request, githubRepository.getId(),
-                userId, prAnalyzeResponse);
+        GithubRepository githubRepository = githubRepoDomainRepository.findByExternalId(request.repositoryId());
+        PullRequestCreateCommand prCreateCommand = resolvePRCreateCommand(request, githubRepository.getId(), userId, prAnalyzeResponse);
         return pullRequestService.save(prCreateCommand);
     }
 
     private PullRequestCreateCommand resolvePRCreateCommand(
-            GitHubWebhookEventRequest gitHubWebhookEventRequest,
+            AppWebhookEventRequest appWebhookEventRequest,
             long repositoryId,
             long userId,
             AdaptedAnalyzePrResponse adaptedAnalyzePrResponse
@@ -98,12 +91,13 @@ public class WebhookFacadeService {
         return new PullRequestCreateCommand(
                 repositoryId,
                 userId,
-                gitHubWebhookEventRequest.getTitle(),
-                gitHubWebhookEventRequest.getDescription(),
+                appWebhookEventRequest.title(),
+                appWebhookEventRequest.description(),
                 adaptedAnalyzePrResponse.summary(),
                 adaptedAnalyzePrResponse.detailSummary(),
-                gitHubWebhookEventRequest.getExternalId(),
-                gitHubWebhookEventRequest.getTag()
+                appWebhookEventRequest.pullRequestId(),
+                appWebhookEventRequest.label(),
+                appWebhookEventRequest.mergedAt()
         );
     }
 

@@ -10,6 +10,7 @@ import com.devoops.domain.entity.github.QuestionAnswer;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.github.PullRequestDomainRepository;
 import com.devoops.domain.repository.github.QuestionDomainRepository;
+import com.devoops.dto.request.AppWebhookEventRequest;
 import com.devoops.dto.request.GitHubWebhookEventRequest;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,8 +42,8 @@ class WebhookFacadeServiceTest extends BaseMcpTest {
             GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
             GitHubWebhookEventRequest request = createClosedMergedPullRequest(user.getProviderId(),
                     repo.getExternalId());
-
-            webhookFacadeService.createQuestionWithWebhookEvent(request);
+            AppWebhookEventRequest appRequest = new AppWebhookEventRequest(request);
+            webhookFacadeService.createQuestionWithWebhookEvent(appRequest);
 
             PullRequests pullRequests = pullRequestDomainRepository.findUserPullRequestsOrderByMergedAt(user.getId(), 2,
                     0);
