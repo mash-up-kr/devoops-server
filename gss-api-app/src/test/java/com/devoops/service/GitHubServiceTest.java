@@ -18,12 +18,12 @@ class GitHubServiceTest {
     @Test
     @Disabled
     void getUserPullRequests() {
-        String token = "";
-        List<GithubPrResponse> userPullRequests = gitHubService.getUserPullRequests(
-                new GithubRepoUrl("https://github.com/coli-geonwoo/prography-ping-pong"),
-                new GithubToken(token),
-                148152234
-        );
-        System.out.println(userPullRequests);
+//        String token = "";
+//        List<GithubPrResponse> userPullRequests = gitHubService.getUserPullRequests(
+//                new GithubRepoUrl("https://github.com/coli-geonwoo/prography-ping-pong"),
+//                new GithubToken(token),
+//                148152234
+//        );
+//        System.out.println(userPullRequests);
     }
 }

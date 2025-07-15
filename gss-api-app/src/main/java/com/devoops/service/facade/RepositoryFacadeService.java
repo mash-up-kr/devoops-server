@@ -7,9 +7,11 @@ import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.GithubRepoUrl;
 import com.devoops.dto.request.RepositorySaveRequest;
 import com.devoops.dto.response.GithubRepoInfoResponse;
+import com.devoops.event.AnalyzeMyPrEvent;
 import com.devoops.service.GitHubService;
 import com.devoops.service.repository.RepositoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import static com.devoops.Constants.INITIAL_PULL_REQUEST_COUNT;
@@ -20,11 +22,13 @@ public class RepositoryFacadeService {
 
     private final RepositoryService repositoryService;
     private final GitHubService gitHubService;
+    private final ApplicationEventPublisher eventPublisher;
 
     public GithubRepository save(RepositorySaveRequest request, User user) {
         GithubRepoUrl repoUrl = new GithubRepoUrl(request.url());
         GithubRepository savedRepository = saveRepository(repoUrl, user);
         gitHubService.registerWebhook(user, savedRepository.getId());
+        eventPublisher.publishEvent(new AnalyzeMyPrEvent(repoUrl, user, this));
         return savedRepository;
     }
 

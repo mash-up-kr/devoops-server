@@ -49,9 +49,9 @@ public class GitHubService {
 
     public List<GithubPrResponse> getUserPullRequests(
             GithubRepoUrl repoUrl,
-            GithubToken token,
-            long userExternalId
+            User user
     ) {
+        GithubToken token = user.getGithubToken();
         List<GithubPrResponse> closedPullRequests = gitHubClient.getPullRequests(
                 BEARER_PREFIX + token.getToken(),
                 repoUrl.getOwner(),
@@ -61,7 +61,7 @@ public class GitHubService {
                 1
         );
         return closedPullRequests.stream()
-                .filter(pr -> pr.isUserPr(userExternalId))
+                .filter(pr -> pr.isUserPr(user.getProviderId()))
                 .limit(MAX_USER_PR_LIMIT)
                 .toList();
     }
