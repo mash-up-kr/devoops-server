@@ -27,12 +27,11 @@ public class PrAnalyzeListener {
         GithubRepoUrl repoUrl = analyzeMyPrEvent.getRepoUrl();
         User user = analyzeMyPrEvent.getUser();
         List<GithubPrResponse> userPullRequests = gitHubService.getUserPullRequests(repoUrl, user);
-        //Redis Pub 이벤트 발행
 
+        //Redis Pub 이벤트 발행
         List<AppWebhookEventRequest> requests = userPullRequests.stream()
                 .map(this::createAppWebhookEventRequest)
                 .toList();
-
         prAnalysisPublisher.publish(requests);
     }
 

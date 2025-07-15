@@ -1,18 +1,16 @@
 package com.devoops.redis;
 
 import com.devoops.dto.AppWebhookEventRequest;
+import com.devoops.exception.custom.GssException;
+import com.devoops.exception.errorcode.ErrorCode;
 import com.devoops.service.webhook.WebhookFacadeService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.PostConstruct;
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
-import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,16 +22,17 @@ public class RedisListener implements MessageListener {
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        String json = new String(message.getBody(), StandardCharsets.UTF_8);
         try {
-            List<AppWebhookEventRequest> events = objectMapper.readValue(
-                    json,
-                    new TypeReference<List<AppWebhookEventRequest>>() {}
+            List<AppWebhookEventRequest> result = objectMapper.readValue(
+                    message.getBody(),
+                    new TypeReference<>() {
+                    }
             );
-            events.forEach(webhookFacadeService::createQuestionWithWebhookEvent);
+            result.forEach(webhookFacadeService::createQuestionWithWebhookEvent);
 
-        } catch (JsonProcessingException e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            throw new GssException(ErrorCode.REDIS_PUBLISH_ERROR);
         }
     }
 }

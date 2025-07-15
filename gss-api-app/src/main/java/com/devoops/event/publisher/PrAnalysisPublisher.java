@@ -22,12 +22,12 @@ public class PrAnalysisPublisher {
     private final ObjectMapper objectMapper;
 
     public void publish(List<AppWebhookEventRequest> eventList) {
-        try {
-            String message = objectMapper.writeValueAsString(eventList);
-            redisTemplate.convertAndSend(channelTopic.getTopic(), message);
-        } catch (JsonProcessingException e) {
-            throw new GssException(ErrorCode.REDIS_PUBLISH_ERROR);
-        }
+//        try {
+//            String message = objectMapper.writeValueAsString(eventList);
+            redisTemplate.convertAndSend(channelTopic.getTopic(), eventList);
+//        } catch (JsonProcessingException e) {
+//            throw new GssException(ErrorCode.REDIS_PUBLISH_ERROR);
+//        }
     }
 }
 

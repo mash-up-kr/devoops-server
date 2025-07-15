@@ -40,9 +40,9 @@ class WebhookFacadeServiceTest extends BaseMcpTest {
         void 웹_훅_이벤트_발생_시_질문을_생성한다() {
             User user = userGenerator.generate("김건우");
             GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
-            GitHubWebhookEventRequest request = createClosedMergedPullRequest(user.getProviderId(),
-                    repo.getExternalId());
+            GitHubWebhookEventRequest request = createClosedMergedPullRequest(user.getProviderId(), repo.getExternalId());
             AppWebhookEventRequest appRequest = createWebhookEventRequest(request);
+
             webhookFacadeService.createQuestionWithWebhookEvent(appRequest);
 
             PullRequests pullRequests = pullRequestDomainRepository.findUserPullRequestsOrderByMergedAt(user.getId(), 2,

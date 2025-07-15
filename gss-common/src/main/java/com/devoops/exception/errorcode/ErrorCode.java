@@ -33,6 +33,7 @@ public enum ErrorCode {
     ANSWER_RANKING_NOT_FOUND(500, "찾는 질문 랭킹이 존재하지 않습니다"),
     USER_NOT_FOUND(500, "찾는 회원이 존재하지 않습니다"),
     REDIS_PUBLISH_ERROR(500, "레디스 이벤트 발행 과정에서 문제가 생겼습니다"),
+    REDIS_SUBSCRIBE_ERROR(500, "레디스 이벤트 수신 과정에서 문제가 생겼습니다"),
     ;
 
     private final int statusCode;

@@ -60,6 +60,7 @@ public class GitHubService {
                 MAX_PER_PAGE_PULL_REQUEST,
                 1
         );
+        System.out.println(closedPullRequests);
         return closedPullRequests.stream()
                 .filter(pr -> pr.isUserPr(user.getProviderId()))
                 .limit(MAX_USER_PR_LIMIT)

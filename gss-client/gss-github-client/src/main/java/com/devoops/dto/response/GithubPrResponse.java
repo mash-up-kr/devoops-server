@@ -9,16 +9,19 @@ public record GithubPrResponse(
         String title,
         String body,
         User user,
-        Repository repo,
+        Head head,
         List<Label> labels,
         @JsonProperty("diff_url") String diffUrl,
         @JsonProperty("merged_at") LocalDateTime mergedAt
-
 ) {
 
     public record User (
             long id,
             String login
+    ) { }
+
+    public record Head(
+            Repository repo
     ) { }
 
     public record Repository (
@@ -37,7 +40,7 @@ public record GithubPrResponse(
     }
 
     public long getRepositoryId() {
-        return repo.id;
+        return head.repo.id;
     }
 
     public Long getUserId() {
