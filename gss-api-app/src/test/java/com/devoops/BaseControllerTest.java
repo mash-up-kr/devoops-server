@@ -1,12 +1,8 @@
 package com.devoops;
 
 
-import com.devoops.config.TestConfig;
 import com.devoops.fake.FakeBlackListRepository;
 import com.devoops.fake.FakeRefreshDomainRepository;
-import com.devoops.domain.repository.github.GithubRepoDomainRepository;
-import com.devoops.domain.repository.github.PullRequestDomainRepository;
-import com.devoops.domain.repository.user.UserDomainRepository;
 import com.devoops.generator.AnswerGenerator;
 import com.devoops.generator.GithubRepoGenerator;
 import com.devoops.generator.PullRequestGenerator;
