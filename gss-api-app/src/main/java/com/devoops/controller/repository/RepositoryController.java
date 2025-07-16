@@ -79,7 +79,7 @@ public class RepositoryController implements RepositoryControllerSwagger {
     @Override
     @DeleteMapping("/{repositoryId}")
     public ResponseEntity<Void> deleteRepositories(
-            User user,
+            @AuthUser User user,
             @PathVariable(name = "repositoryId") long repositoryId
     ) {
         repositoryFacadeService.deleteRepository(user, repositoryId);
