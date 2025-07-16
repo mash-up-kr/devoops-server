@@ -30,6 +30,7 @@ public class FakeGithubClient implements GitHubClient {
     public List<GithubPrResponse> getPullRequests(String authorization, String owner, String repo, String state, long perPage, long page) {
         return List.of(new GithubPrResponse(
                 1L,
+                "https://api.github.com/repos/owner/repo/pulls/38",
                 "title",
                 "body",
                 new GithubPrResponse.User(1L, "login"),
