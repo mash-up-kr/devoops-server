@@ -13,11 +13,13 @@ public class GithubRepoUrl {
     private static final String PATH_DELIMITER = "/";
     private static final String GIT_SUFFIX_REGEX = "\\.git$";
 
+    private final String url;
     private final String owner;
     private final String repoName;
 
     public GithubRepoUrl(String url) {
         String[] pathSegments = parseUrl(url);
+        this.url = url;
         this.owner = pathSegments[0];
         this.repoName = pathSegments[1].replaceAll(GIT_SUFFIX_REGEX, "");
     }
