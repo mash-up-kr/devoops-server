@@ -1,6 +1,5 @@
 package com.devoops.controller.docs;
 
-import com.devoops.controller.auth.AuthUser;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.LogoutV1Request;
 import com.devoops.dto.request.RefreshTokenV1Request;
@@ -10,17 +9,13 @@ import com.devoops.dto.response.UserTokenRefreshResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PostMapping;
 
 @Tag(name = "Auth API")
 @SecurityRequirement(name = "Authorization")
@@ -68,9 +63,9 @@ public interface AuthControllerSwagger {
             summary = "로그 아웃",
             parameters = {
                     @Parameter(
-                            name = "refreshToken",
+                            name = "Cookie",
                             description = "리프레시 토큰 (쿠키에 담김)",
-                            in = ParameterIn.COOKIE,
+                            in = ParameterIn.HEADER,
                             required = true,
                             example = "refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                     )
@@ -81,7 +76,7 @@ public interface AuthControllerSwagger {
             )}
     )
     ResponseEntity<Void> logout(
-            @Parameter(hidden = true)User user,
+            @Parameter(hidden = true) User user,
             String token
     );
 

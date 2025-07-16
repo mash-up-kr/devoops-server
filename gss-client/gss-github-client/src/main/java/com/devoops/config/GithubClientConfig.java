@@ -4,6 +4,7 @@ import com.devoops.client.GitHubClient;
 import com.devoops.client.GitHubWebClientProperties;
 import io.netty.channel.ChannelOption;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,8 @@ import reactor.netty.http.client.HttpClient;
 
 import java.time.Duration;
 
+
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
 @EnableConfigurationProperties(GitHubWebClientProperties.class)
@@ -26,9 +29,7 @@ public class GithubClientConfig {
 
     @Bean
     public GitHubClient gitHubApiClient() {
-
-        System.out.println(properties.url());
-
+        log.info("properties url : {] ", properties.url());
         return HttpServiceProxyFactory
             .builderFor(WebClientAdapter.create(createGitHubWebClient()))
             .build()
