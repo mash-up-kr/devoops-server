@@ -15,6 +15,7 @@ import com.devoops.domain.repository.github.GithubRepoDomainRepository;
 import com.devoops.dto.request.RepositorySaveRequest;
 import com.devoops.dto.response.GithubRepoInfoResponse;
 import com.devoops.dto.response.OwnerResponse;
+import com.devoops.dto.response.WebHookCreateResponse;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
 import org.junit.jupiter.api.Nested;
@@ -41,10 +42,7 @@ class RepositoryFacadeServiceTest extends BaseServiceTest {
         void 레포지토리를_저장하고_웹훅을_심는다() {
             User user = userGenerator.generate("김건우");
             RepositorySaveRequest request = new RepositorySaveRequest("https://github.com/octocat/Hello-World");
-            GithubRepoInfoResponse mockResponse = new GithubRepoInfoResponse(123, "testName", "testUrl",
-                    new OwnerResponse("김건우"));
-            Mockito.when(gitHubClient.getRepositoryInfo(anyString(), anyString(), anyString()))
-                    .thenReturn(mockResponse);
+            mockingGithubClient();
 
             GithubRepository savedRepository = repositoryFacadeService.save(request, user);
 
@@ -61,15 +59,23 @@ class RepositoryFacadeServiceTest extends BaseServiceTest {
         void 레포지토리를_중복_저장할_수_없다() {
             User user = userGenerator.generate("김건우");
             RepositorySaveRequest request = new RepositorySaveRequest("https://github.com/octocat/Hello-World");
-            GithubRepoInfoResponse mockResponse = new GithubRepoInfoResponse(123, "testName", "testUrl",
-                    new OwnerResponse("김건우"));
-            Mockito.when(gitHubClient.getRepositoryInfo(anyString(), anyString(), anyString()))
-                    .thenReturn(mockResponse);
+            mockingGithubClient();
+
             repositoryFacadeService.save(request, user);
 
             assertThatThrownBy(() -> repositoryFacadeService.save(request, user))
                     .isInstanceOf(GssException.class)
                     .hasMessage(ErrorCode.ALREADY_SAVED_REPOSITORY.getMessage());
+        }
+
+        private void mockingGithubClient() {
+            GithubRepoInfoResponse mockResponse = new GithubRepoInfoResponse(123, "testName", "testUrl",
+                    new OwnerResponse("김건우"));
+            WebHookCreateResponse mockWebHookCreateResponse = new WebHookCreateResponse(123);
+            Mockito.when(gitHubClient.getRepositoryInfo(anyString(), anyString(), anyString()))
+                    .thenReturn(mockResponse);
+            Mockito.when(gitHubClient.createWebhook(any(), any(), any(), any()))
+                    .thenReturn(mockWebHookCreateResponse);
         }
     }
 }
