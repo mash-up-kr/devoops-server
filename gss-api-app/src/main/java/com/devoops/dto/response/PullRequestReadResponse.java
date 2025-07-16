@@ -27,6 +27,10 @@ public record PullRequestReadResponse(
         RecordStatus recordStatus,
 
         @NotNull
+        @Schema(description = "풀 리퀘스트 url", example = "https://github.com/aaa/bbb/pull/4")
+        String pullRequestUrl,
+
+        @NotNull
         @Schema(description = "머지 시각", example = "2025-07-07T13:45:30")
         LocalDateTime mergedAt,
 
@@ -53,6 +57,7 @@ public record PullRequestReadResponse(
                 pullRequest.getTitle(),
                 pullRequest.getTag(),
                 pullRequest.getRecordStatus(),
+                pullRequest.getPullRequestUrl(),
                 pullRequest.getMergedAt(),
                 pullRequest.getSummary(),
                 categories,
