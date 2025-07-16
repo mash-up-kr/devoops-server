@@ -96,7 +96,6 @@ public interface RepositoryControllerSwagger {
 
     @Operation(
             summary = "나의 레포지토리 목록 조회",
-            requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = RepositorySaveRequest.class))),
             responses = {@ApiResponse(
                     responseCode = "200",
                     description = "나의 레포지토리 목록 조회 성공",
