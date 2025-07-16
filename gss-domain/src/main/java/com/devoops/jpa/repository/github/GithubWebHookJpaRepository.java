@@ -6,7 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface GithubWebHookJpaRepository extends JpaRepository<GithubWebhookEntity, Long> {
 
-    void deleteByRepositoryId(long repositoryId);
-
     Optional<GithubWebhookEntity> findByRepositoryId(long repositoryId);
 }

@@ -20,6 +20,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +30,6 @@ public class GitHubService {
     private static final int MAX_USER_PR_LIMIT = 3;
     private static final int MAX_PER_PAGE_PULL_REQUEST = 10;
     private static final String REQUEST_PULL_REQUEST_STATUS = "closed";
-    private final GithubWebHookDomainRepositoryImpl githubWebHookDomainRepositoryImpl;
 
     @Value("${dev-oops.mcp.webhook-url}")
     private String mcpWebhookUrl;
@@ -71,7 +71,6 @@ public class GitHubService {
                 MAX_PER_PAGE_PULL_REQUEST,
                 1
         );
-        System.out.println(closedPullRequests);
         return closedPullRequests.stream()
                 .filter(pr -> pr.isUserPr(user.getProviderId()))
                 .limit(MAX_USER_PR_LIMIT)
@@ -84,5 +83,20 @@ public class GitHubService {
                 repoUrl.getOwner(),
                 repoUrl.getRepoName()
         );
+    }
+
+    @Transactional
+    public void deleteWebhook(User user, long repositoryId) {
+        GithubRepository repo = githubRepoDomainRepository.findByIdAndUserId(repositoryId, user.getId());
+        GithubToken githubToken = githubTokenDomainRepository.findByUserId(user)
+                .orElseThrow(() -> new GssException(ErrorCode.NO_RESOURCE_FOUND));
+        GithubWebhook webhook = githubWebhookDomainRepository.findByRepositoryId(repo.getId());
+        gitHubClient.deleteWebhook(
+                BEARER_PREFIX + githubToken.getToken(),
+                repo.getOwner(),
+                repo.getName(),
+                webhook.getExternalId()
+        );
+        githubWebhookDomainRepository.deleteById(webhook.getId());
     }
 }
