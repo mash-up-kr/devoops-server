@@ -24,6 +24,7 @@ public class PullRequestGenerator {
             "description",
             "summary",
             "summaryDetail",
+            "https://github.com/owner/repo/pull/2",
             1L,
             status,
             mergedAt,

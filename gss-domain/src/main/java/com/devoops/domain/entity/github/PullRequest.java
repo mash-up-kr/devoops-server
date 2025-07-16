@@ -16,6 +16,7 @@ public class PullRequest {
     private final String description;
     private final String summary;
     private final String summaryDetail;
+    private final String pullRequestUrl;
     private final long externalId;
     private final RecordStatus recordStatus;
     private final LocalDateTime mergedAt;

@@ -54,6 +54,9 @@ public class PullRequestEntity extends BaseTimeEntity {
     private long githubPullRequestId;
 
     @NotNull
+    private String pullRequestUrl;
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     private RecordStatus recordStatus;
 
@@ -71,6 +74,7 @@ public class PullRequestEntity extends BaseTimeEntity {
                 pullRequest.getSummary(),
                 pullRequest.getSummaryDetail(),
                 pullRequest.getExternalId(),
+                pullRequest.getPullRequestUrl(),
                 pullRequest.getRecordStatus(),
                 pullRequest.getMergedAt()
         );
@@ -94,6 +98,7 @@ public class PullRequestEntity extends BaseTimeEntity {
                 this.description,
                 this.summary,
                 this.summaryDetail,
+                this.pullRequestUrl,
                 this.githubPullRequestId,
                 this.recordStatus,
                 this.mergedAt,

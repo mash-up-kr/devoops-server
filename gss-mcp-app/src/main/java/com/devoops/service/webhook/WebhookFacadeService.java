@@ -94,6 +94,7 @@ public class WebhookFacadeService {
                 appWebhookEventRequest.description(),
                 adaptedAnalyzePrResponse.summary(),
                 adaptedAnalyzePrResponse.detailSummary(),
+                appWebhookEventRequest.getParsedUrl().getValue(),
                 appWebhookEventRequest.pullRequestId(),
                 appWebhookEventRequest.label(),
                 appWebhookEventRequest.mergedAt()

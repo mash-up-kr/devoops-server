@@ -29,7 +29,7 @@ public class GithubClientConfig {
 
     @Bean
     public GitHubClient gitHubApiClient() {
-        log.info("properties url : {] ", properties.url());
+        log.info("properties url : {} ", properties.url());
         return HttpServiceProxyFactory
             .builderFor(WebClientAdapter.create(createGitHubWebClient()))
             .build()

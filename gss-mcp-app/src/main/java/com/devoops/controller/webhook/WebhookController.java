@@ -33,6 +33,7 @@ public class WebhookController {
         return new AppWebhookEventRequest(
                 request.isMerged(),
                 request.getExternalId(),
+                request.getPullRequestUrl(),
                 request.getPullRequestDiffUrl(),
                 request.getTitle(),
                 request.getDescription(),
