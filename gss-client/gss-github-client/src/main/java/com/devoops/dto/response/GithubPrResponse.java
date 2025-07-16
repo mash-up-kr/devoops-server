@@ -6,6 +6,7 @@ import java.util.List;
 
 public record GithubPrResponse(
         long id,
+        String url,
         String title,
         String body,
         User user,

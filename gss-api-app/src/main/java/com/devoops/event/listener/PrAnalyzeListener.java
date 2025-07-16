@@ -39,6 +39,7 @@ public class PrAnalyzeListener {
         return new AppWebhookEventRequest(
                 true,
                 githubPrResponse.id(),
+                githubPrResponse.url(),
                 githubPrResponse.diffUrl(),
                 githubPrResponse.title(),
                 githubPrResponse.getDescription(),

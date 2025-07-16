@@ -52,6 +52,10 @@ public record GitHubWebhookEventRequest(
     ) {
     }
 
+    public String getPullRequestUrl() {
+        return pullRequest.url;
+    }
+
     public long getRepositoryId() {
         return repository.id;
     }

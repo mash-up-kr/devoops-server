@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public record AppWebhookEventRequest(
         Boolean isMerged,
         long pullRequestId,
+        String pullRequestUrl,
         String diffUrl,
         String title,
         String description,
@@ -14,4 +15,7 @@ public record AppWebhookEventRequest(
         LocalDateTime mergedAt
 ) {
 
+    public GithubPRUrl getParsedUrl() {
+        return new GithubPRUrl(pullRequestUrl);
+    }
 }

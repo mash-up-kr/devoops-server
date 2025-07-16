@@ -12,6 +12,7 @@ public record PullRequestCreateCommand(
     String description,
     String summary,
     String summaryDetail,
+    String pullRequestUrl,
     long externalId,
     RecordStatus recordStatus,
     LocalDateTime mergedAt,
@@ -25,11 +26,12 @@ public record PullRequestCreateCommand(
             String description,
             String summary,
             String summaryDetail,
+            String pullRequestUrl,
             long externalId,
             String tag,
             LocalDateTime mergedAt
     ) {
-        this(repositoryId, userId, title, description, summary, summaryDetail, externalId, RecordStatus.PENDING, mergedAt, tag);
+        this(repositoryId, userId, title, description, summary, summaryDetail, pullRequestUrl, externalId, RecordStatus.PENDING, mergedAt, tag);
     }
 
     public PullRequest toDomainEntity() {
@@ -41,6 +43,7 @@ public record PullRequestCreateCommand(
             description,
             summary,
             summaryDetail,
+            pullRequestUrl,
             externalId,
             RecordStatus.PENDING,
             mergedAt,
