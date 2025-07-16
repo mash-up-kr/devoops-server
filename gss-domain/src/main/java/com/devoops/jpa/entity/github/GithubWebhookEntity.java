@@ -20,13 +20,19 @@ public class GithubWebhookEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private long externalId;
+
     private long repositoryId;
 
     public static GithubWebhookEntity from(GithubWebhook githubWebhook) {
-        return new GithubWebhookEntity(githubWebhook.getId(), githubWebhook.getRepositoryId());
+        return new GithubWebhookEntity(
+                githubWebhook.getId(),
+                githubWebhook.getExternalId(),
+                githubWebhook.getRepositoryId()
+        );
     }
 
     public GithubWebhook toDomainEntity() {
-        return new GithubWebhook(this.id, this.repositoryId);
+        return new GithubWebhook(this.id, this.externalId, this.repositoryId);
     }
 }

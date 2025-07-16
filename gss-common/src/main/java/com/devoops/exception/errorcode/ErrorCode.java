@@ -30,6 +30,7 @@ public enum ErrorCode {
     PULL_REQUEST_NOT_FOUND(500, "찾는 풀 리퀘스트가 존재하지 않습니다"),
     QUESTION_NOT_FOUND(500, "찾는 질문이 존재하지 않습니다"),
     ANSWER_NOT_FOUND(500, "찾는 대답이 존재하지 않습니다"),
+    WEBHOOK_NOT_FOUND(500, "찾는 웹훅이 존재하지 않습니다"),
     ANSWER_RANKING_NOT_FOUND(500, "찾는 질문 랭킹이 존재하지 않습니다"),
     USER_NOT_FOUND(500, "찾는 회원이 존재하지 않습니다"),
     REDIS_PUBLISH_ERROR(500, "레디스 이벤트 발행 과정에서 문제가 생겼습니다"),

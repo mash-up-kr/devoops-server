@@ -7,6 +7,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GithubWebhook {
 
-    private final long id;
+    private final Long id;
+    private final long externalId;
     private final long repositoryId;
+
+    public GithubWebhook(long externalId, long repositoryId) {
+        this(null, externalId, repositoryId);
+    }
 }

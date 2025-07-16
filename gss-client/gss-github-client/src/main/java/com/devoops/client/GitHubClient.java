@@ -3,6 +3,7 @@ package com.devoops.client;
 import com.devoops.dto.request.GitHubWebhookRequest;
 import com.devoops.dto.response.GithubPrResponse;
 import com.devoops.dto.response.GithubRepoInfoResponse;
+import com.devoops.dto.response.WebHookCreateResponse;
 import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,7 +67,7 @@ public interface GitHubClient {
      * </a>
      */
     @PostExchange(url = "/repos/{owner}/{repo}/hooks")
-    void createWebhook(
+    WebHookCreateResponse createWebhook(
         @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
         @PathVariable("owner") String owner,
         @PathVariable("repo") String repo,

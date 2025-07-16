@@ -7,6 +7,7 @@ import com.devoops.dto.response.GithubPrResponse.Label;
 import com.devoops.dto.response.GithubPrResponse.Repository;
 import com.devoops.dto.response.GithubRepoInfoResponse;
 import com.devoops.dto.response.OwnerResponse;
+import com.devoops.dto.response.WebHookCreateResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.context.annotation.Primary;
@@ -42,6 +43,7 @@ public class FakeGithubClient implements GitHubClient {
     }
 
     @Override
-    public void createWebhook(String authorization, String owner, String repo, GitHubWebhookRequest request) {
+    public WebHookCreateResponse createWebhook(String authorization, String owner, String repo, GitHubWebhookRequest request) {
+        return new WebHookCreateResponse(101L);
     }
 }

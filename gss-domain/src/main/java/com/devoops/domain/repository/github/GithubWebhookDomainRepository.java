@@ -6,5 +6,7 @@ public interface GithubWebhookDomainRepository {
 
     GithubWebhook save(GithubWebhook webHook);
 
-    void deleteByRepositoryId(String repositoryId);
+    GithubWebhook findByRepositoryId(long repositoryId);
+
+    void deleteByRepositoryId(long repositoryId);
 }
