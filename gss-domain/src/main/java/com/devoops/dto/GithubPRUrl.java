@@ -16,7 +16,8 @@ public class GithubPRUrl {
 
     private String parsed(String url) {
         if(url.startsWith(GITHUB_REPO_API_URL)) {
-            return url.replace(GITHUB_REPO_API_URL, GITHUB_REPO_URL);
+            String replaceApiPrefix = url.replace(GITHUB_REPO_API_URL, GITHUB_REPO_URL);
+            return replaceApiPrefix.replaceFirst("/pulls/(\\d+)$", "/pull/$1");
         }
         return url;
     }
