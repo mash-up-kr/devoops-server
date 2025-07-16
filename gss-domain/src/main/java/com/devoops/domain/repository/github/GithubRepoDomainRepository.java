@@ -17,4 +17,6 @@ public interface GithubRepoDomainRepository {
     boolean existsByExternalId(long externalId);
 
     GithubRepository findByExternalId(long externalId);
+
+    void deleteById(long id);
 }

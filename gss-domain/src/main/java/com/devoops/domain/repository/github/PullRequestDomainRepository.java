@@ -3,6 +3,7 @@ package com.devoops.domain.repository.github;
 import com.devoops.domain.entity.github.PullRequest;
 import com.devoops.domain.entity.github.PullRequests;
 import com.devoops.domain.entity.github.RecordStatus;
+import java.util.List;
 
 public interface PullRequestDomainRepository {
 
@@ -18,5 +19,9 @@ public interface PullRequestDomainRepository {
 
     PullRequest findByQuestionId(long questionId);
 
+    PullRequests findByRepositoryId(long repositoryId);
+
     PullRequest updateStatus(long pullRequestId, RecordStatus status);
+
+    void deleteAll(PullRequests pullRequests);
 }

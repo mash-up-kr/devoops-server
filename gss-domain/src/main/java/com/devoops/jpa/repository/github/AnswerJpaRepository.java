@@ -1,6 +1,7 @@
 package com.devoops.jpa.repository.github;
 
 import com.devoops.jpa.entity.github.AnswerEntity;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,4 +18,6 @@ public interface AnswerJpaRepository extends JpaRepository<AnswerEntity, Long> {
                               )
             """)
     long getAnswerCountByPullRequestId(@Param(value = "pullRequestId") long pullRequestId);
+
+    void deleteByQuestionIdIn(List<Long> questionIds);
 }

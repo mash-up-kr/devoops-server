@@ -12,6 +12,7 @@ import com.devoops.dto.response.GithubRepoInfoResponse;
 import com.devoops.event.AnalyzeMyPrEvent;
 import com.devoops.service.GitHubService;
 import com.devoops.service.repository.RepositoryService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -53,5 +54,14 @@ public class RepositoryFacadeService {
 
     public PullRequests findAllPullRequests(User user, int size, int page) {
         return repositoryService.getPullRequests(user, size, page);
+    }
+
+    public List<GithubRepository> findMyRepositories(User user) {
+        return repositoryService.getMyRepositories(user);
+    }
+
+    @Transactional
+    public void deleteRepository(User user, long repositoryId) {
+        repositoryService.delete(user, repositoryId);
     }
 }

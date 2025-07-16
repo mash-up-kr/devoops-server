@@ -1,11 +1,13 @@
 package com.devoops.jpa.repository.github;
 
 import com.devoops.domain.entity.github.Answer;
+import com.devoops.domain.entity.github.Question;
 import com.devoops.domain.repository.github.AnswerDomainRepository;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
 import com.devoops.jpa.entity.github.AnswerEntity;
-import com.devoops.jpa.entity.github.QuestionEntity;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,5 +51,13 @@ public class AnswerDomainRepositoryImpl implements AnswerDomainRepository {
     @Transactional
     public void deleteById(long answerId) {
         answerJpaRepository.deleteById(answerId);
+    }
+
+    @Override
+    public void deleteAllInQuestions(List<Question> questions) {
+        List<Long> questionIds = questions.stream()
+                .map(Question::getId)
+                .toList();
+        answerJpaRepository.deleteByQuestionIdIn(questionIds);
     }
 }

@@ -9,6 +9,7 @@ import com.devoops.exception.errorcode.ErrorCode;
 import com.devoops.jpa.entity.github.GithubRepositoryEntity;
 import com.devoops.jpa.entity.github.PullRequestEntity;
 import com.devoops.jpa.entity.github.QuestionEntity;
+import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -90,5 +91,24 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
         return pullRequestRepository.findById(questionEntity.getPullRequestId())
                 .orElseThrow(() -> new GssException(ErrorCode.PULL_REQUEST_NOT_FOUND))
                 .toDomainEntity();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PullRequests findByRepositoryId(long repositoryId) {
+         return pullRequestRepository.findAllByRepositoryId(repositoryId)
+                 .stream()
+                 .map(PullRequestEntity::toDomainEntity)
+                 .collect(Collectors.collectingAndThen(Collectors.toList(), PullRequests::new));
+    }
+
+    @Override
+    @Transactional
+    public void deleteAll(PullRequests pullRequests) {
+        List<PullRequestEntity> pullRequestEntities = pullRequests.getValues()
+                .stream()
+                .map(PullRequestEntity::from)
+                .toList();
+        pullRequestRepository.deleteAll(pullRequestEntities);
     }
 }
