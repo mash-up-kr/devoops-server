@@ -64,6 +64,5 @@ public class RepositoryFacadeService {
     public void deleteRepository(User user, long repositoryId) {
         gitHubService.deleteWebhook(user, repositoryId);
         repositoryService.delete(user, repositoryId);
-        gitHubService.deleteWebhook(user, repositoryId);
     }
 }
