@@ -1,5 +1,7 @@
 package com.devoops.jpa.repository.github;
 
+import com.devoops.domain.entity.github.PullRequest;
+import com.devoops.domain.entity.github.PullRequests;
 import com.devoops.domain.entity.github.Question;
 import com.devoops.domain.entity.github.QuestionAnswer;
 import com.devoops.domain.repository.github.QuestionDomainRepository;
@@ -26,6 +28,15 @@ public class QuestionDomainRepositoryImpl implements QuestionDomainRepository {
     }
 
     @Override
+    @Transactional
+    public void saveAll(List<Question> question, long pullRequestId) {
+        List<QuestionEntity> questionEntityList = question.stream()
+                .map(QuestionEntity::from)
+                .toList();
+        questionRepository.saveAll(questionEntityList);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Question findById(long questionId) {
         QuestionEntity questionEntity = questionRepository.findById(questionId)
@@ -40,11 +51,24 @@ public class QuestionDomainRepositoryImpl implements QuestionDomainRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<Question> findAllByPullRequests(PullRequests pullRequests) {
+        List<Long> pullRequestIds = pullRequests.getValues()
+                .stream()
+                .map(PullRequest::getId)
+                .toList();
+        return questionRepository.findAllByPullRequestIdIn(pullRequestIds)
+                .stream()
+                .map(QuestionEntity::toDomainEntity)
+                .toList();
+    }
+
+    @Override
     @Transactional
-    public void saveAll(List<Question> question, long pullRequestId) {
-        List<QuestionEntity> questionEntityList = question.stream()
+    public void deleteAll(List<Question> questions) {
+        List<QuestionEntity> questionEntities = questions.stream()
                 .map(QuestionEntity::from)
                 .toList();
-        questionRepository.saveAll(questionEntityList);
+        questionRepository.deleteAll(questionEntities);
     }
 }

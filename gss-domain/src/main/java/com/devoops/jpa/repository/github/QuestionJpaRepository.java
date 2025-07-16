@@ -28,4 +28,8 @@ public interface QuestionJpaRepository extends JpaRepository<QuestionEntity, Int
               where qe.pullRequestId = :pullRequestId
             """)
     List<QuestionAnswer> findByPullRequestId(@Param("pullRequestId") long pullRequestId);
+
+    List<QuestionEntity> findAllByPullRequestIdIn(List<Long> pullRequestIds);
+
+    void deleteByPullRequestIdIn(List<Long> pullRequestIds);
 }

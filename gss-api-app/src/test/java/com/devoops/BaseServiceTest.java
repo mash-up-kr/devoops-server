@@ -6,6 +6,7 @@ import com.devoops.generator.GithubRepoGenerator;
 import com.devoops.generator.PullRequestGenerator;
 import com.devoops.generator.QuestionGenerator;
 import com.devoops.generator.UserGenerator;
+import com.devoops.generator.WebhookGenerator;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,5 +36,8 @@ public abstract class BaseServiceTest {
 
     @Autowired
     protected AnswerRankingGenerator answerRankingGenerator;
+
+    @Autowired
+    protected WebhookGenerator webhookGenerator;
 }
 

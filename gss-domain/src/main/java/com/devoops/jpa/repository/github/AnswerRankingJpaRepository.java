@@ -10,4 +10,6 @@ public interface AnswerRankingJpaRepository extends JpaRepository<AnswerRankingE
     List<AnswerRankingEntity> findAllByUserId(long userId);
 
     Optional<AnswerRankingEntity> findByPullRequestId(long pullRequestId);
+
+    void deleteByPullRequestIdIn(List<Long> pullRequestIds);
 }

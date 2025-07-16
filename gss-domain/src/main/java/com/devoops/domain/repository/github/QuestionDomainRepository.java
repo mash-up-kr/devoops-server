@@ -1,16 +1,21 @@
 package com.devoops.domain.repository.github;
 
+import com.devoops.domain.entity.github.PullRequests;
 import com.devoops.domain.entity.github.Question;
 import com.devoops.domain.entity.github.QuestionAnswer;
 import java.util.List;
 
 public interface QuestionDomainRepository {
 
-    Question findById(long questionId);
-
     Question save(Question question);
+
+    void saveAll(List<Question> questions, long pullRequestId);
+
+    Question findById(long questionId);
 
     List<QuestionAnswer> findAllPrQuestions(long pullRequestId);
 
-    void saveAll(List<Question> questions, long pullRequestId);
+    List<Question> findAllByPullRequests(PullRequests repositoryPrs);
+
+    void deleteAll(List<Question> questions);
 }

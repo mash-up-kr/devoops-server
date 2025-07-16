@@ -3,12 +3,14 @@ package com.devoops.client;
 import com.devoops.dto.request.GitHubWebhookRequest;
 import com.devoops.dto.response.GithubPrResponse;
 import com.devoops.dto.response.GithubRepoInfoResponse;
+import com.devoops.dto.response.WebHookCreateResponse;
 import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.service.annotation.DeleteExchange;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
 import org.springframework.web.service.annotation.PostExchange;
@@ -66,10 +68,28 @@ public interface GitHubClient {
      * </a>
      */
     @PostExchange(url = "/repos/{owner}/{repo}/hooks")
-    void createWebhook(
+    WebHookCreateResponse createWebhook(
         @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
         @PathVariable("owner") String owner,
         @PathVariable("repo") String repo,
         @RequestBody GitHubWebhookRequest request
+    );
+
+    /**
+     * GitHub 저장소에 Webhook을 삭제합니다.
+     *
+     * @param authorization Authorization 헤더 (예: Bearer 토큰)
+     * @param owner         저장소 소유자
+     * @param repo          저장소 이름
+     * @see <a href=https://docs.github.com/ko/rest/repos/webhooks?apiVersion=2022-11-28#delete-a-repository-webhook">
+     * GitHub 공식 문서 - Create a repository webhook
+     * </a>
+     */
+    @DeleteExchange(url = "/repos/{owner}/{repo}/hooks/{hookId}")
+    void deleteWebhook(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
+            @PathVariable("owner") String owner,
+            @PathVariable("repo") String repo,
+            @PathVariable("hookId") long hookId
     );
 }

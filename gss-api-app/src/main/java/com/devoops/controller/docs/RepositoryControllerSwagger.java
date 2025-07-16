@@ -103,4 +103,15 @@ public interface RepositoryControllerSwagger {
             }
     )
     ResponseEntity<MyRepositoriesResponse> getMyRepositories(@Parameter(hidden = true) User user);
+
+    @Operation(
+            summary = "레포지토리 삭제",
+            responses = {@ApiResponse(
+                    responseCode = "204",
+                    description = "나의 레포지토리 삭제 성공")}
+    )
+    ResponseEntity<Void> deleteRepositories(
+            @Parameter(hidden = true) User user,
+            long repositoryId
+    );
 }

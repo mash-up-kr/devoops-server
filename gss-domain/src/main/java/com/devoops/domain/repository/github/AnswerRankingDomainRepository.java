@@ -3,6 +3,7 @@ package com.devoops.domain.repository.github;
 import com.devoops.domain.entity.github.Answer;
 import com.devoops.domain.entity.github.AnswerRanking;
 import com.devoops.domain.entity.github.AnswerRankings;
+import com.devoops.domain.entity.github.PullRequests;
 
 public interface AnswerRankingDomainRepository {
 
@@ -13,4 +14,6 @@ public interface AnswerRankingDomainRepository {
     AnswerRanking update(long pullRequestId, long questionId);
 
     void deleteById(long id);
+
+    void deleteAllInPullRequests(PullRequests pullRequests);
 }
