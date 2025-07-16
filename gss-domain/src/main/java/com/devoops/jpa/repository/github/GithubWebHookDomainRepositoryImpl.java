@@ -33,7 +33,7 @@ public class GithubWebHookDomainRepositoryImpl implements GithubWebhookDomainRep
 
     @Override
     @Transactional
-    public void deleteByRepositoryId(long repositoryId) {
-        webHookRepository.deleteByRepositoryId(repositoryId);
+    public void deleteById(long id) {
+        webHookRepository.deleteById(id);
     }
 }

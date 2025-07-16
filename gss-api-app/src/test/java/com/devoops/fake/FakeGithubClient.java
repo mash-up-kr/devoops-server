@@ -46,4 +46,9 @@ public class FakeGithubClient implements GitHubClient {
     public WebHookCreateResponse createWebhook(String authorization, String owner, String repo, GitHubWebhookRequest request) {
         return new WebHookCreateResponse(101L);
     }
+
+    @Override
+    public void deleteWebhook(String authorization, String owner, String repo, long hookId) {
+
+    }
 }

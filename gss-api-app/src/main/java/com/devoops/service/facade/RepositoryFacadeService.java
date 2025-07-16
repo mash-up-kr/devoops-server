@@ -63,5 +63,6 @@ public class RepositoryFacadeService {
     @Transactional
     public void deleteRepository(User user, long repositoryId) {
         repositoryService.delete(user, repositoryId);
+        gitHubService.deleteWebhook(user, repositoryId);
     }
 }

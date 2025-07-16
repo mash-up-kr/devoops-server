@@ -8,5 +8,5 @@ public interface GithubWebhookDomainRepository {
 
     GithubWebhook findByRepositoryId(long repositoryId);
 
-    void deleteByRepositoryId(long repositoryId);
+    void deleteById(long repositoryId);
 }
