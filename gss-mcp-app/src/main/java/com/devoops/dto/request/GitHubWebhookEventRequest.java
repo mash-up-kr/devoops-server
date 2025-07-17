@@ -11,7 +11,8 @@ import java.util.List;
 public record GitHubWebhookEventRequest(
         String action,
         int number,
-        @JsonProperty("pull_request") PullRequest pullRequest
+        @JsonProperty("pull_request") PullRequest pullRequest,
+        Repository repository
 ) {
     public record PullRequest(
             String url,
@@ -21,12 +22,10 @@ public record GitHubWebhookEventRequest(
             String state,
             // PR 제목
             String title,
-            Head head,
             // PR 본문
             String body,
             List<Label> labels,
             User user,
-            String closedAt,
             Boolean merged,
             @JsonProperty("merged_at") LocalDateTime mergedAt
     ) {
@@ -37,10 +36,6 @@ public record GitHubWebhookEventRequest(
             long id
     ) {
     }
-
-    public record Head (
-            @JsonProperty("repo") Repository repository
-    ){}
 
     public record Repository(
             long id,
@@ -61,7 +56,7 @@ public record GitHubWebhookEventRequest(
     }
 
     public long getRepositoryId() {
-        return pullRequest.head.repository.id;
+        return repository.id;
     }
 
     public Long getUserId() {
@@ -81,7 +76,9 @@ public record GitHubWebhookEventRequest(
     }
 
     public String getTag() {
-        if(pullRequest.labels == null || pullRequest.labels.isEmpty()) return "NONE";
+        if (pullRequest.labels == null || pullRequest.labels.isEmpty()) {
+            return "NONE";
+        }
         return pullRequest.labels.getFirst().name;
     }
 
@@ -90,7 +87,7 @@ public record GitHubWebhookEventRequest(
     }
 
     public Boolean isMerged() {
-        if (action.equals("closed") && pullRequest.merged != null) {
+        if (action.equals("closed") && pullRequest.merged != null && pullRequest.mergedAt != null) {
             return pullRequest.merged;
         } else {
             return false;

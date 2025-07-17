@@ -26,6 +26,7 @@ public class WebhookController {
     public ResponseEntity<Void> getWebhookPullRequest(
             @RequestBody GitHubWebhookEventRequest gitHubWebhookEventRequest
     ) {
+        log.info("request : {} ", gitHubWebhookEventRequest);
         AppWebhookEventRequest request = createWebhookEventRequest(gitHubWebhookEventRequest);
         log.info("Got webhook pull request {}", gitHubWebhookEventRequest);
         webhookFacadeService.createQuestionWithWebhookEvent(request);

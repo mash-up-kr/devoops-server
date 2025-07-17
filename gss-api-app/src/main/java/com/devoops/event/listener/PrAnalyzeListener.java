@@ -36,8 +36,12 @@ public class PrAnalyzeListener {
     }
 
     private AppWebhookEventRequest createAppWebhookEventRequest(GithubPrResponse githubPrResponse) {
+        boolean isMerged = false;
+        if(githubPrResponse.mergedAt() != null) {
+            isMerged = true;
+        }
         return new AppWebhookEventRequest(
-                true,
+                isMerged,
                 githubPrResponse.id(),
                 githubPrResponse.url(),
                 githubPrResponse.diffUrl(),
