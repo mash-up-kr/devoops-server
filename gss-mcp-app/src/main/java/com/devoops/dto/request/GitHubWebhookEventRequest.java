@@ -56,7 +56,7 @@ public record GitHubWebhookEventRequest(
     }
 
     public long getRepositoryId() {
-        return pullRequest.id;
+        return repository.id;
     }
 
     public Long getUserId() {
@@ -76,7 +76,9 @@ public record GitHubWebhookEventRequest(
     }
 
     public String getTag() {
-        if(pullRequest.labels == null || pullRequest.labels.isEmpty()) return "NONE";
+        if (pullRequest.labels == null || pullRequest.labels.isEmpty()) {
+            return "NONE";
+        }
         return pullRequest.labels.getFirst().name;
     }
 

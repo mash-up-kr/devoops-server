@@ -39,6 +39,7 @@ public class WebhookFacadeService {
         if (!request.isMerged()) {
             return;
         }
+        log.info("request : {}", request);
 
         User triggerUser = userDomainRepository.findByProviderId(request.userId());
         GithubToken githubToken = triggerUser.getGithubToken();
