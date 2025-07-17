@@ -7,6 +7,7 @@ import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
 import com.devoops.jpa.entity.github.AnswerEntity;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -31,6 +32,12 @@ public class AnswerDomainRepositoryImpl implements AnswerDomainRepository {
         return answerJpaRepository.findById(answerId)
                 .orElseThrow(() -> new GssException(ErrorCode.ANSWER_NOT_FOUND))
                 .toDomainEntity();
+    }
+
+    @Override
+    public Optional<Answer> findByQuestionId(long questionId) {
+        return answerJpaRepository.findByQuestionId(questionId)
+                .map(AnswerEntity::toDomainEntity);
     }
 
     @Override

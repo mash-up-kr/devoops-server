@@ -10,6 +10,7 @@ import com.devoops.domain.repository.github.AnswerDomainRepository;
 import com.devoops.domain.repository.github.QuestionDomainRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,8 @@ public class QuestionService {
 
     public Answer initializeAnswer(long questionId, User user) {
         Question question = questionRepository.findById(questionId); //소유권 검증 추가
-        return answerRepository.save(Answer.initialize(question.getId()));
+        return answerRepository.findByQuestionId(questionId)
+                .orElseGet(() -> answerRepository.save(Answer.initialize(question.getId())));
     }
 
     public List<QuestionAnswer> getAllPrQuestions(long pullRequestsId) {
