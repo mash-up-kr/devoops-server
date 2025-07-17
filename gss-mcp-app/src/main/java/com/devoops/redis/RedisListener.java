@@ -9,10 +9,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class RedisListener implements MessageListener {
@@ -28,6 +30,7 @@ public class RedisListener implements MessageListener {
                     new TypeReference<>() {
                     }
             );
+            log.info("Received webhook event: {}", result);
             result.forEach(webhookFacadeService::createQuestionWithWebhookEvent);
 
         } catch (IOException e) {
