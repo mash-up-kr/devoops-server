@@ -8,9 +8,7 @@ public class SummaryFormatter {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < summaries.size(); i++) {
             Map.Entry<String, String> entry = summaries.get(i);
-            builder.append(i + 1)
-                .append(". ")
-                .append(entry.getKey())  // 제목
+            builder.append(entry.getKey())  // 제목
                 .append("\n")
                 .append(entry.getValue()) // 내용
                 .append("\n\n");
