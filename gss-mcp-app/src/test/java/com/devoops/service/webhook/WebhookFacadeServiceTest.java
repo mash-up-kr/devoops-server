@@ -14,11 +14,13 @@ import com.devoops.dto.AppWebhookEventRequest;
 import com.devoops.dto.request.GitHubWebhookEventRequest;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
+@Slf4j
 class WebhookFacadeServiceTest extends BaseMcpTest {
 
     @Autowired
@@ -34,12 +36,13 @@ class WebhookFacadeServiceTest extends BaseMcpTest {
     private PullRequestDomainRepository pullRequestDomainRepository;
 
     @Nested
-    public class WebHookEventTest {
+    class WebHookEventTest {
 
         @Test
         void 웹_훅_이벤트_발생_시_질문을_생성한다() {
             User user = userGenerator.generate("김건우");
             GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
+            log.info("repo: {}", repo.getExternalId());
             GitHubWebhookEventRequest request = createClosedMergedPullRequest(user.getProviderId(),
                     repo.getExternalId());
             AppWebhookEventRequest appRequest = createWebhookEventRequest(request);
@@ -87,27 +90,24 @@ class WebhookFacadeServiceTest extends BaseMcpTest {
                 mockUser
         );
 
-        GitHubWebhookEventRequest.Head head = new GitHubWebhookEventRequest.Head(repository);
-
         GitHubWebhookEventRequest.PullRequest pullRequest = new GitHubWebhookEventRequest.PullRequest(
                 "https://api.github.com/repos/mock-org/mock-repo/pulls/42", // url
                 987654321L, // id
                 "https://github.com/mock-org/mock-repo/pull/42.diff", // diffUrl
                 "closed", // state
                 "feat: mock 기능 구현", // title
-                head, // ⬅️ repository 포함된 head
                 "이 PR은 mock 기능을 구현합니다.", // body
                 List.of(label),
                 mockUser,
-                "2025-07-14T12:00:00Z",
                 true, // merged
-                LocalDateTime.of(2025, 7, 14, 12, 0)
+                LocalDateTime.of(2025, 7, 14, 12, 0) // mergedAt
         );
 
         return new GitHubWebhookEventRequest(
                 "closed",
                 42,
-                pullRequest
+                pullRequest,
+                repository
         );
     }
 }
