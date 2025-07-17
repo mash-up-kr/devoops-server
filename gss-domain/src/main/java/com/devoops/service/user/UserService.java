@@ -22,4 +22,9 @@ public class UserService {
     public User findById(long id) {
         return userDomainRepository.findById(id);
     }
+
+    public User findByProviderId(long providerId) {
+        return userDomainRepository.findByProviderId(providerId);
+    }
+
 }

@@ -4,12 +4,14 @@ import com.devoops.dto.AppWebhookEventRequest;
 import com.devoops.dto.request.GitHubWebhookEventRequest;
 import com.devoops.service.webhook.WebhookFacadeService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/webhooks")
 @RequiredArgsConstructor
@@ -25,6 +27,7 @@ public class WebhookController {
             @RequestBody GitHubWebhookEventRequest gitHubWebhookEventRequest
     ) {
         AppWebhookEventRequest request = createWebhookEventRequest(gitHubWebhookEventRequest);
+        log.info("Got webhook pull request {}", gitHubWebhookEventRequest);
         webhookFacadeService.createQuestionWithWebhookEvent(request);
         return ResponseEntity.ok().build();
     }
