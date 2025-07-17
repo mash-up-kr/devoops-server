@@ -40,7 +40,8 @@ class WebhookFacadeServiceTest extends BaseMcpTest {
         void 웹_훅_이벤트_발생_시_질문을_생성한다() {
             User user = userGenerator.generate("김건우");
             GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
-            GitHubWebhookEventRequest request = createClosedMergedPullRequest(user.getProviderId(), repo.getExternalId());
+            GitHubWebhookEventRequest request = createClosedMergedPullRequest(user.getProviderId(),
+                    repo.getExternalId());
             AppWebhookEventRequest appRequest = createWebhookEventRequest(request);
 
             webhookFacadeService.createQuestionWithWebhookEvent(appRequest);
@@ -71,26 +72,12 @@ class WebhookFacadeServiceTest extends BaseMcpTest {
     public static GitHubWebhookEventRequest createClosedMergedPullRequest(long userProviderId, long repoId) {
         GitHubWebhookEventRequest.User mockUser = new GitHubWebhookEventRequest.User(
                 "mock-user", // login
-                userProviderId      // id
+                userProviderId
         );
 
         GitHubWebhookEventRequest.Label label = new GitHubWebhookEventRequest.Label(
                 1L,
                 "feature"
-        );
-
-        GitHubWebhookEventRequest.PullRequest pullRequest = new GitHubWebhookEventRequest.PullRequest(
-                "https://api.github.com/repos/mock-org/mock-repo/pulls/42", // url
-                987654321L, // id
-                "https://github.com/mock-org/mock-repo/pull/42.diff", // diffUrl
-                "closed", // state
-                "feat: mock 기능 구현", // title
-                "이 PR은 mock 기능을 구현합니다.", // body
-                List.of(label), // labels
-                mockUser,
-                "2025-07-14T12:00:00Z", // closedAt
-                true, // merged
-                LocalDateTime.of(2025, 7, 14, 12, 0) // mergedAt
         );
 
         GitHubWebhookEventRequest.Repository repository = new GitHubWebhookEventRequest.Repository(
@@ -100,11 +87,27 @@ class WebhookFacadeServiceTest extends BaseMcpTest {
                 mockUser
         );
 
+        GitHubWebhookEventRequest.Head head = new GitHubWebhookEventRequest.Head(repository);
+
+        GitHubWebhookEventRequest.PullRequest pullRequest = new GitHubWebhookEventRequest.PullRequest(
+                "https://api.github.com/repos/mock-org/mock-repo/pulls/42", // url
+                987654321L, // id
+                "https://github.com/mock-org/mock-repo/pull/42.diff", // diffUrl
+                "closed", // state
+                "feat: mock 기능 구현", // title
+                head, // ⬅️ repository 포함된 head
+                "이 PR은 mock 기능을 구현합니다.", // body
+                List.of(label),
+                mockUser,
+                "2025-07-14T12:00:00Z",
+                true, // merged
+                LocalDateTime.of(2025, 7, 14, 12, 0)
+        );
+
         return new GitHubWebhookEventRequest(
                 "closed",
                 42,
-                pullRequest,
-                repository
+                pullRequest
         );
     }
 }
