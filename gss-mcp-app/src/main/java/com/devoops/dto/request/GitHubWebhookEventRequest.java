@@ -28,7 +28,7 @@ public record GitHubWebhookEventRequest(
             User user,
             String closedAt,
             Boolean merged,
-            LocalDateTime mergedAt
+            @JsonProperty("merged_at") LocalDateTime mergedAt
     ) {
     }
 
