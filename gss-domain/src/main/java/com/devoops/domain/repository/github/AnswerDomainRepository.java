@@ -3,12 +3,15 @@ package com.devoops.domain.repository.github;
 import com.devoops.domain.entity.github.Answer;
 import com.devoops.domain.entity.github.Question;
 import java.util.List;
+import java.util.Optional;
 
 public interface AnswerDomainRepository {
 
     Answer save(Answer answer);
 
     Answer findById(long answerId);
+
+    Optional<Answer> findByQuestionId(long questionId);
 
     long getAnswerCountByPullRequestId(long pullRequestId);
 
