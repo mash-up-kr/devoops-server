@@ -28,6 +28,7 @@ public class WebhookController {
     ) {
         log.info("request : {} ", gitHubWebhookEventRequest);
         AppWebhookEventRequest request = createWebhookEventRequest(gitHubWebhookEventRequest);
+        log.info("Got webhook pull request {}", gitHubWebhookEventRequest);
         webhookFacadeService.createQuestionWithWebhookEvent(request);
         return ResponseEntity.ok().build();
     }

@@ -23,6 +23,10 @@ public class PullRequestService {
         return pullRequestRepository.updateStatus(pullRequestId, status);
     }
 
+    public PullRequest updateAnalyzeResult(long pullRequestId, String summary, String detailSummary) {
+        return pullRequestRepository.updateAnalyzedResult(pullRequestId, summary, detailSummary);
+    }
+
     public PullRequest findByQuestionId(long questionId) {
         return pullRequestRepository.findByQuestionId(questionId);
     }

@@ -24,6 +24,20 @@ public record PullRequestCreateCommand(
             long userId,
             String title,
             String description,
+            String pullRequestUrl,
+            long externalId,
+            String tag,
+            LocalDateTime mergedAt
+    ) {
+        this(repositoryId, userId, title, description, "", "", pullRequestUrl, externalId, RecordStatus.PENDING, mergedAt, tag);
+    }
+
+
+    public PullRequestCreateCommand(
+            long repositoryId,
+            long userId,
+            String title,
+            String description,
             String summary,
             String summaryDetail,
             String pullRequestUrl,
