@@ -4,7 +4,9 @@ import com.devoops.client.PrAnalysisClient;
 import com.devoops.dto.response.AnalyzePrResponse;
 import java.util.Arrays;
 import java.util.List;
+import org.springframework.context.annotation.Profile;
 
+@Profile("test")
 public class FakePrAnalysisClient implements PrAnalysisClient {
 
     public static AnalyzePrResponse MOCK_RESPONSE = new AnalyzePrResponse(
