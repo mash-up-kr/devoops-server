@@ -87,21 +87,18 @@ class WebhookFacadeServiceTest extends BaseMcpTest {
                 mockUser
         );
 
-        GitHubWebhookEventRequest.Head head = new GitHubWebhookEventRequest.Head(repository);
-
         GitHubWebhookEventRequest.PullRequest pullRequest = new GitHubWebhookEventRequest.PullRequest(
                 "https://api.github.com/repos/mock-org/mock-repo/pulls/42", // url
                 987654321L, // id
                 "https://github.com/mock-org/mock-repo/pull/42.diff", // diffUrl
                 "closed", // state
                 "feat: mock 기능 구현", // title
-                head, // ⬅️ repository 포함된 head
+                repository,
                 "이 PR은 mock 기능을 구현합니다.", // body
                 List.of(label),
                 mockUser,
-                "2025-07-14T12:00:00Z",
                 true, // merged
-                LocalDateTime.of(2025, 7, 14, 12, 0)
+                LocalDateTime.of(2025, 7, 14, 12, 0) // mergedAt
         );
 
         return new GitHubWebhookEventRequest(

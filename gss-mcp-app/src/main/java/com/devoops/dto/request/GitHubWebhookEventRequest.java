@@ -21,14 +21,13 @@ public record GitHubWebhookEventRequest(
             String state,
             // PR 제목
             String title,
-            Head head,
+            Repository repository,
             // PR 본문
             String body,
             List<Label> labels,
             User user,
-            String closedAt,
             Boolean merged,
-            LocalDateTime mergedAt
+            @JsonProperty("merged_at") LocalDateTime mergedAt
     ) {
     }
 
@@ -37,10 +36,6 @@ public record GitHubWebhookEventRequest(
             long id
     ) {
     }
-
-    public record Head (
-            @JsonProperty("repo") Repository repository
-    ){}
 
     public record Repository(
             long id,
@@ -61,7 +56,7 @@ public record GitHubWebhookEventRequest(
     }
 
     public long getRepositoryId() {
-        return pullRequest.head.repository.id;
+        return pullRequest.repository.id;
     }
 
     public Long getUserId() {
