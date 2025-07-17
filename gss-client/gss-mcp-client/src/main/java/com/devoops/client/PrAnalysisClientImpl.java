@@ -23,6 +23,7 @@ public class PrAnalysisClientImpl implements PrAnalysisClient {
     @Override
     public AnalyzePrResponse analyze(String title, String description, String diff) {
         String prompt = buildPrompt(title, description, diff);
+        log.info("prompt = {}", prompt);
         String content = chatModel.call(prompt);
         return parseResponse(content);
     }
