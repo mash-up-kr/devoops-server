@@ -72,7 +72,7 @@ public class GitHubService {
                 1
         );
         return closedPullRequests.stream()
-                .filter(pr -> pr.isUserPr(user.getProviderId()))
+                .filter(pr -> pr.isUserPr(user.getProviderId()) && pr.mergedAt() != null)
                 .limit(MAX_USER_PR_LIMIT)
                 .toList();
     }
