@@ -6,7 +6,11 @@ spring:
   config:
     activate:
       on-profile: local
-  data:
-    redis:
-      host: localhost
-      port: 6379
+
+jwt:
+  secret_key: lnklbdsxjfhruyfidjgjgrjfjfjhfhhh
+  access_token_expiration: 1h
+  refresh_token_expiration: 3d
+
+cors:
+  origin: http://localhost:8080

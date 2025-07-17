@@ -9,7 +9,6 @@ spring:
       - mcp-client
       - redis
 
-
 server:
   port: 8090
 
