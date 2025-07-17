@@ -11,7 +11,8 @@ import java.util.List;
 public record GitHubWebhookEventRequest(
         String action,
         int number,
-        @JsonProperty("pull_request") PullRequest pullRequest
+        @JsonProperty("pull_request") PullRequest pullRequest,
+        Repository repository
 ) {
     public record PullRequest(
             String url,
@@ -21,7 +22,6 @@ public record GitHubWebhookEventRequest(
             String state,
             // PR 제목
             String title,
-            Repository repository,
             // PR 본문
             String body,
             List<Label> labels,
@@ -56,7 +56,7 @@ public record GitHubWebhookEventRequest(
     }
 
     public long getRepositoryId() {
-        return pullRequest.repository.id;
+        return pullRequest.id;
     }
 
     public Long getUserId() {
