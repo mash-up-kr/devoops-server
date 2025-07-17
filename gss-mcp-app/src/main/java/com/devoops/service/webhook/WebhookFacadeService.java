@@ -19,8 +19,10 @@ import com.devoops.dto.response.AnalyzePrResponse;
 import com.devoops.service.pullrequest.PullRequestService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class WebhookFacadeService {

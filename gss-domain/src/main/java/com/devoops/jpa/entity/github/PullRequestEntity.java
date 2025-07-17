@@ -36,18 +36,14 @@ public class PullRequestEntity extends BaseTimeEntity {
     @NotNull
     private String title;
 
-    @NotNull
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @NotNull
     private String tag;
 
-    @NotNull
     @Column(columnDefinition = "TEXT")
     private String summary;
 
-    @NotNull
     @Column(columnDefinition = "TEXT")
     private String summaryDetail;
 
