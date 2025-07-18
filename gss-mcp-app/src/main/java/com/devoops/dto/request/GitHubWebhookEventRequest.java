@@ -76,18 +76,22 @@ public record GitHubWebhookEventRequest(
     }
 
     public String getTag() {
-        if (pullRequest.labels == null || pullRequest.labels.isEmpty()) {
+        if (pullRequest == null || pullRequest.labels == null || pullRequest.labels.isEmpty()) {
             return "NONE";
         }
         return pullRequest.labels.getFirst().name;
     }
 
     public LocalDateTime getMergedAt() {
+        if (pullRequest == null) {
+            return null;
+        }
         return pullRequest.mergedAt;
     }
 
     public Boolean isMerged() {
         if ("closed".equals(action)
+                && pullRequest != null
                 && pullRequest.merged != null
                 && pullRequest.mergedAt != null
         ) {
@@ -98,6 +102,9 @@ public record GitHubWebhookEventRequest(
     }
 
     public String getPullRequestDiffUrl() {
+        if (pullRequest == null) {
+            return null;
+        }
         return pullRequest.diffUrl;
     }
 }

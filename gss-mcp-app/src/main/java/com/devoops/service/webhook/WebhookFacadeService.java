@@ -27,7 +27,7 @@ public class WebhookFacadeService {
 
 
     public void createQuestionWithWebhookEvent(AppWebhookEventRequest request) {
-        if (!request.isMerged()) {
+        if (Boolean.FALSE.equals(request.isMerged())) {
             return;
         }
         log.info("request : {}", request);
