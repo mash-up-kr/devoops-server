@@ -1,11 +1,9 @@
-spring:
-  config:
-    import: 'aws-secretsmanager:dev/devoops/secrets'
-
 dev-oops:
   github-pr-analysis:
     prompt: |
-      당신은 10년차 시니어 개발자로서 아래 PR의 변경 내용을 분석하고, 기술 면접에서 사용할 수 있는 질문을 생성해.
+      너는 10년차 시니어 개발자로서 아래 PR의 변경 내용을 분석하고, PR 제목, 내용, 변경내용에서 기술 면접에서 사용할 수 있는 질문을 생성해.
+      나는 개발자 지망생으로서 나의 PR을 카테고리별 질문을 받음으로써 내 PR을 회고하고 싶어.
+      너는 나의 PR내용 중에 사실확인용 같은 쉬운 질문들과 심화된 맞춤형 기술 질문들을 뽑아주면 돼
 
       PR 제목: %s
       PR 내용: %s
@@ -46,3 +44,23 @@ dev-oops:
       - "category"는 기술적인 관점에서 자유롭게 선택해. (예: 성능, 보안, 확장성, 유지보수성, 테스트 등)
       - "question"은 PR 코드 변경 내용을 반영해서 심화된 기술 질문으로 만들어.
       - 카테고리마다 3개씩 질문을 만들어.
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  ai:
+    openai:
+      api-key: testKey
+      chat:
+        options:
+          model: gpt-4o-mini
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import: 'aws-secretsmanager:dev/devoops/secrets'
