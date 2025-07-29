@@ -14,8 +14,13 @@ public class GithubRepository {
     private final String owner;
     private final int prCount;
     private final long externalId;
+    private final boolean isTracking;
 
-    public GithubRepository(long userId, String name, String url, String owner, int prCount, long externalId) {
-        this(null, userId, name, url, owner, prCount, externalId);
+    public GithubRepository(long userId, String name, String url, String owner, int prCount, long externalId, boolean isTracking) {
+        this(null, userId, name, url, owner, prCount, externalId, isTracking);
+    }
+
+    public GithubRepository stopTracking() {
+        return new GithubRepository(id, userId, name, url, owner, prCount, externalId, false);
     }
 }

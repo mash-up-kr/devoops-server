@@ -55,14 +55,9 @@ public class RepositoryService {
     }
 
     @Transactional
-    public void delete(User user, long repositoryId) {
+    public void stopTrackingRepository(User user, long repositoryId) {
         GithubRepository repo = repoRepository.findByIdAndUserId(repositoryId, user.getId());
-        repoRepository.deleteById(repo.getId());
-        PullRequests repositoryPrs = pullRequestRepository.findByRepositoryId(repo.getId());
-        pullRequestRepository.deleteAll(repositoryPrs);
-        answerRankingRepository.deleteAllInPullRequests(repositoryPrs);
-        List<Question> questions = questionRepository.findAllByPullRequests(repositoryPrs);
-        questionRepository.deleteAll(questions);
-        answerRepository.deleteAllInQuestions(questions);
+        GithubRepository updatedRepository = repo.stopTracking();
+        repoRepository.update(updatedRepository);
     }
 }
