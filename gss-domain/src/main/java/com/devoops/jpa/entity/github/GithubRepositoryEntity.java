@@ -36,6 +36,7 @@ public class GithubRepositoryEntity extends BaseTimeEntity {
     @NotNull
     private String owner;
 
+    @Column(name = "is_tracking")
     private boolean isTracking;
 
     private int pullRequestCount;
