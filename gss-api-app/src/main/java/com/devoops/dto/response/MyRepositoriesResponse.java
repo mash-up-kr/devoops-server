@@ -18,12 +18,14 @@ public record MyRepositoriesResponse(
     public record RepositorySummary(
         long id,
         String name,
+        boolean isTracking,
         int pullRequestCount
     ) {
         public static RepositorySummary from(GithubRepository repository) {
             return new RepositorySummary(
                 repository.getId(),
                 repository.getName(),
+                repository.isTracking(),
                 repository.getPrCount()
             );
         }
