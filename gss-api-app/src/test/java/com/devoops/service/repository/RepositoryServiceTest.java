@@ -178,40 +178,18 @@ class RepositoryServiceTest extends BaseServiceTest {
     }
 
     @Nested
-    class Delete {
+    class StopTracking {
 
         @Test
-        void 레포지토리를_삭제할_수_있다() {
+        void 레포지토리의_트래킹을_끊을_수_있다() {
             User user = userGenerator.generate("김건우");
             GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
-            PullRequest pr1 = pullRequestGenerator.generate("PR1", RecordStatus.PENDING, repo, LocalDateTime.now());
-            PullRequest pr2 = pullRequestGenerator.generate("PR2", RecordStatus.PENDING, repo, LocalDateTime.now());
-            Question question1 = questionGenerator.generate(pr1, "질문1");
-            Question question2 = questionGenerator.generate(pr2, "질문2");
-            Answer answer1 = answerGenerator.generate(question1, "answer1");
-            Answer answer2 = answerGenerator.generate(question2, "answer2");
-            AnswerRanking answerRanking1 = answerRankingGenerator.generate(pr1, question1, answer1, user.getId());
-            AnswerRanking answerRanking2 = answerRankingGenerator.generate(pr2, question2, answer2, user.getId());
 
-            repositoryService.delete(user, repo.getId());
+            repositoryService.stopTrackingRepository(user, repo.getId());
 
-            boolean exists = githubRepoDomainRepository.existsByIdAndUserId(repo.getId(), user.getId());
-            PullRequests repositoryPrs = pullRequestDomainRepository.findByRepositoryId(repo.getId());
-            List<QuestionAnswer> pr1Questions = questionDomainRepository.findAllPrQuestions(pr1.getId());
-            List<QuestionAnswer> pr2Questions = questionDomainRepository.findAllPrQuestions(pr2.getId());
-            AnswerRankings userAnswerRankings = answerRankingDomainRepository.findAllByUserId(user.getId());
-            long pr1AnswerCount = answerDomainRepository.getAnswerCountByPullRequestId(pr1.getId());
-            long pr2AnswerCount = answerDomainRepository.getAnswerCountByPullRequestId(pr2.getId());
+            GithubRepository foundRepository = githubRepoDomainRepository.findByIdAndUserId(repo.getId(), user.getId());
 
-            assertAll(
-                    () -> assertThat(exists).isFalse(),
-                    () -> assertThat(repositoryPrs.getValues()).isEmpty(),
-                    () -> assertThat(pr1Questions).isEmpty(),
-                    () -> assertThat(pr2Questions).isEmpty(),
-                    () -> assertThat(userAnswerRankings.getRankings()).isEmpty(),
-                    () -> assertThat(pr1AnswerCount).isZero(),
-                    () -> assertThat(pr2AnswerCount).isZero()
-            );
+            assertThat(foundRepository.isTracking()).isFalse();
         }
     }
 }

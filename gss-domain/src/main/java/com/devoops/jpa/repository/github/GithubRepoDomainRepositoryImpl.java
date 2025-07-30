@@ -5,6 +5,7 @@ import com.devoops.domain.repository.github.GithubRepoDomainRepository;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
 import com.devoops.jpa.entity.github.GithubRepositoryEntity;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,15 @@ public class GithubRepoDomainRepositoryImpl implements GithubRepoDomainRepositor
         GithubRepositoryEntity repositoryEntity = GithubRepositoryEntity.from(githubRepository);
         GithubRepositoryEntity savedRepositoryEntity = repoJpaRepository.save(repositoryEntity);
         return savedRepositoryEntity.toDomainEntity();
+    }
+
+    @Override
+    @Transactional
+    public GithubRepository update(GithubRepository githubRepository) {
+        GithubRepositoryEntity githubRepositoryEntity = repoJpaRepository.findById(githubRepository.getId())
+                 .orElseThrow(() -> new GssException(ErrorCode.GITHUB_REPOSITORY_NOT_FOUND));
+        return githubRepositoryEntity.update(githubRepository)
+                .toDomainEntity();
     }
 
     @Override

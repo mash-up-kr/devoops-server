@@ -12,6 +12,6 @@ public record RepositoryCreateCommand(
 ) {
 
     public GithubRepository toDomainEntity() {
-        return new GithubRepository(userId, repositoryName, url, ownerName, prCount, externalId);
+        return new GithubRepository(userId, repositoryName, url, ownerName, prCount, externalId, true);
     }
 }

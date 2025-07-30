@@ -21,7 +21,8 @@ public class GithubRepoGenerator {
                 "url",
                 "owner",
                 0,
-                ThreadLocalRandom.current().nextLong()
+                ThreadLocalRandom.current().nextLong(),
+                true
         );
         return githubRepoDomainRepository.save(repository);
     }
