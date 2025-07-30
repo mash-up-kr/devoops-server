@@ -65,7 +65,7 @@ public class GithubRepositoryEntity extends BaseTimeEntity {
         this.url = githubRepository.getUrl();
         this.owner = githubRepository.getOwner();
         this.pullRequestCount = githubRepository.getPrCount();
-        this.githubRepositoryId = githubRepository.getId();
+        this.githubRepositoryId = githubRepository.getExternalId();
         this.isTracking = githubRepository.isTracking();
         return this;
     }
