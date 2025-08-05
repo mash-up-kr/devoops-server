@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 
@@ -16,6 +17,7 @@ import com.devoops.dto.request.RepositorySaveRequest;
 import com.devoops.dto.response.GithubRepoInfoResponse;
 import com.devoops.dto.response.OwnerResponse;
 import com.devoops.dto.response.WebHookCreateResponse;
+import com.devoops.exception.GithubNotFoundException;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
 import org.junit.jupiter.api.Nested;
@@ -76,6 +78,25 @@ class RepositoryFacadeServiceTest extends BaseServiceTest {
                     .thenReturn(mockResponse);
             Mockito.when(gitHubClient.createWebhook(any(), any(), any(), any()))
                     .thenReturn(mockWebHookCreateResponse);
+        }
+    }
+
+    @Nested
+    class Delete {
+
+        @Test
+        void 웹훅을_찾지_못해도_레포지토리_트래킹을_끊을_수_있다() {
+            User user = userGenerator.generate("김건우");
+            GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
+            webhookGenerator.generate(user, repo);
+            Mockito.doThrow(new GithubNotFoundException("mocking error"))
+                    .when(gitHubClient)
+                    .deleteWebhook(anyString(), anyString(), anyString(), anyLong());
+
+            repositoryFacadeService.deleteRepository(user, repo.getId());
+
+            GithubRepository foundRepo = githubRepoDomainRepository.findByIdAndUserId(repo.getId(), user.getId());
+            assertThat(foundRepo.isTracking()).isFalse();
         }
     }
 }
