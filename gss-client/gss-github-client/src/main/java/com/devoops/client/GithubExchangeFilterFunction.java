@@ -1,5 +1,6 @@
 package com.devoops.client;
 
+import com.devoops.exception.GithubNotFoundException;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
 import java.util.Map;
@@ -27,7 +28,7 @@ public class GithubExchangeFilterFunction {
                                     "response", body
                             ));
                             if (response.statusCode().isSameCodeAs(HttpStatusCode.valueOf(404))) {
-                                return Mono.error(new GssException(ErrorCode.MALFORMED_GITHUB_REPOSITORY_URL));
+                                return Mono.error(new GithubNotFoundException("깃허브에서 자원을 찾을 수 없습니다."));
                             }
                             return Mono.error(new GssException(ErrorCode.GITHUB_CLIENT_ERROR));
                         });
