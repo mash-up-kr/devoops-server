@@ -106,7 +106,7 @@ public class GitHubService {
                     webhook.getExternalId()
             );
         } catch (GithubNotFoundException githubNotFoundException) {
-            log.error("깃허브 레포에서 웹훅을 찾을 수 없습니다 : {}, repo : {} ", githubNotFoundException, repo);
+            log.error("깃허브 레포에서 웹훅을 찾을 수 없습니다 : {}, repo : {} ", githubNotFoundException, repo.getName());
         }
     }
 }
