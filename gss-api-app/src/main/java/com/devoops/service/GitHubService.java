@@ -13,15 +13,17 @@ import com.devoops.dto.request.GithubRepoUrl;
 import com.devoops.dto.response.GithubPrResponse;
 import com.devoops.dto.response.GithubRepoInfoResponse;
 import com.devoops.dto.response.WebHookCreateResponse;
+import com.devoops.exception.GithubNotFoundException;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
-import com.devoops.jpa.repository.github.GithubWebHookDomainRepositoryImpl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GitHubService {
@@ -91,12 +93,20 @@ public class GitHubService {
         GithubToken githubToken = githubTokenDomainRepository.findByUserId(user)
                 .orElseThrow(() -> new GssException(ErrorCode.NO_RESOURCE_FOUND));
         GithubWebhook webhook = githubWebhookDomainRepository.findByRepositoryId(repo.getId());
-        gitHubClient.deleteWebhook(
-                BEARER_PREFIX + githubToken.getToken(),
-                repo.getOwner(),
-                repo.getName(),
-                webhook.getExternalId()
-        );
+        tryDeleteWebhook(githubToken, webhook, repo);
         githubWebhookDomainRepository.deleteById(webhook.getId());
+    }
+
+    private void tryDeleteWebhook(GithubToken githubToken, GithubWebhook webhook, GithubRepository repo) {
+        try {
+            gitHubClient.deleteWebhook(
+                    BEARER_PREFIX + githubToken.getToken(),
+                    repo.getOwner(),
+                    repo.getName(),
+                    webhook.getExternalId()
+            );
+        } catch (GithubNotFoundException githubNotFoundException) {
+            log.error("깃허브 레포에서 웹훅을 찾을 수 없습니다 : {}, repo : {} ", githubNotFoundException, repo.getName());
+        }
     }
 }
