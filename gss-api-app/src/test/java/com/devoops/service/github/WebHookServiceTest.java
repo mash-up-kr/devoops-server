@@ -57,10 +57,11 @@ class WebHookServiceTest extends BaseServiceTest {
         @Test
         void 이미_웹훅이_등록된_레포지토리는_등록_카운트를_증가시킨다() {
             User user = userGenerator.generate("김건우");
+            User user2 = userGenerator.generate("콜리");
             GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
             Mockito.when(gitHubClient.createWebhook(anyString(), anyString(), anyString(), any()))
                     .thenReturn(new WebHookCreateResponse(1234L));
-            registryCountRepository.save(new GithubRepoRegistryCount(repo.getExternalId(), 1L));
+            webhookGenerator.generate(user2, repo, 1L);
 
             webHookService.registerWebhook(user, repo.getId());
 
@@ -81,8 +82,7 @@ class WebHookServiceTest extends BaseServiceTest {
         void 웹_훅을_삭제_할_수_있다() {
             User user = userGenerator.generate("김건우");
             GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
-            webhookGenerator.generate(user, repo);
-            registryCountRepository.save(new GithubRepoRegistryCount(repo.getExternalId(), 1L));
+            webhookGenerator.generate(user, repo, 1L);
 
             webHookService.deleteWebhook(user, repo.getId());
 
@@ -99,8 +99,7 @@ class WebHookServiceTest extends BaseServiceTest {
         void 여러_유저가_트래킹하는_경우_웹훅_등록_카운트를_감소시킨다() {
             User user = userGenerator.generate("김건우");
             GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
-            webhookGenerator.generate(user, repo);
-            registryCountRepository.save(new GithubRepoRegistryCount(repo.getExternalId(), 2L));
+            webhookGenerator.generate(user, repo, 2L);
 
             webHookService.deleteWebhook(user, repo.getId());
 

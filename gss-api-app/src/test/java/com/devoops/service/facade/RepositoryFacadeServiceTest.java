@@ -88,7 +88,7 @@ class RepositoryFacadeServiceTest extends BaseServiceTest {
         void 웹훅을_찾지_못해도_레포지토리_트래킹을_끊을_수_있다() {
             User user = userGenerator.generate("김건우");
             GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
-            webhookGenerator.generate(user, repo);
+            webhookGenerator.generate(user, repo, 1L);
             Mockito.doThrow(new GithubNotFoundException("mocking error"))
                     .when(gitHubClient)
                     .deleteWebhook(anyString(), anyString(), anyString(), anyLong());
