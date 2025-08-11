@@ -14,8 +14,6 @@ import com.devoops.dto.response.GithubPrResponse;
 import com.devoops.dto.response.GithubRepoInfoResponse;
 import com.devoops.dto.response.WebHookCreateResponse;
 import com.devoops.exception.GithubNotFoundException;
-import com.devoops.exception.custom.GssException;
-import com.devoops.exception.errorcode.ErrorCode;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,11 +47,12 @@ public class GitHubService {
     }
 
     private void createWebhook(GithubToken token, GithubRepository repo) {
+        String webhookUrl = mcpWebhookUrl + "/" + repo.getId();
         WebHookCreateResponse webHookCreateResponse = gitHubClient.createWebhook(
                 BEARER_PREFIX + token.getToken(),
                 repo.getOwner(),
                 repo.getName(),
-                GitHubWebhookRequest.ofPullRequestEvent(mcpWebhookUrl)
+                GitHubWebhookRequest.ofPullRequestEvent(webhookUrl)
         );
         GithubWebhook webhook = new GithubWebhook(webHookCreateResponse.id(), repo.getId());
         githubWebhookDomainRepository.save(webhook);

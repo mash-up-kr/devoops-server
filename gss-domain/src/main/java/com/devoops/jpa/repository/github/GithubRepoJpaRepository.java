@@ -13,7 +13,7 @@ public interface GithubRepoJpaRepository extends JpaRepository<GithubRepositoryE
 
     List<GithubRepositoryEntity> findAllByUserId(Long userId);
 
-    boolean existsByGithubRepositoryId(long externalId);
+    boolean existsByGithubRepositoryIdAndUserId(long externalId, long userId);
 
     Optional<GithubRepositoryEntity> findByGithubRepositoryId(long externalId);
 }
