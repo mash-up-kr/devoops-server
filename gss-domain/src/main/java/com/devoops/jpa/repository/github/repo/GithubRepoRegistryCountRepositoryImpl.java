@@ -16,6 +16,13 @@ public class GithubRepoRegistryCountRepositoryImpl implements GithubRepoRegistry
     private final GithubRepoRegistryCountJpaRepository githubRepoRegistryCountJpaRepository;
 
     @Override
+    public GithubRepoRegistryCount save(GithubRepoRegistryCount githubRepoRegistryCount) {
+        GithubRepoRegistryCountEntity registryCountEntity = GithubRepoRegistryCountEntity.from(githubRepoRegistryCount);
+        return githubRepoRegistryCountJpaRepository.save(registryCountEntity)
+                .toDomainEntity();
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public GithubRepoRegistryCount getByExternalId(long externalId) {
         return findRegistryEntityByExternalId(externalId)

@@ -26,6 +26,14 @@ public class GithubRepoRegistryCountEntity {
 
     private long registryCount;
 
+    public static GithubRepoRegistryCountEntity from(GithubRepoRegistryCount githubRepoRegistryCount) {
+        return new GithubRepoRegistryCountEntity(
+                null,
+                githubRepoRegistryCount.getExternalId(),
+                githubRepoRegistryCount.getReposCount()
+        );
+    }
+
     public GithubRepoRegistryCount toDomainEntity() {
         return new GithubRepoRegistryCount(this.externalId, this.registryCount);
     }

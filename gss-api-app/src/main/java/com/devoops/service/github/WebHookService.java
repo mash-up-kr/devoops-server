@@ -42,6 +42,7 @@ public class WebHookService {
             registryCountRepository.plusCount(repoExternalId);
             return;
         }
+        registryCountRepository.save(new GithubRepoRegistryCount(repoExternalId, 1L));
         GithubToken githubToken = githubTokenDomainRepository.getByUserId(user.getId());
         createWebhook(githubToken, githubRepository);
     }
