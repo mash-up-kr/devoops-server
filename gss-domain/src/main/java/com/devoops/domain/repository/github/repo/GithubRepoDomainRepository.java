@@ -20,5 +20,7 @@ public interface GithubRepoDomainRepository {
 
     GithubRepository findByExternalId(long externalId);
 
+    GithubRepository findByExternalIdAndUserId(long externalId, long userId);
+
     void deleteById(long id);
 }

@@ -34,9 +34,5 @@ public class PullRequestService {
     public PullRequest getPullRequest(long pullRequestId) {
         return pullRequestRepository.findById(pullRequestId);
     }
-
-    public PullRequests findByRepositoryId(long repositoryId) {
-        return pullRequestRepository.findByRepositoryId(repositoryId);
-    }
 }
 

@@ -6,6 +6,7 @@ import com.devoops.service.webhook.WebhookFacadeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,9 +23,10 @@ public class WebhookController {
     /**
      * webhook url : https://mcp.dev-oops.kr/api/webhooks/github/pull-requests
      */
-    @PostMapping("/github/pull-requests")
+    @PostMapping("/github/pull-requests/{repositoryId}")
     public ResponseEntity<Void> getWebhookPullRequest(
-            @RequestBody GitHubWebhookEventRequest gitHubWebhookEventRequest
+            @RequestBody GitHubWebhookEventRequest gitHubWebhookEventRequest,
+            @PathVariable(name = "repositoryId") Long appRepositoryId
     ) {
         log.info("request : {} ", gitHubWebhookEventRequest);
         if(gitHubWebhookEventRequest.isMerged()) {

@@ -34,7 +34,6 @@ public class WebhookFacadeService {
 
         User triggerUser = userService.findByProviderId(request.userId());
         GithubToken githubToken = triggerUser.getGithubToken();
-        // 레포 아이디를 기반으로 찾기 -> 풀리퀘 생성 -> prCount 올리기
         PullRequest readyPullRequest = savePullRequest(
                 triggerUser.getId(),
                 request
@@ -47,7 +46,8 @@ public class WebhookFacadeService {
             long userId,
             AppWebhookEventRequest request
     ) {
-        GithubRepository githubRepository = githubRepoDomainRepository.findByExternalId(request.repositoryId());
+        // 레포 아이디를 기반으로 찾기 -> 풀리퀘 생성 -> prCount 올리기
+        GithubRepository githubRepository = githubRepoDomainRepository.findByExternalIdAndUserId(request.repositoryId(), userId);
         PullRequestCreateCommand prCreateCommand = resolvePRCreateCommand(request, githubRepository.getId(), userId);
         return pullRequestService.save(prCreateCommand);
     }

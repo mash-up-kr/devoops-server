@@ -74,6 +74,15 @@ public class GithubRepoDomainRepositoryImpl implements GithubRepoDomainRepositor
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public GithubRepository findByExternalIdAndUserId(long externalId, long userId) {
+        return repoJpaRepository.findByGithubRepositoryIdAndUserId(externalId, userId)
+                .orElseThrow(() -> new GssException(ErrorCode.GITHUB_REPOSITORY_NOT_FOUND))
+                .toDomainEntity();
+
+    }
+
+    @Override
     @Transactional
     public void deleteById(long id) {
         repoJpaRepository.deleteById(id);
