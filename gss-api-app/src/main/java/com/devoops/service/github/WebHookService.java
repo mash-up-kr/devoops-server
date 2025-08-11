@@ -38,9 +38,7 @@ public class WebHookService {
     public void registerWebhook(User user, long repositoryId) {
         GithubRepository githubRepository = githubRepoDomainRepository.findByIdAndUserId(repositoryId, user.getId());
         long repoExternalId = githubRepository.getExternalId();
-        GithubRepoRegistryCount registryCount = registryCountRepository.getByExternalId(repoExternalId);
-
-        if(registryCount.isPositive()) {
+        if(registryCountRepository.existsByExternalId(repoExternalId)) {
             registryCountRepository.plusCount(repoExternalId);
             return;
         }
