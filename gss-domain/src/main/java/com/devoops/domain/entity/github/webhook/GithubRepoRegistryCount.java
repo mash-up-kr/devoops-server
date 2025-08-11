@@ -1,4 +1,4 @@
-package com.devoops.domain.entity.github.repo;
+package com.devoops.domain.entity.github.webhook;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

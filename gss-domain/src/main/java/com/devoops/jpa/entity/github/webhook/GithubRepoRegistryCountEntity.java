@@ -1,6 +1,6 @@
-package com.devoops.jpa.entity.github.repo;
+package com.devoops.jpa.entity.github.webhook;
 
-import com.devoops.domain.entity.github.repo.GithubRepoRegistryCount;
+import com.devoops.domain.entity.github.webhook.GithubRepoRegistryCount;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

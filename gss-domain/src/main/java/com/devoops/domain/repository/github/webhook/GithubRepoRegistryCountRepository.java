@@ -1,6 +1,6 @@
-package com.devoops.domain.repository.github.repo;
+package com.devoops.domain.repository.github.webhook;
 
-import com.devoops.domain.entity.github.repo.GithubRepoRegistryCount;
+import com.devoops.domain.entity.github.webhook.GithubRepoRegistryCount;
 
 public interface GithubRepoRegistryCountRepository {
 

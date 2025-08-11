@@ -1,10 +1,10 @@
-package com.devoops.jpa.repository.github.repo;
+package com.devoops.jpa.repository.github.webhook;
 
-import com.devoops.domain.entity.github.repo.GithubRepoRegistryCount;
-import com.devoops.domain.repository.github.repo.GithubRepoRegistryCountRepository;
+import com.devoops.domain.entity.github.webhook.GithubRepoRegistryCount;
+import com.devoops.domain.repository.github.webhook.GithubRepoRegistryCountRepository;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
-import com.devoops.jpa.entity.github.repo.GithubRepoRegistryCountEntity;
+import com.devoops.jpa.entity.github.webhook.GithubRepoRegistryCountEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

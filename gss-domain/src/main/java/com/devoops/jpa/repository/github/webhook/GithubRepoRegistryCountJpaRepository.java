@@ -1,6 +1,6 @@
-package com.devoops.jpa.repository.github.repo;
+package com.devoops.jpa.repository.github.webhook;
 
-import com.devoops.jpa.entity.github.repo.GithubRepoRegistryCountEntity;
+import com.devoops.jpa.entity.github.webhook.GithubRepoRegistryCountEntity;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

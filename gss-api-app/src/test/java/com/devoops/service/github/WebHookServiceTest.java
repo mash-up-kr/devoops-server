@@ -10,10 +10,10 @@ import static org.mockito.Mockito.never;
 
 import com.devoops.BaseServiceTest;
 import com.devoops.client.GitHubClient;
-import com.devoops.domain.entity.github.repo.GithubRepoRegistryCount;
+import com.devoops.domain.entity.github.webhook.GithubRepoRegistryCount;
 import com.devoops.domain.entity.github.repo.GithubRepository;
 import com.devoops.domain.entity.user.User;
-import com.devoops.domain.repository.github.repo.GithubRepoRegistryCountRepository;
+import com.devoops.domain.repository.github.webhook.GithubRepoRegistryCountRepository;
 import com.devoops.domain.repository.github.webhook.GithubWebhookDomainRepository;
 import com.devoops.dto.response.WebHookCreateResponse;
 import com.devoops.exception.custom.GssException;
