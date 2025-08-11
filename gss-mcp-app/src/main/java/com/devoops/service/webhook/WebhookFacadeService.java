@@ -10,6 +10,7 @@ import com.devoops.dto.AppWebhookEventRequest;
 import com.devoops.event.QuestionCreateEvent;
 import com.devoops.service.pullrequest.PullRequestService;
 import com.devoops.service.user.UserService;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -33,13 +34,16 @@ public class WebhookFacadeService {
         log.info("request : {}", request);
 
         User triggerUser = userService.findByProviderId(request.userId());
-        GithubToken githubToken = triggerUser.getGithubToken();
-        PullRequest readyPullRequest = savePullRequest(
-                triggerUser.getId(),
-                request
-        );
+        GithubRepository githubRepository = githubRepoDomainRepository.findByExternalIdAndUserId(request.repositoryId(), triggerUser.getId());
 
-        eventPublisher.publishEvent(new QuestionCreateEvent(this, request, readyPullRequest, githubToken));
+        if(githubRepository.isTracking()) {
+            PullRequest readyPullRequest = savePullRequest(
+                    triggerUser.getId(),
+                    request
+            );
+            QuestionCreateEvent questionCreateEvent = new QuestionCreateEvent(this, request, readyPullRequest, triggerUser.getGithubToken());
+            eventPublisher.publishEvent(questionCreateEvent);
+        }
     }
 
     private PullRequest savePullRequest(
