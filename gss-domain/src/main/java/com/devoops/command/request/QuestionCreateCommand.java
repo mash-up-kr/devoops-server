@@ -1,6 +1,6 @@
 package com.devoops.command.request;
 
-import com.devoops.domain.entity.github.Question;
+import com.devoops.domain.entity.github.question.Question;
 
 public record QuestionCreateCommand(
     Long pullRequestId,

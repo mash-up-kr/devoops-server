@@ -1,7 +1,6 @@
 package com.devoops.dto.response;
 
-import com.devoops.domain.entity.github.PullRequests;
-import com.devoops.dto.request.AnswerPutRequest;
+import com.devoops.domain.entity.github.pr.PullRequests;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;

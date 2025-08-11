@@ -4,11 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.devoops.BaseControllerTest;
-import com.devoops.domain.entity.github.Answer;
-import com.devoops.domain.entity.github.GithubRepository;
-import com.devoops.domain.entity.github.PullRequest;
-import com.devoops.domain.entity.github.Question;
-import com.devoops.domain.entity.github.RecordStatus;
+import com.devoops.domain.entity.github.answer.Answer;
+import com.devoops.domain.entity.github.repo.GithubRepository;
+import com.devoops.domain.entity.github.pr.PullRequest;
+import com.devoops.domain.entity.github.question.Question;
+import com.devoops.domain.entity.github.pr.RecordStatus;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.AnswerPutRequest;
 import com.devoops.dto.request.AnswerPutRequests;

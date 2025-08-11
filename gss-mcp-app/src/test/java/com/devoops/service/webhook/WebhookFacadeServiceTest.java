@@ -4,12 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.devoops.BaseMcpTest;
 import com.devoops.adaptor.GithubAdaptor;
-import com.devoops.domain.entity.github.GithubRepository;
-import com.devoops.domain.entity.github.PullRequests;
+import com.devoops.domain.entity.github.repo.GithubRepository;
+import com.devoops.domain.entity.github.pr.PullRequests;
 import com.devoops.domain.entity.github.QuestionAnswer;
 import com.devoops.domain.entity.user.User;
-import com.devoops.domain.repository.github.PullRequestDomainRepository;
-import com.devoops.domain.repository.github.QuestionDomainRepository;
+import com.devoops.domain.repository.github.pr.PullRequestDomainRepository;
+import com.devoops.domain.repository.github.question.QuestionDomainRepository;
 import com.devoops.dto.AppWebhookEventRequest;
 import com.devoops.dto.request.GitHubWebhookEventRequest;
 import java.time.LocalDateTime;

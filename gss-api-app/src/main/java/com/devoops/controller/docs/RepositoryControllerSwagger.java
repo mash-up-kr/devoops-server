@@ -1,11 +1,7 @@
 package com.devoops.controller.docs;
 
-import com.devoops.controller.auth.AuthUser;
-import com.devoops.domain.entity.github.GithubRepository;
-import com.devoops.domain.entity.github.PullRequests;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.RepositorySaveRequest;
-import com.devoops.dto.response.AnswerUpdateResponse;
 import com.devoops.dto.response.MyRepositoriesResponse;
 import com.devoops.dto.response.RepositoryPullRequestResponses;
 import com.devoops.dto.response.RepositorySaveResponse;
@@ -17,10 +13,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Repository API")
 @SecurityRequirement(name = "Authorization")

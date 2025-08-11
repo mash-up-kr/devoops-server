@@ -1,7 +1,7 @@
 package com.devoops.event;
 
-import com.devoops.domain.entity.github.GithubToken;
-import com.devoops.domain.entity.github.PullRequest;
+import com.devoops.domain.entity.github.token.GithubToken;
+import com.devoops.domain.entity.github.pr.PullRequest;
 import com.devoops.dto.AppWebhookEventRequest;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;

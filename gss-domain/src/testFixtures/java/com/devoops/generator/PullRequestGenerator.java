@@ -1,9 +1,9 @@
 package com.devoops.generator;
 
-import com.devoops.domain.entity.github.GithubRepository;
-import com.devoops.domain.entity.github.PullRequest;
-import com.devoops.domain.entity.github.RecordStatus;
-import com.devoops.domain.repository.github.PullRequestDomainRepository;
+import com.devoops.domain.entity.github.repo.GithubRepository;
+import com.devoops.domain.entity.github.pr.PullRequest;
+import com.devoops.domain.entity.github.pr.RecordStatus;
+import com.devoops.domain.repository.github.pr.PullRequestDomainRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,7 +1,7 @@
 package com.devoops.dto.response;
 
-import com.devoops.domain.entity.github.PullRequest;
-import com.devoops.domain.entity.github.RecordStatus;
+import com.devoops.domain.entity.github.pr.PullRequest;
+import com.devoops.domain.entity.github.pr.RecordStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

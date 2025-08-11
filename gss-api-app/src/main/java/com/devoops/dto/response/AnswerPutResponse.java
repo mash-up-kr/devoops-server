@@ -1,6 +1,6 @@
 package com.devoops.dto.response;
 
-import com.devoops.domain.entity.github.Answer;
+import com.devoops.domain.entity.github.answer.Answer;
 
 public record AnswerPutResponse(
         long answerId,

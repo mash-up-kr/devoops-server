@@ -1,6 +1,6 @@
 package com.devoops.dto.response;
 
-import com.devoops.domain.entity.github.Answer;
+import com.devoops.domain.entity.github.answer.Answer;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record AnswerSaveResponse(

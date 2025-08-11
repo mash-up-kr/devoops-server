@@ -1,6 +1,6 @@
 package com.devoops.jpa.entity.user;
 
-import com.devoops.domain.entity.github.GithubToken;
+import com.devoops.domain.entity.github.token.GithubToken;
 import com.devoops.domain.entity.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

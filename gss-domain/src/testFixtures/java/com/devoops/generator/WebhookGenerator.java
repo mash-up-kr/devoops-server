@@ -1,9 +1,9 @@
 package com.devoops.generator;
 
-import com.devoops.domain.entity.github.GithubRepository;
-import com.devoops.domain.entity.github.GithubWebhook;
+import com.devoops.domain.entity.github.repo.GithubRepository;
+import com.devoops.domain.entity.github.webhook.GithubWebhook;
 import com.devoops.domain.entity.user.User;
-import com.devoops.domain.repository.github.GithubWebhookDomainRepository;
+import com.devoops.domain.repository.github.webhook.GithubWebhookDomainRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

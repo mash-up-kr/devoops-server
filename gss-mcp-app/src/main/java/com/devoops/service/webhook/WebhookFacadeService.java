@@ -1,11 +1,11 @@
 package com.devoops.service.webhook;
 
 import com.devoops.command.request.PullRequestCreateCommand;
-import com.devoops.domain.entity.github.GithubRepository;
-import com.devoops.domain.entity.github.GithubToken;
-import com.devoops.domain.entity.github.PullRequest;
+import com.devoops.domain.entity.github.repo.GithubRepository;
+import com.devoops.domain.entity.github.token.GithubToken;
+import com.devoops.domain.entity.github.pr.PullRequest;
 import com.devoops.domain.entity.user.User;
-import com.devoops.domain.repository.github.GithubRepoDomainRepository;
+import com.devoops.domain.repository.github.repo.GithubRepoDomainRepository;
 import com.devoops.dto.AppWebhookEventRequest;
 import com.devoops.event.QuestionCreateEvent;
 import com.devoops.service.pullrequest.PullRequestService;

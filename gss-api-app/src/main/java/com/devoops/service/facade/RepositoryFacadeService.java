@@ -3,8 +3,8 @@ package com.devoops.service.facade;
 import static com.devoops.Constants.INITIAL_PULL_REQUEST_COUNT;
 
 import com.devoops.command.request.RepositoryCreateCommand;
-import com.devoops.domain.entity.github.GithubRepository;
-import com.devoops.domain.entity.github.PullRequests;
+import com.devoops.domain.entity.github.repo.GithubRepository;
+import com.devoops.domain.entity.github.pr.PullRequests;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.GithubRepoUrl;
 import com.devoops.dto.request.RepositorySaveRequest;

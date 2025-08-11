@@ -1,10 +1,10 @@
 package com.devoops.service.facade;
 
 import com.devoops.command.request.AnswerUpdateCommand;
-import com.devoops.domain.entity.github.Answer;
-import com.devoops.domain.entity.github.Answers;
-import com.devoops.domain.entity.github.PullRequest;
-import com.devoops.domain.entity.github.RecordStatus;
+import com.devoops.domain.entity.github.answer.Answer;
+import com.devoops.domain.entity.github.answer.Answers;
+import com.devoops.domain.entity.github.pr.PullRequest;
+import com.devoops.domain.entity.github.pr.RecordStatus;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.AnswerPutRequests;
 import com.devoops.service.answer.AnswerService;

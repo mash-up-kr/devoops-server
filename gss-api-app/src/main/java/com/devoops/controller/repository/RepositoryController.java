@@ -2,8 +2,8 @@ package com.devoops.controller.repository;
 
 import com.devoops.controller.auth.AuthUser;
 import com.devoops.controller.docs.RepositoryControllerSwagger;
-import com.devoops.domain.entity.github.GithubRepository;
-import com.devoops.domain.entity.github.PullRequests;
+import com.devoops.domain.entity.github.repo.GithubRepository;
+import com.devoops.domain.entity.github.pr.PullRequests;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.RepositorySaveRequest;
 import com.devoops.dto.response.MyRepositoriesResponse;

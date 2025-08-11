@@ -1,14 +1,13 @@
 package com.devoops.service;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.devoops.BaseServiceTest;
 import com.devoops.client.GitHubClient;
-import com.devoops.domain.entity.github.GithubRepository;
-import com.devoops.domain.entity.github.GithubWebhook;
+import com.devoops.domain.entity.github.repo.GithubRepository;
+import com.devoops.domain.entity.github.webhook.GithubWebhook;
 import com.devoops.domain.entity.user.User;
-import com.devoops.domain.repository.github.GithubWebhookDomainRepository;
+import com.devoops.domain.repository.github.webhook.GithubWebhookDomainRepository;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
 import org.junit.jupiter.api.Nested;

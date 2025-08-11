@@ -1,7 +1,7 @@
 package com.devoops.service.answer;
 
-import com.devoops.domain.entity.github.Answer;
-import com.devoops.domain.repository.github.AnswerDomainRepository;
+import com.devoops.domain.entity.github.answer.Answer;
+import com.devoops.domain.repository.github.answer.AnswerDomainRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

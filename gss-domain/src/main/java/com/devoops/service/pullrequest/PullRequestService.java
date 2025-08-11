@@ -1,10 +1,10 @@
 package com.devoops.service.pullrequest;
 
 import com.devoops.command.request.PullRequestCreateCommand;
-import com.devoops.domain.entity.github.PullRequest;
-import com.devoops.domain.entity.github.PullRequests;
-import com.devoops.domain.entity.github.RecordStatus;
-import com.devoops.domain.repository.github.PullRequestDomainRepository;
+import com.devoops.domain.entity.github.pr.PullRequest;
+import com.devoops.domain.entity.github.pr.PullRequests;
+import com.devoops.domain.entity.github.pr.RecordStatus;
+import com.devoops.domain.repository.github.pr.PullRequestDomainRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

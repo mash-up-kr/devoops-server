@@ -1,13 +1,13 @@
 package com.devoops.service;
 
 import com.devoops.client.GitHubClient;
-import com.devoops.domain.entity.github.GithubRepository;
-import com.devoops.domain.entity.github.GithubToken;
-import com.devoops.domain.entity.github.GithubWebhook;
+import com.devoops.domain.entity.github.repo.GithubRepository;
+import com.devoops.domain.entity.github.token.GithubToken;
+import com.devoops.domain.entity.github.webhook.GithubWebhook;
 import com.devoops.domain.entity.user.User;
-import com.devoops.domain.repository.github.GithubRepoDomainRepository;
-import com.devoops.domain.repository.github.GithubTokenDomainRepository;
-import com.devoops.domain.repository.github.GithubWebhookDomainRepository;
+import com.devoops.domain.repository.github.repo.GithubRepoDomainRepository;
+import com.devoops.domain.repository.github.token.GithubTokenDomainRepository;
+import com.devoops.domain.repository.github.webhook.GithubWebhookDomainRepository;
 import com.devoops.dto.request.GitHubWebhookRequest;
 import com.devoops.dto.request.GithubRepoUrl;
 import com.devoops.dto.response.GithubPrResponse;

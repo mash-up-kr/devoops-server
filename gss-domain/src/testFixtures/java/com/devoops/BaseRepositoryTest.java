@@ -1,7 +1,7 @@
 package com.devoops;
 
-import com.devoops.jpa.repository.github.GithubRepoJpaRepository;
-import com.devoops.jpa.repository.github.PullRequestJpaRepository;
+import com.devoops.jpa.repository.github.repo.GithubRepoJpaRepository;
+import com.devoops.jpa.repository.github.pr.PullRequestJpaRepository;
 import com.devoops.jpa.repository.user.UserJpaRepository;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;

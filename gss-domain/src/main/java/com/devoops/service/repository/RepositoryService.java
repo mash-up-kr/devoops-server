@@ -1,11 +1,11 @@
 package com.devoops.service.repository;
 
 import com.devoops.command.request.RepositoryCreateCommand;
-import com.devoops.domain.entity.github.GithubRepository;
-import com.devoops.domain.entity.github.PullRequests;
+import com.devoops.domain.entity.github.repo.GithubRepository;
+import com.devoops.domain.entity.github.pr.PullRequests;
 import com.devoops.domain.entity.user.User;
-import com.devoops.domain.repository.github.GithubRepoDomainRepository;
-import com.devoops.domain.repository.github.PullRequestDomainRepository;
+import com.devoops.domain.repository.github.repo.GithubRepoDomainRepository;
+import com.devoops.domain.repository.github.pr.PullRequestDomainRepository;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
 import java.util.List;
