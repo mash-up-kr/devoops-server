@@ -47,12 +47,11 @@ public class GitHubService {
     }
 
     private void createWebhook(GithubToken token, GithubRepository repo) {
-        String webhookUrl = mcpWebhookUrl + "/" + repo.getId();
         WebHookCreateResponse webHookCreateResponse = gitHubClient.createWebhook(
                 BEARER_PREFIX + token.getToken(),
                 repo.getOwner(),
                 repo.getName(),
-                GitHubWebhookRequest.ofPullRequestEvent(webhookUrl)
+                GitHubWebhookRequest.ofPullRequestEvent(mcpWebhookUrl)
         );
         GithubWebhook webhook = new GithubWebhook(webHookCreateResponse.id(), repo.getId());
         githubWebhookDomainRepository.save(webhook);
