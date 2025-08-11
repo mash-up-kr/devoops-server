@@ -3,6 +3,8 @@ package com.devoops.jpa.repository.github;
 import com.devoops.domain.entity.github.GithubToken;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.github.GithubTokenDomainRepository;
+import com.devoops.exception.custom.GssException;
+import com.devoops.exception.errorcode.ErrorCode;
 import com.devoops.jpa.entity.github.GithubTokenEntity;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +25,10 @@ public class GithubTokenDomainRepositoryImpl implements GithubTokenDomainReposit
     }
 
     @Override
-    public Optional<GithubToken> findByUserId(User owner) {
-
-        return githubTokenJpaRepository.findByUserId(owner.getId())
-                .map(GithubTokenEntity::toDomainEntity);
+    @Transactional(readOnly = true)
+    public GithubToken getByUserId(long userId) {
+        return githubTokenJpaRepository.findByUserId(userId)
+                .map(GithubTokenEntity::toDomainEntity)
+                .orElseThrow(() -> new GssException(ErrorCode.NO_RESOURCE_FOUND));
     }
 }

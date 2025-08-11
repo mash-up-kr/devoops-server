@@ -44,12 +44,11 @@ public class GitHubService {
     public void registerWebhook(User user, long repositoryId) {
 
         GithubRepository githubRepository = githubRepoDomainRepository.findByIdAndUserId(repositoryId, user.getId());
-        GithubToken githubToken = githubTokenDomainRepository.findByUserId(user)
-                .orElseThrow(() -> new GssException(ErrorCode.NO_RESOURCE_FOUND));
-        createWebHook(githubToken, githubRepository);
+        GithubToken githubToken = githubTokenDomainRepository.getByUserId(user.getId());
+        createWebhook(githubToken, githubRepository);
     }
 
-    private GithubWebhook createWebHook(GithubToken token, GithubRepository repo) {
+    private void createWebhook(GithubToken token, GithubRepository repo) {
         WebHookCreateResponse webHookCreateResponse = gitHubClient.createWebhook(
                 BEARER_PREFIX + token.getToken(),
                 repo.getOwner(),
@@ -57,7 +56,7 @@ public class GitHubService {
                 GitHubWebhookRequest.ofPullRequestEvent(mcpWebhookUrl)
         );
         GithubWebhook webhook = new GithubWebhook(webHookCreateResponse.id(), repo.getId());
-        return githubWebhookDomainRepository.save(webhook);
+        githubWebhookDomainRepository.save(webhook);
     }
 
     public List<GithubPrResponse> getUserPullRequests(
@@ -90,8 +89,7 @@ public class GitHubService {
     @Transactional
     public void deleteWebhook(User user, long repositoryId) {
         GithubRepository repo = githubRepoDomainRepository.findByIdAndUserId(repositoryId, user.getId());
-        GithubToken githubToken = githubTokenDomainRepository.findByUserId(user)
-                .orElseThrow(() -> new GssException(ErrorCode.NO_RESOURCE_FOUND));
+        GithubToken githubToken = githubTokenDomainRepository.getByUserId(user.getId());
         GithubWebhook webhook = githubWebhookDomainRepository.findByRepositoryId(repo.getId());
         tryDeleteWebhook(githubToken, webhook, repo);
         githubWebhookDomainRepository.deleteById(webhook.getId());

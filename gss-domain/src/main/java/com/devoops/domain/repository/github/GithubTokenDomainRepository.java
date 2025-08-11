@@ -9,5 +9,5 @@ public interface GithubTokenDomainRepository {
 
     GithubToken save(GithubToken token, User user);
 
-    Optional<GithubToken> findByUserId(User owner);
+    GithubToken getByUserId(long userId);
 }
