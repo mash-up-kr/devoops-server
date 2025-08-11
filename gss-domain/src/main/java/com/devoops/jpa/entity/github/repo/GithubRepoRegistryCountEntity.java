@@ -1,5 +1,6 @@
 package com.devoops.jpa.entity.github.repo;
 
+import com.devoops.domain.entity.github.repo.GithubRepoRegistryCount;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,4 +25,16 @@ public class GithubRepoRegistryCountEntity {
     private long externalId;
 
     private long registryCount;
+
+    public GithubRepoRegistryCount toDomainEntity() {
+        return new GithubRepoRegistryCount(this.externalId, this.registryCount);
+    }
+
+    public void plusCount() {
+        this.registryCount += 1;
+    }
+
+    public void minusCount() {
+        this.registryCount -= 1;
+    }
 }

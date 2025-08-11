@@ -1,25 +1,15 @@
 package com.devoops.service;
 
 import com.devoops.client.GitHubClient;
-import com.devoops.domain.entity.github.repo.GithubRepository;
 import com.devoops.domain.entity.github.token.GithubToken;
-import com.devoops.domain.entity.github.webhook.GithubWebhook;
 import com.devoops.domain.entity.user.User;
-import com.devoops.domain.repository.github.repo.GithubRepoDomainRepository;
-import com.devoops.domain.repository.github.token.GithubTokenDomainRepository;
-import com.devoops.domain.repository.github.webhook.GithubWebhookDomainRepository;
-import com.devoops.dto.request.GitHubWebhookRequest;
 import com.devoops.dto.request.GithubRepoUrl;
 import com.devoops.dto.response.GithubPrResponse;
 import com.devoops.dto.response.GithubRepoInfoResponse;
-import com.devoops.dto.response.WebHookCreateResponse;
-import com.devoops.exception.GithubNotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -31,31 +21,7 @@ public class GitHubService {
     private static final int MAX_PER_PAGE_PULL_REQUEST = 10;
     private static final String REQUEST_PULL_REQUEST_STATUS = "closed";
 
-    @Value("${dev-oops.mcp.webhook-url}")
-    private String mcpWebhookUrl;
-
     private final GitHubClient gitHubClient;
-    private final GithubRepoDomainRepository githubRepoDomainRepository;
-    private final GithubTokenDomainRepository githubTokenDomainRepository;
-    private final GithubWebhookDomainRepository githubWebhookDomainRepository;
-
-    public void registerWebhook(User user, long repositoryId) {
-
-        GithubRepository githubRepository = githubRepoDomainRepository.findByIdAndUserId(repositoryId, user.getId());
-        GithubToken githubToken = githubTokenDomainRepository.getByUserId(user.getId());
-        createWebhook(githubToken, githubRepository);
-    }
-
-    private void createWebhook(GithubToken token, GithubRepository repo) {
-        WebHookCreateResponse webHookCreateResponse = gitHubClient.createWebhook(
-                BEARER_PREFIX + token.getToken(),
-                repo.getOwner(),
-                repo.getName(),
-                GitHubWebhookRequest.ofPullRequestEvent(mcpWebhookUrl)
-        );
-        GithubWebhook webhook = new GithubWebhook(webHookCreateResponse.id(), repo.getId());
-        githubWebhookDomainRepository.save(webhook);
-    }
 
     public List<GithubPrResponse> getUserPullRequests(
             GithubRepoUrl repoUrl,
@@ -82,27 +48,5 @@ public class GitHubService {
                 repoUrl.getOwner(),
                 repoUrl.getRepoName()
         );
-    }
-
-    @Transactional
-    public void deleteWebhook(User user, long repositoryId) {
-        GithubRepository repo = githubRepoDomainRepository.findByIdAndUserId(repositoryId, user.getId());
-        GithubToken githubToken = githubTokenDomainRepository.getByUserId(user.getId());
-        GithubWebhook webhook = githubWebhookDomainRepository.findByRepositoryId(repo.getId());
-        tryDeleteWebhook(githubToken, webhook, repo);
-        githubWebhookDomainRepository.deleteById(webhook.getId());
-    }
-
-    private void tryDeleteWebhook(GithubToken githubToken, GithubWebhook webhook, GithubRepository repo) {
-        try {
-            gitHubClient.deleteWebhook(
-                    BEARER_PREFIX + githubToken.getToken(),
-                    repo.getOwner(),
-                    repo.getName(),
-                    webhook.getExternalId()
-            );
-        } catch (GithubNotFoundException githubNotFoundException) {
-            log.error("깃허브 레포에서 웹훅을 찾을 수 없습니다 : {}, repo : {} ", githubNotFoundException, repo.getName());
-        }
     }
 }

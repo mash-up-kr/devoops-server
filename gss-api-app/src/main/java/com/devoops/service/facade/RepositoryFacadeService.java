@@ -11,6 +11,7 @@ import com.devoops.dto.request.RepositorySaveRequest;
 import com.devoops.dto.response.GithubRepoInfoResponse;
 import com.devoops.event.AnalyzeMyPrEvent;
 import com.devoops.service.GitHubService;
+import com.devoops.service.github.WebHookService;
 import com.devoops.service.repository.RepositoryService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +25,14 @@ public class RepositoryFacadeService {
 
     private final RepositoryService repositoryService;
     private final GitHubService gitHubService;
+    private final WebHookService webHookService;
     private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public GithubRepository save(RepositorySaveRequest request, User user) {
         GithubRepoUrl repoUrl = new GithubRepoUrl(request.url());
         GithubRepository savedRepository = saveRepository(repoUrl, user);
-        gitHubService.registerWebhook(user, savedRepository.getId());
+        webHookService.registerWebhook(user, savedRepository.getId());
         eventPublisher.publishEvent(new AnalyzeMyPrEvent(repoUrl, user, this));
         return savedRepository;
     }
@@ -62,7 +64,8 @@ public class RepositoryFacadeService {
 
     @Transactional
     public void deleteRepository(User user, long repositoryId) {
-        gitHubService.deleteWebhook(user, repositoryId);
+        //TODO 다른 유저로부터 등록된 상황 고려
         repositoryService.stopTrackingRepository(user, repositoryId);
+        webHookService.deleteWebhook(user, repositoryId);
     }
 }
