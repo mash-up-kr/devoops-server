@@ -23,10 +23,9 @@ public class WebhookController {
     /**
      * webhook url : https://mcp.dev-oops.kr/api/webhooks/github/pull-requests
      */
-    @PostMapping("/github/pull-requests/{repositoryId}")
+    @PostMapping("/github/pull-requests")
     public ResponseEntity<Void> getWebhookPullRequest(
-            @RequestBody GitHubWebhookEventRequest gitHubWebhookEventRequest,
-            @PathVariable(name = "repositoryId") Long appRepositoryId
+            @RequestBody GitHubWebhookEventRequest gitHubWebhookEventRequest
     ) {
         log.info("request : {} ", gitHubWebhookEventRequest);
         if(gitHubWebhookEventRequest.isMerged()) {
