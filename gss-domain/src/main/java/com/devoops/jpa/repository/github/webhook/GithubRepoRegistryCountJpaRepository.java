@@ -13,11 +13,11 @@ public interface GithubRepoRegistryCountJpaRepository extends JpaRepository<Gith
 
     boolean existsByExternalId(long externalId);
 
-    @Modifying
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("update GithubRepoRegistryCountEntity e set e.registryCount = e.registryCount + 1 where e.externalId = :externalId")
     int incrementByExternalId(@Param("externalId") long externalId);
 
-    @Modifying
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("update GithubRepoRegistryCountEntity e set e.registryCount = e.registryCount - 1 where e.externalId = :externalId and e.registryCount > 0")
     int decrementByExternalIdIfPositive(@Param("externalId") long externalId);
 

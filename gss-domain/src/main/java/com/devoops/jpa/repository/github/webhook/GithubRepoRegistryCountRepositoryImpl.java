@@ -38,7 +38,10 @@ public class GithubRepoRegistryCountRepositoryImpl implements GithubRepoRegistry
     @Override
     @Transactional
     public void plusCount(long externalId) {
-        githubRepoRegistryCountJpaRepository.incrementByExternalId(externalId);
+        int updatedRow = githubRepoRegistryCountJpaRepository.incrementByExternalId(externalId);
+        if (updatedRow == 0) {
+            throw new GssException(ErrorCode.GITHUB_REPOSITORY_REGISTRY_COUNT_NOT_FOUND);
+        }
     }
 
     @Override
