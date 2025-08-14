@@ -10,9 +10,9 @@ public interface GithubRepoRegistryCountRepository {
 
     boolean existsByExternalId(long externalId);
 
-    GithubRepoRegistryCount plusCount(long externalId);
+    void plusCount(long externalId);
 
-    GithubRepoRegistryCount minusCount(long externalId);
+    void minusCount(long externalId);
 
     void deleteByExternalId(long repoExternalId);
 }
