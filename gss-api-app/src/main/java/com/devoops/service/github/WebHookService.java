@@ -35,6 +35,7 @@ public class WebHookService {
     private final GithubWebhookDomainRepository githubWebhookDomainRepository;
     private final GithubRepoRegistryCountRepository registryCountRepository;
 
+    @Transactional
     public void registerWebhook(User user, long repositoryId) {
         GithubRepository githubRepository = githubRepoDomainRepository.findByIdAndUserId(repositoryId, user.getId());
         long repoExternalId = githubRepository.getExternalId();
