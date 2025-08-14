@@ -26,6 +26,7 @@ public enum ErrorCode {
     //5XX
     INTERNAL_SERVER_ERROR(500, "서버 오류가 발생했습니다. 관리자에게 문의하세요."),
     GITHUB_REPOSITORY_NOT_FOUND(500, "찾는 레포지토리가 존재하지 않습니다"),
+    GITHUB_REPOSITORY_REGISTRY_COUNT_NOT_FOUND(500, "찾는 레포지토리 등록 카운트가 존재하지 않습니다"),
     GITHUB_TOKEN_NOT_FOUND(500, "찾는 깃허브 토큰이 존재하지 않습니다"),
     PULL_REQUEST_NOT_FOUND(500, "찾는 풀 리퀘스트가 존재하지 않습니다"),
     QUESTION_NOT_FOUND(500, "찾는 질문이 존재하지 않습니다"),

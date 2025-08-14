@@ -59,6 +59,6 @@ public class GithubRepoRegistryCountRepositoryImpl implements GithubRepoRegistry
 
     private GithubRepoRegistryCountEntity findRegistryEntityByExternalId(long externalId) {
         return githubRepoRegistryCountJpaRepository.findByExternalId(externalId)
-                .orElseThrow(() -> new GssException(ErrorCode.NO_RESOURCE_FOUND));
+                .orElseThrow(() -> new GssException(ErrorCode.GITHUB_REPOSITORY_REGISTRY_COUNT_NOT_FOUND));
     }
 }

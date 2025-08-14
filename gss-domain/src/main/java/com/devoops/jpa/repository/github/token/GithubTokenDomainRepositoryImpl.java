@@ -28,6 +28,6 @@ public class GithubTokenDomainRepositoryImpl implements GithubTokenDomainReposit
     public GithubToken getByUserId(long userId) {
         return githubTokenJpaRepository.findByUserId(userId)
                 .map(GithubTokenEntity::toDomainEntity)
-                .orElseThrow(() -> new GssException(ErrorCode.NO_RESOURCE_FOUND));
+                .orElseThrow(() -> new GssException(ErrorCode.GITHUB_TOKEN_NOT_FOUND));
     }
 }
