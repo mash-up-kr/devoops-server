@@ -1,14 +1,14 @@
 package com.devoops.jpa.repository.user;
 
-import com.devoops.domain.entity.github.GithubToken;
+import com.devoops.domain.entity.github.token.GithubToken;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.user.UserDomainRepository;
 
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
-import com.devoops.jpa.entity.github.GithubTokenEntity;
+import com.devoops.jpa.entity.github.token.GithubTokenEntity;
 import com.devoops.jpa.entity.user.UserEntity;
-import com.devoops.jpa.repository.github.GithubTokenJpaRepository;
+import com.devoops.jpa.repository.github.token.GithubTokenJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

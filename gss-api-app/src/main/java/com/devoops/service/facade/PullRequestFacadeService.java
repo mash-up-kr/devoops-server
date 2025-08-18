@@ -1,9 +1,9 @@
 package com.devoops.service.facade;
 
-import com.devoops.domain.entity.github.AnswerRankings;
-import com.devoops.domain.entity.github.PullRequest;
+import com.devoops.domain.entity.github.answer.AnswerRankings;
+import com.devoops.domain.entity.github.pr.PullRequest;
 import com.devoops.domain.entity.github.QuestionAnswer;
-import com.devoops.domain.entity.github.RecordStatus;
+import com.devoops.domain.entity.github.pr.RecordStatus;
 import com.devoops.dto.response.PullRequestDetailReadResponse;
 import com.devoops.dto.response.PullRequestRankingResponses;
 import com.devoops.dto.response.PullRequestReadResponse;

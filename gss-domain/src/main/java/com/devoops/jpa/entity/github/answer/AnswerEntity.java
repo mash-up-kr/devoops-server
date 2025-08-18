@@ -1,0 +1,60 @@
+package com.devoops.jpa.entity.github.answer;
+
+import com.devoops.domain.entity.github.answer.Answer;
+import com.devoops.jpa.entity.BaseTimeEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.LastModifiedDate;
+
+@Entity
+@Getter
+@Table(name = "answers")
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class AnswerEntity extends BaseTimeEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private long questionId;
+
+    @NotNull
+    @Column(columnDefinition = "TEXT")
+    private String content;
+
+    @NotNull
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
+    public static AnswerEntity from(Answer answer) {
+        return new AnswerEntity(
+                answer.getId(),
+                answer.getQuestionId(),
+                answer.getContent(),
+                LocalDateTime.now()
+        );
+    }
+
+    public void update(String content) {
+        this.content = content;
+    }
+
+    public Answer toDomainEntity() {
+        return new Answer(
+                this.id,
+                questionId,
+                content
+        );
+    }
+}

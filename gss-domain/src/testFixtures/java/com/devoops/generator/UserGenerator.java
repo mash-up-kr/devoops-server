@@ -1,6 +1,6 @@
 package com.devoops.generator;
 
-import com.devoops.domain.entity.github.GithubToken;
+import com.devoops.domain.entity.github.token.GithubToken;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.user.UserDomainRepository;
 import java.util.concurrent.ThreadLocalRandom;

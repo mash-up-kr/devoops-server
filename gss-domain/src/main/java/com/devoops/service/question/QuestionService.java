@@ -1,16 +1,15 @@
 package com.devoops.service.question;
 
 import com.devoops.command.request.AnswerUpdateCommand;
-import com.devoops.domain.entity.github.Answer;
-import com.devoops.domain.entity.github.Answers;
-import com.devoops.domain.entity.github.Question;
+import com.devoops.domain.entity.github.answer.Answer;
+import com.devoops.domain.entity.github.answer.Answers;
+import com.devoops.domain.entity.github.question.Question;
 import com.devoops.domain.entity.github.QuestionAnswer;
 import com.devoops.domain.entity.user.User;
-import com.devoops.domain.repository.github.AnswerDomainRepository;
-import com.devoops.domain.repository.github.QuestionDomainRepository;
+import com.devoops.domain.repository.github.answer.AnswerDomainRepository;
+import com.devoops.domain.repository.github.question.QuestionDomainRepository;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

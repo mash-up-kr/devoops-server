@@ -1,6 +1,6 @@
 package com.devoops.command.request;
 
-import com.devoops.domain.entity.github.GithubRepository;
+import com.devoops.domain.entity.github.repo.GithubRepository;
 
 public record RepositoryCreateCommand(
         long userId,

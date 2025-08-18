@@ -1,6 +1,6 @@
 package com.devoops.dto.response;
 
-import com.devoops.domain.entity.github.AnswerRanking;
+import com.devoops.domain.entity.github.answer.AnswerRanking;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

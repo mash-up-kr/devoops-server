@@ -1,9 +1,9 @@
 package com.devoops.controller.repository;
 
 import com.devoops.BaseControllerTest;
-import com.devoops.domain.entity.github.GithubRepository;
-import com.devoops.domain.entity.github.PullRequest;
-import com.devoops.domain.entity.github.RecordStatus;
+import com.devoops.domain.entity.github.repo.GithubRepository;
+import com.devoops.domain.entity.github.pr.PullRequest;
+import com.devoops.domain.entity.github.pr.RecordStatus;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.RepositorySaveRequest;
 import com.devoops.service.auth.jwt.AccessToken;

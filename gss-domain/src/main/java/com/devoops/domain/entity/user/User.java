@@ -1,6 +1,6 @@
 package com.devoops.domain.entity.user;
 
-import com.devoops.domain.entity.github.GithubToken;
+import com.devoops.domain.entity.github.token.GithubToken;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

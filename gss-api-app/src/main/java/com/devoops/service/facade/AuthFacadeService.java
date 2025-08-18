@@ -1,6 +1,6 @@
 package com.devoops.service.facade;
 
-import com.devoops.domain.entity.github.GithubToken;
+import com.devoops.domain.entity.github.token.GithubToken;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.UserSaveRequest;
 import com.devoops.dto.response.AuthResponse;

@@ -3,7 +3,7 @@ package com.devoops.service.user;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.devoops.BaseServiceTest;
-import com.devoops.domain.entity.github.GithubToken;
+import com.devoops.domain.entity.github.token.GithubToken;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.user.UserDomainRepository;
 import org.junit.jupiter.api.Nested;

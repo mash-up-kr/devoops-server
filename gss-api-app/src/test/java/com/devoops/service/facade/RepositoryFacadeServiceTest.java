@@ -10,9 +10,9 @@ import static org.mockito.Mockito.times;
 
 import com.devoops.BaseServiceTest;
 import com.devoops.client.GitHubClient;
-import com.devoops.domain.entity.github.GithubRepository;
+import com.devoops.domain.entity.github.repo.GithubRepository;
 import com.devoops.domain.entity.user.User;
-import com.devoops.domain.repository.github.GithubRepoDomainRepository;
+import com.devoops.domain.repository.github.repo.GithubRepoDomainRepository;
 import com.devoops.dto.request.RepositorySaveRequest;
 import com.devoops.dto.response.GithubRepoInfoResponse;
 import com.devoops.dto.response.OwnerResponse;
@@ -88,7 +88,7 @@ class RepositoryFacadeServiceTest extends BaseServiceTest {
         void 웹훅을_찾지_못해도_레포지토리_트래킹을_끊을_수_있다() {
             User user = userGenerator.generate("김건우");
             GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
-            webhookGenerator.generate(user, repo);
+            webhookGenerator.generate(user, repo, 1L);
             Mockito.doThrow(new GithubNotFoundException("mocking error"))
                     .when(gitHubClient)
                     .deleteWebhook(anyString(), anyString(), anyString(), anyLong());

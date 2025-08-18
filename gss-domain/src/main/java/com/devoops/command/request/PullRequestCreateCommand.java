@@ -1,7 +1,7 @@
 package com.devoops.command.request;
 
-import com.devoops.domain.entity.github.PullRequest;
-import com.devoops.domain.entity.github.RecordStatus;
+import com.devoops.domain.entity.github.pr.PullRequest;
+import com.devoops.domain.entity.github.pr.RecordStatus;
 
 import java.time.LocalDateTime;
 

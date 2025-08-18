@@ -2,7 +2,7 @@ package com.devoops.controller.pullrequests;
 
 import com.devoops.controller.auth.AuthUser;
 import com.devoops.controller.docs.PullRequestControllerSwagger;
-import com.devoops.domain.entity.github.RecordStatus;
+import com.devoops.domain.entity.github.pr.RecordStatus;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.response.PullRequestDetailReadResponse;
 import com.devoops.dto.response.PullRequestRankingResponses;

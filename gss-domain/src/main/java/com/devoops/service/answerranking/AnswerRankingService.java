@@ -1,11 +1,11 @@
 package com.devoops.service.answerranking;
 
-import com.devoops.domain.entity.github.Answer;
-import com.devoops.domain.entity.github.AnswerRanking;
-import com.devoops.domain.entity.github.AnswerRankings;
-import com.devoops.domain.entity.github.Question;
-import com.devoops.domain.repository.github.AnswerRankingDomainRepository;
-import com.devoops.domain.repository.github.QuestionDomainRepository;
+import com.devoops.domain.entity.github.answer.Answer;
+import com.devoops.domain.entity.github.answer.AnswerRanking;
+import com.devoops.domain.entity.github.answer.AnswerRankings;
+import com.devoops.domain.entity.github.question.Question;
+import com.devoops.domain.repository.github.answer.AnswerRankingDomainRepository;
+import com.devoops.domain.repository.github.question.QuestionDomainRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

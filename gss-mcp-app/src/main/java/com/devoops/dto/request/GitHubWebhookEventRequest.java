@@ -89,7 +89,7 @@ public record GitHubWebhookEventRequest(
         return pullRequest.mergedAt;
     }
 
-    public Boolean isMerged() {
+    public boolean isMerged() {
         if ("closed".equals(action)
                 && pullRequest != null
                 && pullRequest.merged != null

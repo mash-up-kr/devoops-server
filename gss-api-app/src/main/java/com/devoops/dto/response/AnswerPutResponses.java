@@ -1,6 +1,6 @@
 package com.devoops.dto.response;
 
-import com.devoops.domain.entity.github.Answers;
+import com.devoops.domain.entity.github.answer.Answers;
 import java.util.List;
 import java.util.stream.Collectors;
 

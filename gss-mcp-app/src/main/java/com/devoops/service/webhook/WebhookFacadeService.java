@@ -1,15 +1,16 @@
 package com.devoops.service.webhook;
 
 import com.devoops.command.request.PullRequestCreateCommand;
-import com.devoops.domain.entity.github.GithubRepository;
-import com.devoops.domain.entity.github.GithubToken;
-import com.devoops.domain.entity.github.PullRequest;
+import com.devoops.domain.entity.github.repo.GithubRepository;
+import com.devoops.domain.entity.github.token.GithubToken;
+import com.devoops.domain.entity.github.pr.PullRequest;
 import com.devoops.domain.entity.user.User;
-import com.devoops.domain.repository.github.GithubRepoDomainRepository;
+import com.devoops.domain.repository.github.repo.GithubRepoDomainRepository;
 import com.devoops.dto.AppWebhookEventRequest;
 import com.devoops.event.QuestionCreateEvent;
 import com.devoops.service.pullrequest.PullRequestService;
 import com.devoops.service.user.UserService;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -33,21 +34,24 @@ public class WebhookFacadeService {
         log.info("request : {}", request);
 
         User triggerUser = userService.findByProviderId(request.userId());
-        GithubToken githubToken = triggerUser.getGithubToken();
-        // 레포 아이디를 기반으로 찾기 -> 풀리퀘 생성 -> prCount 올리기
-        PullRequest readyPullRequest = savePullRequest(
-                triggerUser.getId(),
-                request
-        );
+        GithubRepository githubRepository = githubRepoDomainRepository.findByExternalIdAndUserId(request.repositoryId(), triggerUser.getId());
 
-        eventPublisher.publishEvent(new QuestionCreateEvent(this, request, readyPullRequest, githubToken));
+        if(githubRepository.isTracking()) {
+            PullRequest readyPullRequest = savePullRequest(
+                    triggerUser.getId(),
+                    request
+            );
+            QuestionCreateEvent questionCreateEvent = new QuestionCreateEvent(this, request, readyPullRequest, triggerUser.getGithubToken());
+            eventPublisher.publishEvent(questionCreateEvent);
+        }
     }
 
     private PullRequest savePullRequest(
             long userId,
             AppWebhookEventRequest request
     ) {
-        GithubRepository githubRepository = githubRepoDomainRepository.findByExternalId(request.repositoryId());
+        // 레포 아이디를 기반으로 찾기 -> 풀리퀘 생성 -> prCount 올리기
+        GithubRepository githubRepository = githubRepoDomainRepository.findByExternalIdAndUserId(request.repositoryId(), userId);
         PullRequestCreateCommand prCreateCommand = resolvePRCreateCommand(request, githubRepository.getId(), userId);
         return pullRequestService.save(prCreateCommand);
     }

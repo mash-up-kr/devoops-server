@@ -2,8 +2,8 @@ package com.devoops.controller.question;
 
 import com.devoops.controller.auth.AuthUser;
 import com.devoops.controller.docs.QuestionControllerSwagger;
-import com.devoops.domain.entity.github.Answer;
-import com.devoops.domain.entity.github.Answers;
+import com.devoops.domain.entity.github.answer.Answer;
+import com.devoops.domain.entity.github.answer.Answers;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.AnswerPutRequests;
 import com.devoops.dto.request.AnswerUpdateRequest;

@@ -1,6 +1,6 @@
 package com.devoops.dto.response;
 
-import com.devoops.domain.entity.github.GithubRepository;
+import com.devoops.domain.entity.github.repo.GithubRepository;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record RepositorySaveResponse(

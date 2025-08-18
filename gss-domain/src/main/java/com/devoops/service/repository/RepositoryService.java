@@ -1,21 +1,16 @@
 package com.devoops.service.repository;
 
 import com.devoops.command.request.RepositoryCreateCommand;
-import com.devoops.domain.entity.github.GithubRepository;
-import com.devoops.domain.entity.github.PullRequests;
-import com.devoops.domain.entity.github.Question;
+import com.devoops.domain.entity.github.repo.GithubRepository;
+import com.devoops.domain.entity.github.pr.PullRequests;
 import com.devoops.domain.entity.user.User;
-import com.devoops.domain.repository.github.AnswerDomainRepository;
-import com.devoops.domain.repository.github.AnswerRankingDomainRepository;
-import com.devoops.domain.repository.github.GithubRepoDomainRepository;
-import com.devoops.domain.repository.github.PullRequestDomainRepository;
-import com.devoops.domain.repository.github.QuestionDomainRepository;
+import com.devoops.domain.repository.github.repo.GithubRepoDomainRepository;
+import com.devoops.domain.repository.github.pr.PullRequestDomainRepository;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -24,12 +19,9 @@ public class RepositoryService {
 
     private final GithubRepoDomainRepository repoRepository;
     private final PullRequestDomainRepository pullRequestRepository;
-    private final AnswerRankingDomainRepository answerRankingRepository;
-    private final AnswerDomainRepository answerRepository;
-    private final QuestionDomainRepository questionRepository;
 
     public GithubRepository save(RepositoryCreateCommand command) {
-        if(repoRepository.existsByExternalId(command.externalId())) {
+        if (repoRepository.existsByExternalIdAndUserId(command.externalId(), command.userId())) {
             throw new GssException(ErrorCode.ALREADY_SAVED_REPOSITORY);
         }
         return repoRepository.save(command.toDomainEntity());
