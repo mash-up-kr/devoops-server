@@ -3,13 +3,16 @@ package com.devoops.service.facade;
 import static com.devoops.Constants.INITIAL_PULL_REQUEST_COUNT;
 
 import com.devoops.command.request.RepositoryCreateCommand;
-import com.devoops.domain.entity.github.repo.GithubRepository;
 import com.devoops.domain.entity.github.pr.PullRequests;
+import com.devoops.domain.entity.github.repo.GithubRepository;
 import com.devoops.domain.entity.user.User;
 import com.devoops.dto.request.GithubRepoUrl;
 import com.devoops.dto.request.RepositorySaveRequest;
 import com.devoops.dto.response.GithubRepoInfoResponse;
 import com.devoops.event.AnalyzeMyPrEvent;
+import com.devoops.exception.GithubNotFoundException;
+import com.devoops.exception.custom.GssException;
+import com.devoops.exception.errorcode.ErrorCode;
 import com.devoops.service.GitHubService;
 import com.devoops.service.github.WebHookService;
 import com.devoops.service.repository.RepositoryService;
@@ -30,11 +33,15 @@ public class RepositoryFacadeService {
 
     @Transactional
     public GithubRepository save(RepositorySaveRequest request, User user) {
-        GithubRepoUrl repoUrl = new GithubRepoUrl(request.url());
-        GithubRepository savedRepository = saveRepository(repoUrl, user);
-        webHookService.registerWebhook(user, savedRepository.getId());
-        eventPublisher.publishEvent(new AnalyzeMyPrEvent(repoUrl, user, this));
-        return savedRepository;
+        try {
+            GithubRepoUrl repoUrl = new GithubRepoUrl(request.url());
+            GithubRepository savedRepository = saveRepository(repoUrl, user);
+            webHookService.registerWebhook(user, savedRepository.getId());
+            eventPublisher.publishEvent(new AnalyzeMyPrEvent(repoUrl, user, this));
+            return savedRepository;
+        } catch (GithubNotFoundException githubNotFoundException) {
+            throw new GssException(ErrorCode.REGISTRY_GITHUB_REPOSITORY_NOT_FOUND);
+        }
     }
 
     private GithubRepository saveRepository(GithubRepoUrl url, User user) {

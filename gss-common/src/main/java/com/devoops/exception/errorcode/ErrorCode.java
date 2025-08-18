@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum ErrorCode {
 
     //4XX
+    REGISTRY_GITHUB_REPOSITORY_NOT_FOUND(400, "입력한 깃허브 레포지토리를 등록할 수 없습니다"),
     REPOSITORY_NOT_FOUND(400, "레포지토리를 찾을 수 없습니다"),
     MALFORMED_GITHUB_REPOSITORY_URL(400, "잘못된 형식의 레포지토리 url입니다"),
     UNAUTHORIZED_EXCEPTION(401, "잘못된 유저 접근입니다"),
