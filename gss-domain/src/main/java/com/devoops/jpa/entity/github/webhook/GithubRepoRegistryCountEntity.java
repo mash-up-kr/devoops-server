@@ -37,12 +37,4 @@ public class GithubRepoRegistryCountEntity {
     public GithubRepoRegistryCount toDomainEntity() {
         return new GithubRepoRegistryCount(this.externalId, this.registryCount);
     }
-
-    public void plusCount() {
-        this.registryCount += 1;
-    }
-
-    public void minusCount() {
-        this.registryCount -= 1;
-    }
 }
