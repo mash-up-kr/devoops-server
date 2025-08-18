@@ -1,11 +1,16 @@
 package com.devoops.client;
 
 import com.devoops.dto.response.AnalyzePrResponse;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.converter.BeanOutputConverter;
+import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.ai.openai.api.OpenAiApi;
+import org.springframework.ai.openai.api.ResponseFormat;
+import org.springframework.ai.openai.api.ResponseFormat.Type;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -17,28 +22,40 @@ public class PrAnalysisClientImpl implements PrAnalysisClient {
     @Value("${dev-oops.github-pr-analysis.prompt}")
     private String promptTemplate;
 
-    private final ChatModel chatModel;
-    private final ObjectMapper objectMapper;
+    @Value("${dev-oops.github-pr-analysis.system}")
+    private String systemPrompt;
+
+    private final ChatClient chatClient;
 
     @Override
     public AnalyzePrResponse analyze(String title, String description, String diff) {
-        String prompt = buildPrompt(title, description, diff);
-//        log.info("prompt = {}", prompt);
-        String content = chatModel.call(prompt);
-        return parseResponse(content);
+        //json schema 추출
+        BeanOutputConverter<AnalyzePrResponse> outputConverter = new BeanOutputConverter<>(AnalyzePrResponse.class);
+        String jsonSchema = outputConverter.getJsonSchema();
+
+        //option 설정
+        OpenAiChatOptions openAiChatOptions = OpenAiChatOptions.builder()
+                .responseFormat(new ResponseFormat(Type.JSON_SCHEMA, jsonSchema))
+                .model(OpenAiApi.ChatModel.GPT_4_O_MINI)
+                .build();
+
+        //prompt 만들고 보내기
+        String userPrompt = buildPrompt(title, description, diff);
+        return chatClient.prompt()
+                .options(openAiChatOptions)
+                .system(systemPrompt)
+                .user(userPrompt)
+                .call()
+                .entity(AnalyzePrResponse.class);
     }
 
     private String buildPrompt(String title, String description, String diff) {
-        return String.format(promptTemplate, title, description, diff);
+        return promptTemplate
+                .replace("{title}", title)
+                .replace("{description}", description)
+                .replace("{diff}", encodeDiff(diff));
     }
-
-    private AnalyzePrResponse parseResponse(String content) {
-        try {
-            return objectMapper.readValue(content, new TypeReference<>() {
-            });
-        } catch (Exception e) {
-            log.error("AI 응답 파싱 실패. 응답 내용: {}", content, e);
-            throw new IllegalArgumentException("AI 응답 파싱 중 오류 발생", e);
-        }
+    private String encodeDiff(String diff) {
+        return Base64.getEncoder().encodeToString(diff.getBytes(StandardCharsets.UTF_8));
     }
 }
