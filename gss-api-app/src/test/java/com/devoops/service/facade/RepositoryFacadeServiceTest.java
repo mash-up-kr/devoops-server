@@ -58,6 +58,17 @@ class RepositoryFacadeServiceTest extends BaseServiceTest {
         }
 
         @Test
+        void 웹훅_등록_실패_시_애플리케이션_에러로_전환한다() {
+            User user = userGenerator.generate("김건우");
+            RepositorySaveRequest request = new RepositorySaveRequest("https://github.com/octocat/Hello-World");
+            mockingErrorWhenCreateWebHook();
+
+            assertThatThrownBy(() -> repositoryFacadeService.save(request, user))
+                    .isInstanceOf(GssException.class)
+                    .hasMessage(ErrorCode.REGISTRY_GITHUB_REPOSITORY_NOT_FOUND.getMessage());
+        }
+
+        @Test
         void 레포지토리를_중복_저장할_수_없다() {
             User user = userGenerator.generate("김건우");
             RepositorySaveRequest request = new RepositorySaveRequest("https://github.com/octocat/Hello-World");
@@ -78,6 +89,16 @@ class RepositoryFacadeServiceTest extends BaseServiceTest {
                     .thenReturn(mockResponse);
             Mockito.when(gitHubClient.createWebhook(any(), any(), any(), any()))
                     .thenReturn(mockWebHookCreateResponse);
+        }
+
+        private void mockingErrorWhenCreateWebHook() {
+            GithubRepoInfoResponse mockResponse = new GithubRepoInfoResponse(123, "testName", "testUrl",
+                    new OwnerResponse("김건우"));
+            WebHookCreateResponse mockWebHookCreateResponse = new WebHookCreateResponse(123);
+            Mockito.when(gitHubClient.getRepositoryInfo(anyString(), anyString(), anyString()))
+                    .thenReturn(mockResponse);
+            Mockito.when(gitHubClient.createWebhook(any(), any(), any(), any()))
+                    .thenThrow(new GithubNotFoundException("mocking error"));
         }
     }
 
