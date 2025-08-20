@@ -28,7 +28,10 @@ public class AiChargeRepositoryImpl implements AiChargeRepository {
     }
 
     @Override
-    public void addCharge(long id, double charge) {
-        chargeJpaRepository.updateChargeById(id, charge);
+    public void addCharge(int month, double charge) {
+        ZoneId seoulZoneId = ZoneId.of("Asia/Seoul");
+        LocalDateTime now = LocalDateTime.now(seoulZoneId);
+        int todayYear = now.getYear();
+        chargeJpaRepository.updateChargeById(todayYear, month, charge);
     }
 }

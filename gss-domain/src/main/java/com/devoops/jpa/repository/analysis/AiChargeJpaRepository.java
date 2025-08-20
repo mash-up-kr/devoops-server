@@ -14,9 +14,15 @@ public interface AiChargeJpaRepository extends JpaRepository<AiChargeEntity, Lon
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("""
-            update AiChargeEntity ai_charge 
-            set ai_charge.charge = ai_charge.charge + :charge 
-            where ai_charge.id = :id and ai_charge.charge >= 0
+            update AiChargeEntity ai_charge
+            set ai_charge.charge = ai_charge.charge + :charge
+            where ai_charge.year = :year
+                        and ai_charge.month = :month
+                        and ai_charge.charge >= 0
             """)
-    void updateChargeById(@Param("id") long id, @Param("charge") double charge);
+    void updateChargeById(
+            @Param("year") int year,
+            @Param("month") int month,
+            @Param("charge") double charge
+    );
 }

@@ -6,5 +6,5 @@ public interface AiChargeRepository {
 
     AiCharge getByMonth(int month);
 
-    void addCharge(long id, double charge);
+    void addCharge(int month, double charge);
 }

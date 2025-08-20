@@ -18,7 +18,7 @@ public class PrAnalysisService {
 
     private final GithubAdaptor githubAdaptor;
     private final PrAnalysisAdapter prAnalysisAdapter;
-    private AiChargeRepository chargeRepository;
+    private final AiChargeRepository chargeRepository;
 
     public AdaptedAnalyzePrResponse analyzePullRequest(AppWebhookEventRequest request, GithubToken githubToken) {
         String diff = githubAdaptor.getCodeChangeHistory(request.diffUrl(), githubToken.getToken());
