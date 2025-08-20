@@ -1,5 +1,6 @@
 package com.devoops.domain.entity.analysis;
 
+import com.devoops.util.CurrencyUtil;
 import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +20,16 @@ public enum OpenAiModel {
     private final double inputTokenCharge; //달러
     private final double outputTokenCharge; //달러
 
-    public OpenAiModel getModelByUsage(int currentUsageWon) {
+    public static OpenAiModel getModelByUsage(int currentUsageWon) {
         return Stream.of(values())
                 .filter(model -> model.moneyUnderCriteria<=currentUsageWon && model.moneyUpperCriteria>=currentUsageWon)
                 .findAny()
                 .orElse(GPT_5_NANO);
+    }
+
+    public double getCharge(int promptToken, int completionTokens) {
+        double inputCharge = CurrencyUtil.usdToKrw(inputTokenCharge * promptToken);
+        double outputCharge = CurrencyUtil.usdToKrw(outputTokenCharge * completionTokens);
+        return inputCharge + outputCharge;
     }
 }
