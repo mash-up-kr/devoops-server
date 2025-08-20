@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 public enum OpenAiModel {
 
     GPT_5(0, 7500, "gpt-5", 0.00000125, 0.00001),
-    GPT_5_MINI(7501, 10000, "gpt-5-mini", 0.00000025, 0.000002),
-    GPT_5_NANO(10001, 15000, "gpt-5-nano", 0.00000005, 0.0000004),
+    GPT_5_MINI(7501, 12500, "gpt-5-mini", 0.00000025, 0.000002),
+    GPT_5_NANO(12501, 15000, "gpt-5-nano", 0.00000005, 0.0000004),
     ;
 
     private final int moneyUnderCriteria; //원
