@@ -41,7 +41,7 @@ public class WebhookFacadeService {
                     triggerUser.getId(),
                     request
             );
-            QuestionCreateEvent questionCreateEvent = new QuestionCreateEvent(this, request, readyPullRequest, triggerUser.getGithubToken(), "gpt-5-mini");
+            QuestionCreateEvent questionCreateEvent = new QuestionCreateEvent(this, request, readyPullRequest, triggerUser.getGithubToken());
             eventPublisher.publishEvent(questionCreateEvent);
         }
     }
