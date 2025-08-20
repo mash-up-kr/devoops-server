@@ -24,7 +24,9 @@ dev-oops:
       --- END DIFF ---
       
       diff를 Base64에서 디코딩한 후 분석하고 PR 요약과 질문을 만들어 주세요.
+
 ---
+
 spring:
   config:
     activate:
@@ -32,12 +34,9 @@ spring:
   ai:
     openai:
       api-key: testKey
-      chat:
-        options:
-          model: gpt-4o-mini
-
 
 ---
+
 spring:
   config:
     activate:
