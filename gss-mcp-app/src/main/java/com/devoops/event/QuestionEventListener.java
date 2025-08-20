@@ -32,10 +32,10 @@ public class QuestionEventListener {
         AppWebhookEventRequest request = questionCreateEvent.getRequest();
         GithubToken githubToken = questionCreateEvent.getToken();
         PullRequest readyPullRequest = questionCreateEvent.getInitializedPullRequest();
+        String aiModel = questionCreateEvent.getAiModel();
 
         String diff = githubAdaptor.getCodeChangeHistory(request.diffUrl(), githubToken.getToken());
-        AdaptedAnalyzePrResponse adaptedAnalyzePrResponse = prAnalysisAdapter.analyze(request.title(), request.description(), diff, "gpt-5-mini");
-
+        AdaptedAnalyzePrResponse adaptedAnalyzePrResponse = prAnalysisAdapter.analyze(request.title(), request.description(), diff, aiModel);
 
         PullRequest updatedPullRequest = pullRequestService.updateAnalyzeResult(
                 readyPullRequest.getId(),
