@@ -9,6 +9,7 @@ import com.devoops.domain.repository.analysis.AiChargeRepository;
 import com.devoops.dto.AppWebhookEventRequest;
 import com.devoops.dto.request.AdaptedAnalyzePrResponse;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,8 @@ public class PrAnalysisService {
 
     public AdaptedAnalyzePrResponse analyzePullRequest(AppWebhookEventRequest request, GithubToken githubToken) {
         String diff = githubAdaptor.getCodeChangeHistory(request.diffUrl(), githubToken.getToken());
-        int month = LocalDate.now().getMonthValue();
+        ZoneId seoulZoneId = ZoneId.of("Asia/Seoul");
+        int month = LocalDate.now(seoulZoneId).getMonthValue();
         AiCharge aiCharge = chargeRepository.getByMonth(month);
         OpenAiModel aiModel = OpenAiModel.getModelByUsage(aiCharge.getCharge());
 
@@ -32,6 +34,7 @@ public class PrAnalysisService {
                 diff,
                 aiModel.getName()
         );
+
         double consumedCharge = aiModel.getCharge(result.promptTokens(), result.completionTokens());
         chargeRepository.addCharge(month, consumedCharge);
         return result;
