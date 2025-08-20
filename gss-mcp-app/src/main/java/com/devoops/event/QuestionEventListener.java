@@ -8,7 +8,7 @@ import com.devoops.domain.entity.github.pr.PullRequest;
 import com.devoops.domain.entity.github.question.Question;
 import com.devoops.dto.AppWebhookEventRequest;
 import com.devoops.dto.request.AdaptedAnalyzePrResponse;
-import com.devoops.dto.response.AnalyzePrResponse;
+import com.devoops.dto.response.PrAnalysis;
 import com.devoops.service.pullrequest.PullRequestService;
 import com.devoops.service.question.QuestionService;
 import java.util.List;
@@ -34,7 +34,7 @@ public class QuestionEventListener {
         PullRequest readyPullRequest = questionCreateEvent.getInitializedPullRequest();
 
         String diff = githubAdaptor.getCodeChangeHistory(request.diffUrl(), githubToken.getToken());
-        AdaptedAnalyzePrResponse adaptedAnalyzePrResponse = prAnalysisAdapter.analyze(request.title(), request.description(), diff);
+        AdaptedAnalyzePrResponse adaptedAnalyzePrResponse = prAnalysisAdapter.analyze(request.title(), request.description(), diff, "gpt-5-mini");
 
 
         PullRequest updatedPullRequest = pullRequestService.updateAnalyzeResult(
@@ -51,7 +51,7 @@ public class QuestionEventListener {
     }
 
     private List<Question> createQuestionListFromCategorizedQuestions(
-            List<AnalyzePrResponse.CategorizedQuestion> questions,
+            List<PrAnalysis.CategorizedQuestion> questions,
             Long pulLRequestId
     ) {
         return questions.stream()

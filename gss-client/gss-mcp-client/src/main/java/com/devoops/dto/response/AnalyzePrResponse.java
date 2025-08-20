@@ -1,24 +1,31 @@
 package com.devoops.dto.response;
 
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.List;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.ai.chat.metadata.Usage;
 
 public record AnalyzePrResponse(
-        @JsonProperty(required = true) String summary,
-        @JsonProperty(required = true) List<SummaryDetails> summaryDetails,
-        @JsonProperty(required = true) List<CategorizedQuestion> questions
+        int promptTokens,
+        int completionTokens,
+        int totalTokens,
+        PrAnalysis prAnalysis
 ) {
-    public record SummaryDetails(
-            @JsonProperty(required = true) String title,
-            @JsonProperty(required = true) String description
-    ) {
+
+    public AnalyzePrResponse(Usage usage, String analysisResult) {
+        this(
+                usage.getPromptTokens(),
+                usage.getCompletionTokens(),
+                usage.getTotalTokens(),
+                resolvePrAnalysis(analysisResult)
+        );
     }
 
-    public record CategorizedQuestion(
-            @JsonProperty(required = true) String category,
-            @JsonProperty(required = true) List<String> question
-    ) {
+    private static PrAnalysis resolvePrAnalysis(String analysisResult) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.readValue(analysisResult, PrAnalysis.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
-
