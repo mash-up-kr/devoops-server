@@ -1,7 +1,5 @@
 package com.devoops.domain.entity.analysis;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -9,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AiCharge {
 
+    private final int year;
     private final int month;
     private final double charge;
 }
