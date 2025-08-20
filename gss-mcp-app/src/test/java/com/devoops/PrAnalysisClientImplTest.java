@@ -32,8 +32,11 @@ class PrAnalysisClientImplTest {
                 +        userRepository.save(user);
                 +    }
                 """;
-
+        long startTime = System.currentTimeMillis();
         AnalyzePrResponse result = prAnalysisClient.analyze(title, desc, diff);
+        long endTime = System.currentTimeMillis();
+
+        System.out.println(endTime - startTime+ "ms");
 
         System.out.println("📝 요약: " + result.summary());
         result.summaryDetails().forEach(q -> System.out.println("- " + q));
