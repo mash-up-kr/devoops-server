@@ -3,6 +3,7 @@ package com.devoops.jpa.entity.analysis;
 import com.devoops.domain.entity.analysis.AiCharge;
 import com.devoops.domain.entity.github.answer.Answer;
 import com.devoops.jpa.entity.github.answer.AnswerEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,8 +28,10 @@ public class AiChargeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "charge_year")
     private int year;
 
+    @Column(name = "charge_month")
     private int month;
 
     private double charge;

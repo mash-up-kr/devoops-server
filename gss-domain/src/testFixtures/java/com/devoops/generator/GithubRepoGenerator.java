@@ -14,6 +14,10 @@ public class GithubRepoGenerator {
     private GithubRepoDomainRepository githubRepoDomainRepository;
 
     public GithubRepository generate(User user, String repoName) {
+        return generate(user, repoName, ThreadLocalRandom.current().nextLong(), true);
+    }
+
+    public GithubRepository generate(User user, String repoName, long externalId, boolean tracking) {
         GithubRepository repository = new GithubRepository(
                 null,
                 user.getId(),
@@ -21,8 +25,8 @@ public class GithubRepoGenerator {
                 "url",
                 "owner",
                 0,
-                ThreadLocalRandom.current().nextLong(),
-                true
+                externalId,
+                tracking
         );
         return githubRepoDomainRepository.save(repository);
     }

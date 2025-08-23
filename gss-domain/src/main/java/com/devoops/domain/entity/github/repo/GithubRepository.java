@@ -23,4 +23,8 @@ public class GithubRepository {
     public GithubRepository stopTracking() {
         return new GithubRepository(id, userId, name, url, owner, prCount, externalId, false);
     }
+
+    public GithubRepository reTracking() {
+        return new GithubRepository(id, userId, name, url, owner, prCount, externalId, true);
+    }
 }

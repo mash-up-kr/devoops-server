@@ -5,6 +5,7 @@ import com.devoops.domain.repository.github.repo.GithubRepoDomainRepository;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
 import com.devoops.jpa.entity.github.repo.GithubRepositoryEntity;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,21 +66,17 @@ public class GithubRepoDomainRepositoryImpl implements GithubRepoDomainRepositor
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public GithubRepository findByExternalId(long externalId) {
-        return repoJpaRepository.findByGithubRepositoryId(externalId)
-                .orElseThrow(() -> new GssException(ErrorCode.GITHUB_REPOSITORY_NOT_FOUND))
-                .toDomainEntity();
-
+    public Optional<GithubRepository> findByExternalIdAndUserId(long externalId, long userId) {
+        return repoJpaRepository.findByGithubRepositoryIdAndUserId(externalId, userId)
+                .map(GithubRepositoryEntity::toDomainEntity);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public GithubRepository findByExternalIdAndUserId(long externalId, long userId) {
+    public GithubRepository getByExternalIdAndUserId(long externalId, long userId) {
         return repoJpaRepository.findByGithubRepositoryIdAndUserId(externalId, userId)
                 .orElseThrow(() -> new GssException(ErrorCode.GITHUB_REPOSITORY_NOT_FOUND))
                 .toDomainEntity();
-
     }
 
     @Override
