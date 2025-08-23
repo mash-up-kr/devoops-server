@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
@@ -28,6 +29,7 @@ public class AiChargeRepositoryImpl implements AiChargeRepository {
     }
 
     @Override
+    @Transactional
     public void addCharge(int month, double charge) {
         ZoneId seoulZoneId = ZoneId.of("Asia/Seoul");
         LocalDateTime now = LocalDateTime.now(seoulZoneId);

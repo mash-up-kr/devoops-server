@@ -1,17 +1,12 @@
 package com.devoops.jpa.entity.analysis;
 
 import com.devoops.domain.entity.analysis.AiCharge;
-import com.devoops.domain.entity.github.answer.Answer;
-import com.devoops.jpa.entity.github.answer.AnswerEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

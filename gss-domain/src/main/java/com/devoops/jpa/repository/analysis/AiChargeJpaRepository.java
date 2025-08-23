@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface AiChargeJpaRepository extends JpaRepository<AiChargeEntity, Long> {
 
-
     Optional<AiChargeEntity> findByYearAndMonth(int todayYear, int todayMonth);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
