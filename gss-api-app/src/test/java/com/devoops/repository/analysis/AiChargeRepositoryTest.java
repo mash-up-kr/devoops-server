@@ -24,16 +24,16 @@ class AiChargeRepositoryTest extends BaseServiceTest {
             LocalDate localDate = LocalDate.now();
             aiChargeGenerator.generate(localDate.getYear(), localDate.getMonthValue(), charge);
 
-            AiCharge actual = chargeRepository.getByMonth(localDate.getMonthValue());
+            AiCharge actual = chargeRepository.getByYearAndMonth(localDate.getYear(), localDate.getMonthValue());
 
             assertThat(actual.getCharge()).isEqualTo(charge);
         }
 
         @Test
         void 가져올_요금이_없다면_초기화한다() {
-            int month = LocalDate.now().getMonthValue();
+            LocalDate localDate = LocalDate.now();
 
-            AiCharge actual = chargeRepository.getByMonth(month);
+            AiCharge actual = chargeRepository.getByYearAndMonth(localDate.getYear(), localDate.getMonthValue());
 
             assertThat(actual.getCharge()).isEqualTo(0.0);
         }
@@ -48,9 +48,9 @@ class AiChargeRepositoryTest extends BaseServiceTest {
             LocalDate localDate = LocalDate.now();
             aiChargeGenerator.generate(localDate.getYear(), localDate.getMonthValue(), charge);
 
-            chargeRepository.addCharge(localDate.getMonthValue(), charge);
+            chargeRepository.addCharge(localDate.getYear(), localDate.getMonthValue(), charge);
 
-            AiCharge updatedcharge = chargeRepository.getByMonth(localDate.getMonthValue());
+            AiCharge updatedcharge = chargeRepository.getByYearAndMonth(localDate.getYear(), localDate.getMonthValue());
             assertThat(updatedcharge.getCharge()).isEqualTo(charge * 2);
         }
     }

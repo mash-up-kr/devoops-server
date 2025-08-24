@@ -24,8 +24,8 @@ public class PrAnalysisService {
     public AdaptedAnalyzePrResponse analyzePullRequest(AppWebhookEventRequest request, GithubToken githubToken) {
         String diff = githubAdaptor.getCodeChangeHistory(request.diffUrl(), githubToken.getToken());
         ZoneId seoulZoneId = ZoneId.of("Asia/Seoul");
-        int month = LocalDate.now(seoulZoneId).getMonthValue();
-        AiCharge aiCharge = chargeRepository.getByMonth(month);
+        LocalDate today = LocalDate.now(seoulZoneId);
+        AiCharge aiCharge = chargeRepository.getByYearAndMonth(today.getYear(), today.getMonthValue());
         OpenAiModel aiModel = OpenAiModel.getModelByUsage(aiCharge.getCharge());
 
         AdaptedAnalyzePrResponse result = prAnalysisAdapter.analyze(
@@ -36,7 +36,7 @@ public class PrAnalysisService {
         );
 
         double consumedCharge = aiModel.getCharge(result.promptTokens(), result.completionTokens());
-        chargeRepository.addCharge(month, consumedCharge);
+        chargeRepository.addCharge(today.getYear(), today.getMonthValue(), consumedCharge);
         return result;
     }
 }

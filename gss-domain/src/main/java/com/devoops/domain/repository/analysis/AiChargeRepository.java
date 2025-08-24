@@ -4,7 +4,7 @@ import com.devoops.domain.entity.analysis.AiCharge;
 
 public interface AiChargeRepository {
 
-    AiCharge getByMonth(int month);
+    AiCharge getByYearAndMonth(int year, int month);
 
-    void addCharge(int month, double charge);
+    void addCharge(int year, int month, double charge);
 }
