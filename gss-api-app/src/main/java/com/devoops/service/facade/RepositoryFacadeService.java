@@ -69,9 +69,7 @@ public class RepositoryFacadeService {
         if(registeredRepo.isTracking()) {
             throw new GssException(ErrorCode.ALREADY_SAVED_REPOSITORY);
         }
-        GithubRepository reTrackingRepo = repositoryService.reTracking(user, registeredRepo.getExternalId());
-        webHookService.registerWebhook(user, reTrackingRepo.getId());
-        return reTrackingRepo;
+        return repositoryService.reTracking(user, registeredRepo.getExternalId());
     }
 
     public PullRequests findAllPullRequestsByRepository(User user, long repositoryId, int size, int page) {

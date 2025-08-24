@@ -10,7 +10,6 @@ import static org.mockito.Mockito.times;
 
 import com.devoops.BaseServiceTest;
 import com.devoops.client.GitHubClient;
-import com.devoops.command.request.RepositoryCreateCommand;
 import com.devoops.domain.entity.github.repo.GithubRepository;
 import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.github.repo.GithubRepoDomainRepository;
@@ -96,7 +95,10 @@ class RepositoryFacadeServiceTest extends BaseServiceTest {
                     user.getId()
             );
 
-            assertThat(actual.isTracking()).isTrue();
+            assertAll(
+                    () -> Mockito.verify(gitHubClient, times(1)).createWebhook(any(), any(), any(), any()),
+                    () -> assertThat(actual.isTracking()).isTrue()
+            );
         }
 
         private void mockingGithubClient() {
