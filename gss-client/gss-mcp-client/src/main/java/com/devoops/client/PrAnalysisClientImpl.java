@@ -3,6 +3,7 @@ package com.devoops.client;
 import com.devoops.dto.request.AnalyzePrRequest;
 import com.devoops.dto.response.AnalyzePrResponse;
 import com.devoops.dto.response.PrAnalysis;
+import com.devoops.serdes.PrAnalysisMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -22,6 +23,7 @@ public class PrAnalysisClientImpl implements PrAnalysisClient {
 
     private final ChatClient chatClient;
     private final PromptBuilder promptBuilder;
+    private final PrAnalysisMapper prAnalysisMapper;
 
     @Override
     public AnalyzePrResponse analyze(AnalyzePrRequest request) {
@@ -39,7 +41,8 @@ public class PrAnalysisClientImpl implements PrAnalysisClient {
 
         Usage usage = chatresponse.getMetadata().getUsage();
         String analysisResult = chatresponse.getResult().getOutput().getText();
-        return new AnalyzePrResponse(usage, analysisResult);
+        PrAnalysis prAnalysis = prAnalysisMapper.mapToPrAnalysis(analysisResult);
+        return new AnalyzePrResponse(usage, prAnalysis);
     }
 
     private OpenAiChatOptions.Builder openAiChatBuilder() {

@@ -11,21 +11,12 @@ public record AnalyzePrResponse(
         PrAnalysis prAnalysis
 ) {
 
-    public AnalyzePrResponse(Usage usage, String analysisResult) {
+    public AnalyzePrResponse(Usage usage, PrAnalysis prAnalysis) {
         this(
                 usage.getPromptTokens(),
                 usage.getCompletionTokens(),
                 usage.getTotalTokens(),
-                resolvePrAnalysis(analysisResult)
+                prAnalysis
         );
-    }
-
-    private static PrAnalysis resolvePrAnalysis(String analysisResult) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.readValue(analysisResult, PrAnalysis.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

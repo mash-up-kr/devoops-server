@@ -38,7 +38,8 @@ public enum ErrorCode {
     USER_NOT_FOUND(500, "찾는 회원이 존재하지 않습니다"),
     REDIS_PUBLISH_ERROR(500, "레디스 이벤트 발행 과정에서 문제가 생겼습니다"),
     REDIS_SUBSCRIBE_ERROR(500, "레디스 이벤트 수신 과정에서 문제가 생겼습니다"),
-    GITHUB_CLIENT_ERROR(500, "깃허브 클라이언트 소통과정에 문제가 발생했습니다")
+    GITHUB_CLIENT_ERROR(500, "깃허브 클라이언트 소통과정에 문제가 발생했습니다"),
+    AI_RESPONSE_PARSING_ERROR(500, "AI로부터 온 질문 생성을 파싱하는 과정에 오류가 발생했습니다"),
     ;
 
     private final int statusCode;

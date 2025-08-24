@@ -3,6 +3,7 @@ plugins {
 }
 
 dependencies {
+    implementation project(":gss-common")
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
