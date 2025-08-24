@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +15,9 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "ai_charge")
+@Table(name = "ai_charge",
+        uniqueConstraints = {@UniqueConstraint(name= "uk_year_month", columnNames = {"charge_year", "charge_month"})}
+)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AiChargeEntity {
