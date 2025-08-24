@@ -32,6 +32,7 @@ public class AiChargeEntity {
     @Column(name = "charge_month")
     private int month;
 
+    @Column(precision = 10, scale = 2)
     private double charge;
 
     public static AiChargeEntity from(AiCharge aiCharge) {
