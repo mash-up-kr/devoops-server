@@ -1,6 +1,7 @@
 package com.devoops.domain.entity.analysis;
 
 import com.devoops.util.CurrencyUtil;
+import java.math.BigDecimal;
 import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +21,10 @@ public enum OpenAiModel {
     private final double inputTokenCharge; //달러
     private final double outputTokenCharge; //달러
 
-    public static OpenAiModel getModelByUsage(double currentUsageWon) {
+    public static OpenAiModel getModelByUsage(BigDecimal currentUsageWon) {
         return Stream.of(values())
-                .filter(model -> model.moneyUnderCriteria <= currentUsageWon
-                        && model.moneyUpperCriteria >= currentUsageWon)
+                .filter(model -> model.moneyUnderCriteria <= currentUsageWon.doubleValue()
+                        && model.moneyUpperCriteria >= currentUsageWon.doubleValue())
                 .findAny()
                 .orElse(GPT_5_NANO);
     }

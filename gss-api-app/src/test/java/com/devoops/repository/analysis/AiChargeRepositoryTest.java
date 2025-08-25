@@ -26,7 +26,7 @@ class AiChargeRepositoryTest extends BaseServiceTest {
 
             AiCharge actual = chargeRepository.getByYearAndMonth(localDate.getYear(), localDate.getMonthValue());
 
-            assertThat(actual.getCharge()).isEqualTo(charge);
+            assertThat(actual.getCharge().doubleValue()).isEqualTo(charge);
         }
 
         @Test
@@ -35,7 +35,7 @@ class AiChargeRepositoryTest extends BaseServiceTest {
 
             AiCharge actual = chargeRepository.getByYearAndMonth(localDate.getYear(), localDate.getMonthValue());
 
-            assertThat(actual.getCharge()).isEqualTo(0.0);
+            assertThat(actual.getCharge().doubleValue()).isEqualTo(0.0);
         }
     }
 
@@ -51,7 +51,7 @@ class AiChargeRepositoryTest extends BaseServiceTest {
             chargeRepository.addCharge(localDate.getYear(), localDate.getMonthValue(), charge);
 
             AiCharge updatedcharge = chargeRepository.getByYearAndMonth(localDate.getYear(), localDate.getMonthValue());
-            assertThat(updatedcharge.getCharge()).isEqualTo(charge * 2);
+            assertThat(updatedcharge.getCharge().doubleValue()).isEqualTo(charge * 2);
         }
     }
 }

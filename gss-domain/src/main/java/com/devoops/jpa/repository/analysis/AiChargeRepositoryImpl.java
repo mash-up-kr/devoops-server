@@ -3,6 +3,7 @@ package com.devoops.jpa.repository.analysis;
 import com.devoops.domain.entity.analysis.AiCharge;
 import com.devoops.domain.repository.analysis.AiChargeRepository;
 import com.devoops.jpa.entity.analysis.AiChargeEntity;
+import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,7 @@ public class AiChargeRepositoryImpl implements AiChargeRepository {
     public AiCharge getByYearAndMonth(int year, int month) {
         return chargeJpaRepository.findByYearAndMonth(year, month)
                 .orElseGet(() -> {
-                    AiCharge initializeCharge = new AiCharge(year, month, 0);
+                    AiCharge initializeCharge = new AiCharge(year, month, BigDecimal.ZERO);
                     return chargeJpaRepository.save(AiChargeEntity.from(initializeCharge));
                 }).toDomainEntity();
     }

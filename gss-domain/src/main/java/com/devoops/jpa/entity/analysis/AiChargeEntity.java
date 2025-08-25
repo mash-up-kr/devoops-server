@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.math.BigDecimal;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,7 +34,7 @@ public class AiChargeEntity {
     private int month;
 
     @Column(precision = 10, scale = 2)
-    private double charge;
+    private BigDecimal charge;
 
     public static AiChargeEntity from(AiCharge aiCharge) {
         return new AiChargeEntity(
