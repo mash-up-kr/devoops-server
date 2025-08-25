@@ -1,5 +1,6 @@
-package com.devoops.client;
+package com.devoops.client.openai;
 
+import com.devoops.client.PrAnalysisClient;
 import com.devoops.dto.request.AnalyzePrRequest;
 import com.devoops.dto.response.AnalyzePrResponse;
 import com.devoops.dto.response.PrAnalysis;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class PrAnalysisClientImpl implements PrAnalysisClient {
+public class OpenAiPrAnalysisClient implements PrAnalysisClient {
 
     private final ChatClient chatClient;
     private final PromptBuilder promptBuilder;

@@ -35,6 +35,8 @@ spring:
   ai:
     openai:
       api-key: testKey
+    anthropic:
+      api-key: testKey2
 
 ---
 

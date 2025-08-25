@@ -1,13 +1,8 @@
 package com.devoops;
 
-import com.devoops.client.PrAnalysisClientImpl;
+import com.devoops.client.openai.OpenAiPrAnalysisClient;
 import com.devoops.dto.request.AnalyzePrRequest;
 import com.devoops.dto.response.PrAnalysis;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @Disabled
-class PrAnalysisClientImplTest {
+class OpenAiPrAnalysisClientTest {
 
     @Autowired
-    PrAnalysisClientImpl prAnalysisClient;
+    OpenAiPrAnalysisClient prAnalysisClient;
 
     @Test
     void analyzePr_shouldReturnSummaryAndQuestions() {

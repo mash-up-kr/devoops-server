@@ -1,4 +1,4 @@
-package com.devoops.client;
+package com.devoops.client.openai;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
