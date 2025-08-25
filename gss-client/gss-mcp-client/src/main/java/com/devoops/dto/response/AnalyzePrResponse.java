@@ -1,23 +1,22 @@
 package com.devoops.dto.response;
 
-
-import java.util.List;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.ai.chat.metadata.Usage;
 
 public record AnalyzePrResponse(
-    String summary,
-    List<SummaryDetails> summaryDetails,
-    List<CategorizedQuestion> questions
+        int promptTokens,
+        int completionTokens,
+        int totalTokens,
+        PrAnalysis prAnalysis
 ) {
-    public record SummaryDetails(
-        String title,
-        String description
-    ) {
-    }
 
-    public record CategorizedQuestion(
-        String category,
-        List<String> question
-    ) {
+    public AnalyzePrResponse(Usage usage, PrAnalysis prAnalysis) {
+        this(
+                usage.getPromptTokens(),
+                usage.getCompletionTokens(),
+                usage.getTotalTokens(),
+                prAnalysis
+        );
     }
 }
-

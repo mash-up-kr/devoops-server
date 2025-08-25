@@ -1,0 +1,37 @@
+package com.devoops.domain.entity.analysis;
+
+import com.devoops.util.CurrencyUtil;
+import java.math.BigDecimal;
+import java.util.stream.Stream;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
+public enum OpenAiModel {
+
+    GPT_5(0, 7500, "gpt-5", 0.00000125, 0.00001),
+    GPT_5_MINI(7501, 12500, "gpt-5-mini", 0.00000025, 0.000002),
+    GPT_5_NANO(12501, 15000, "gpt-5-nano", 0.00000005, 0.0000004),
+    ;
+
+    private final int moneyUnderCriteria; //원
+    private final int moneyUpperCriteria; //원
+    private final String name;
+    private final double inputTokenCharge; //달러
+    private final double outputTokenCharge; //달러
+
+    public static OpenAiModel getModelByUsage(BigDecimal currentUsageWon) {
+        return Stream.of(values())
+                .filter(model -> model.moneyUnderCriteria <= currentUsageWon.doubleValue()
+                        && model.moneyUpperCriteria >= currentUsageWon.doubleValue())
+                .findAny()
+                .orElse(GPT_5_NANO);
+    }
+
+    public double getCharge(int promptToken, int completionTokens) {
+        double inputCharge = CurrencyUtil.usdToKrw(inputTokenCharge * promptToken);
+        double outputCharge = CurrencyUtil.usdToKrw(outputTokenCharge * completionTokens);
+        return inputCharge + outputCharge;
+    }
+}

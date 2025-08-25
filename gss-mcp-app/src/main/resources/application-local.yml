@@ -2,13 +2,13 @@ spring:
   config:
     activate:
       on-profile: local
-  datasource:
-    url: jdbc:mysql://localhost:3306/gss?useSSL=false&allowPublicKeyRetrieval=true
-    username: root
-    password:
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/gss?useSSL=false&allowPublicKeyRetrieval=true
+#    username: root
+#    password:
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQL8Dialect

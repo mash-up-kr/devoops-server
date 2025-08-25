@@ -13,7 +13,6 @@ public class QuestionCreateEvent extends ApplicationEvent {
     private final PullRequest initializedPullRequest;
     private final GithubToken token;
 
-
     public QuestionCreateEvent(
             Object source,
             AppWebhookEventRequest request,

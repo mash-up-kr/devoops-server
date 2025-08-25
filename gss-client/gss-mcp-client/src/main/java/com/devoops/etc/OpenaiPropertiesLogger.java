@@ -12,13 +12,9 @@ public class OpenaiPropertiesLogger {
     @Value("${spring.ai.openai.api-key}")
     private String apiKey;
 
-    @Value("${spring.ai.openai.chat.options.model}")
-    private String model;
-
     @PostConstruct
     public void logProperties() {
         log.info("🔑 OpenAI API Key: {}", maskKey(apiKey));
-        log.info("🤖 OpenAI Model: {}", model);
     }
 
     private String maskKey(String key) {

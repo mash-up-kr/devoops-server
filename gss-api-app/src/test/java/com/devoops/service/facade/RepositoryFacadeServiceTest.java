@@ -81,6 +81,26 @@ class RepositoryFacadeServiceTest extends BaseServiceTest {
                     .hasMessage(ErrorCode.ALREADY_SAVED_REPOSITORY.getMessage());
         }
 
+        @Test
+        void 레포지토리를_재연결_할_수_있다() {
+            User user = userGenerator.generate("김건우");
+            GithubRepository unTrackingRepo = repoGenerator.generate(user, "연결 끊긴 레포지토리", 123L, false);
+            RepositorySaveRequest request = new RepositorySaveRequest("https://github.com/octocat/Hello-World");
+            mockingGithubClient();
+
+            GithubRepository reTrackingRepository = repositoryFacadeService.save(request, user);
+
+            GithubRepository actual = githubRepoDomainRepository.findByIdAndUserId(
+                    unTrackingRepo.getId(),
+                    user.getId()
+            );
+
+            assertAll(
+                    () -> Mockito.verify(gitHubClient, times(1)).createWebhook(any(), any(), any(), any()),
+                    () -> assertThat(actual.isTracking()).isTrue()
+            );
+        }
+
         private void mockingGithubClient() {
             GithubRepoInfoResponse mockResponse = new GithubRepoInfoResponse(123, "testName", "testUrl",
                     new OwnerResponse("김건우"));

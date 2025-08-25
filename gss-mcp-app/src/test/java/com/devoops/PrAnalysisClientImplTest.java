@@ -1,7 +1,13 @@
 package com.devoops;
 
 import com.devoops.client.PrAnalysisClientImpl;
-import com.devoops.dto.response.AnalyzePrResponse;
+import com.devoops.dto.request.AnalyzePrRequest;
+import com.devoops.dto.response.PrAnalysis;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +39,12 @@ class PrAnalysisClientImplTest {
                 +    }
                 """;
 
-        AnalyzePrResponse result = prAnalysisClient.analyze(title, desc, diff);
+        long startTime = System.currentTimeMillis();
+        AnalyzePrRequest request = new AnalyzePrRequest(title, desc, diff, "gpt-5-nano");
+        PrAnalysis result = prAnalysisClient.analyze(request).prAnalysis();
+        long endTime = System.currentTimeMillis();
+
+        System.out.println(endTime - startTime+ "ms");
 
         System.out.println("📝 요약: " + result.summary());
         result.summaryDetails().forEach(q -> System.out.println("- " + q));

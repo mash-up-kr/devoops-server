@@ -17,6 +17,7 @@ import com.devoops.service.GitHubService;
 import com.devoops.service.github.WebHookService;
 import com.devoops.service.repository.RepositoryService;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,13 @@ public class RepositoryFacadeService {
 
     private GithubRepository saveRepository(GithubRepoUrl url, User user) {
         GithubRepoInfoResponse repositoryInfo = gitHubService.getRepositoryInfo(url, user.getGithubToken());
+        long externalId = repositoryInfo.id();
+        Optional<GithubRepository> alreadyRegisteredRepo = repositoryService.findByUserAndExternalId(user, externalId);
+
+        if(alreadyRegisteredRepo.isPresent()) {
+            return reTrackingOrThrowException(user, alreadyRegisteredRepo.get());
+        }
+
         RepositoryCreateCommand createCommand = new RepositoryCreateCommand(
                 user.getId(),
                 repositoryInfo.name(),
@@ -55,6 +63,13 @@ public class RepositoryFacadeService {
                 repositoryInfo.id()
         );
         return repositoryService.save(createCommand);
+    }
+
+    private GithubRepository reTrackingOrThrowException(User user, GithubRepository registeredRepo) {
+        if(registeredRepo.isTracking()) {
+            throw new GssException(ErrorCode.ALREADY_SAVED_REPOSITORY);
+        }
+        return repositoryService.reTracking(user, registeredRepo.getExternalId());
     }
 
     public PullRequests findAllPullRequestsByRepository(User user, long repositoryId, int size, int page) {

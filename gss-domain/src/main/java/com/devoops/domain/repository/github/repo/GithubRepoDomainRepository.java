@@ -3,6 +3,7 @@ package com.devoops.domain.repository.github.repo;
 import com.devoops.domain.entity.github.repo.GithubRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GithubRepoDomainRepository {
 
@@ -18,9 +19,9 @@ public interface GithubRepoDomainRepository {
 
     boolean existsByExternalIdAndUserId(long externalId, long userId);
 
-    GithubRepository findByExternalId(long externalId);
+    Optional<GithubRepository> findByExternalIdAndUserId(long externalId, long userId);
 
-    GithubRepository findByExternalIdAndUserId(long externalId, long userId);
+    GithubRepository getByExternalIdAndUserId(long externalId, long userId);
 
     void deleteById(long id);
 }

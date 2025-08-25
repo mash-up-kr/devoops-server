@@ -1,5 +1,6 @@
 package com.devoops;
 
+import com.devoops.generator.AiChargeGenerator;
 import com.devoops.generator.AnswerGenerator;
 import com.devoops.generator.AnswerRankingGenerator;
 import com.devoops.generator.GithubRepoGenerator;
@@ -39,5 +40,8 @@ public abstract class BaseServiceTest {
 
     @Autowired
     protected WebhookGenerator webhookGenerator;
+
+    @Autowired
+    protected AiChargeGenerator aiChargeGenerator;
 }
 
