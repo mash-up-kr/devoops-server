@@ -15,6 +15,7 @@ public enum ClaudeAiModel implements AiModel {
     private final double inputTokenCharge; //달러
     private final double outputTokenCharge; //달러
 
+    @Override
     public double getCharge(int promptToken, int completionTokens) {
         double inputCharge = CurrencyUtil.usdToKrw(inputTokenCharge * promptToken);
         double outputCharge = CurrencyUtil.usdToKrw(outputTokenCharge * completionTokens);
