@@ -43,12 +43,6 @@ public class GithubRepoDomainRepositoryImpl implements GithubRepoDomainRepositor
 
     @Override
     @Transactional(readOnly = true)
-    public boolean existsByExternalIdAndUserId(long externalId, long userId) {
-        return repoJpaRepository.existsByGithubRepositoryIdAndUserId(externalId, userId);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public GithubRepository findByIdAndUserId(long id, long userId) {
         GithubRepositoryEntity repositoryEntity = repoJpaRepository.findByIdAndUserId(id, userId)
             .orElseThrow(() -> new GssException(ErrorCode.GITHUB_REPOSITORY_NOT_FOUND));

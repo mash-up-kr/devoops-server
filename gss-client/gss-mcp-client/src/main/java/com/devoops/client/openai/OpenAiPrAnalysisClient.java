@@ -1,29 +1,45 @@
-package com.devoops.client;
+package com.devoops.client.openai;
 
+import com.devoops.McpClientType;
+import com.devoops.client.PrAnalysisClient;
+import com.devoops.client.PromptBuilder;
 import com.devoops.dto.request.AnalyzePrRequest;
 import com.devoops.dto.response.AnalyzePrResponse;
 import com.devoops.dto.response.PrAnalysis;
 import com.devoops.serdes.PrAnalysisMapper;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.metadata.Usage;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.converter.BeanOutputConverter;
+import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.ResponseFormat;
 import org.springframework.ai.openai.api.ResponseFormat.Type;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
+@Primary
 @Component
-@RequiredArgsConstructor
 @Slf4j
-public class PrAnalysisClientImpl implements PrAnalysisClient {
+public class OpenAiPrAnalysisClient implements PrAnalysisClient {
+
+    private static final McpClientType MCP_CLIENT_VENDOR = McpClientType.OPEN_AI;
 
     private final ChatClient chatClient;
     private final PromptBuilder promptBuilder;
     private final PrAnalysisMapper prAnalysisMapper;
+
+    public OpenAiPrAnalysisClient(
+            OpenAiChatModel openAiChatModel,
+            PromptBuilder promptBuilder,
+            PrAnalysisMapper prAnalysisMapper
+    ) {
+        this.chatClient = ChatClient.create(openAiChatModel);
+        this.promptBuilder = promptBuilder;
+        this.prAnalysisMapper = prAnalysisMapper;
+    }
 
     @Override
     public AnalyzePrResponse analyze(AnalyzePrRequest request) {
@@ -43,6 +59,11 @@ public class PrAnalysisClientImpl implements PrAnalysisClient {
         String analysisResult = chatresponse.getResult().getOutput().getText();
         PrAnalysis prAnalysis = prAnalysisMapper.mapToPrAnalysis(analysisResult);
         return new AnalyzePrResponse(usage, prAnalysis);
+    }
+
+    @Override
+    public McpClientType getMcpClientType() {
+        return MCP_CLIENT_VENDOR;
     }
 
     private OpenAiChatOptions.Builder openAiChatBuilder() {

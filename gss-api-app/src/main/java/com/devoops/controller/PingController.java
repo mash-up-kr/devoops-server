@@ -10,6 +10,6 @@ public class PingController {
 
     @GetMapping("/api/ping")
     public ResponseEntity<String> ping() {
-        return new ResponseEntity<>("pong", HttpStatus.OK);
+        return new ResponseEntity<>("pong2", HttpStatus.OK);
     }
 }

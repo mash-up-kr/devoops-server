@@ -26,6 +26,12 @@ dev-oops:
       
       diff를 Base64에서 디코딩한 후 분석하고 PR 요약과 질문을 만들어 주세요.
 
+    format-message: |
+      응답은 반드시 다음 JSON 스키마에 맞춰 정확한 JSON 형식으로 제공해주세요('''json도 제외)::
+      
+      %s
+      
+      응답에는 JSON만 포함하고, 다른 텍스트나 설명은 포함하지 마세요.
 ---
 
 spring:
@@ -35,6 +41,8 @@ spring:
   ai:
     openai:
       api-key: testKey
+    anthropic:
+      api-key: testKey2
 
 ---
 
