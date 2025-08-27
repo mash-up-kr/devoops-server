@@ -1,5 +1,6 @@
 package com.devoops.client.claude;
 
+import com.devoops.McpClientType;
 import com.devoops.client.PrAnalysisClient;
 import com.devoops.client.PromptBuilder;
 import com.devoops.dto.request.AnalyzePrRequest;
@@ -16,6 +17,8 @@ import org.springframework.ai.converter.BeanOutputConverter;
 
 @Slf4j
 public class ClaudePrAnalysisClient implements PrAnalysisClient {
+
+    private static final McpClientType CLIENT_VENDOR = McpClientType.CLAUDE;
 
     private final ChatClient chatClient;
     private final PromptBuilder promptBuilder;
@@ -48,8 +51,12 @@ public class ClaudePrAnalysisClient implements PrAnalysisClient {
         return new AnalyzePrResponse(usage, prAnalysis);
     }
 
+    @Override
+    public McpClientType getMcpClientType() {
+        return CLIENT_VENDOR;
+    }
+
     private ChatOptions anthropicChatOptions(String model) {
-        //"claude-sonnet-4-20250514"
         return ChatOptions.builder()
                 .temperature(0.7)
                 .model(model)

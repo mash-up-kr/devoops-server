@@ -1,5 +1,6 @@
 package com.devoops.client.openai;
 
+import com.devoops.McpClientType;
 import com.devoops.client.PrAnalysisClient;
 import com.devoops.client.PromptBuilder;
 import com.devoops.dto.request.AnalyzePrRequest;
@@ -23,6 +24,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class OpenAiPrAnalysisClient implements PrAnalysisClient {
+
+    private static final McpClientType MCP_CLIENT_VENDOR = McpClientType.OPEN_AI;
 
     private final ChatClient chatClient;
     private final PromptBuilder promptBuilder;
@@ -56,6 +59,11 @@ public class OpenAiPrAnalysisClient implements PrAnalysisClient {
         String analysisResult = chatresponse.getResult().getOutput().getText();
         PrAnalysis prAnalysis = prAnalysisMapper.mapToPrAnalysis(analysisResult);
         return new AnalyzePrResponse(usage, prAnalysis);
+    }
+
+    @Override
+    public McpClientType getMcpClientType() {
+        return MCP_CLIENT_VENDOR;
     }
 
     private OpenAiChatOptions.Builder openAiChatBuilder() {

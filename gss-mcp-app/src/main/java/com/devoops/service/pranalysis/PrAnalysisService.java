@@ -32,7 +32,7 @@ public class PrAnalysisService {
                 request.title(),
                 request.description(),
                 diff,
-                aiModel.getName()
+                aiCharge.getCharge()
         );
 
         double consumedCharge = aiModel.getCharge(result.promptTokens(), result.completionTokens());
