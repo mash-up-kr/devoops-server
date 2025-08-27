@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PrAnalysisMapper {
 
-    private static final int MAX_LOGGING_LENGTH = 255;
+    private static final int MAX_LOGGING_LENGTH = 500;
 
     private static final ObjectMapper MAPPER = new ObjectMapper()
             .findAndRegisterModules()

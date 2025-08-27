@@ -1,4 +1,4 @@
-package com.devoops.client.openai;
+package com.devoops.client;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -14,6 +14,9 @@ public class PromptBuilder {
     @Value("${dev-oops.github-pr-analysis.system}")
     private String systemPrompt;
 
+    @Value("${dev-oops.github-pr-analysis.format-message}")
+    private String formatMessage;
+
     public String buildUserPrompt(String title, String description, String diff) {
         return promptTemplate
                 .replace("{title}", title)
@@ -23,6 +26,10 @@ public class PromptBuilder {
 
     public String buildSystemPrompt() {
         return systemPrompt;
+    }
+
+    public String buildSystemPromptWithResponseFormat(String jsonSchema) {
+        return systemPrompt + "\n\n" + formatMessage.formatted(jsonSchema);
     }
 
     private String encodeDiff(String diff) {
