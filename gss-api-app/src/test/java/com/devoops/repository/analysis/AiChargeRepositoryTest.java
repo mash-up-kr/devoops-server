@@ -1,10 +1,13 @@
 package com.devoops.repository.analysis;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.devoops.BaseServiceTest;
 import com.devoops.domain.entity.analysis.AiCharge;
 import com.devoops.domain.repository.analysis.AiChargeRepository;
+import com.devoops.exception.custom.GssException;
+import com.devoops.exception.errorcode.ErrorCode;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -30,13 +33,14 @@ class AiChargeRepositoryTest extends BaseServiceTest {
         }
 
         @Test
-        void 가져올_요금이_없다면_초기화한다() {
+        void 가져올_요금이_없다면_에러가_발생한다() {
             LocalDate localDate = LocalDate.now();
 
-            AiCharge actual = chargeRepository.getByYearAndMonth(localDate.getYear(), localDate.getMonthValue());
-
-            assertThat(actual.getCharge().doubleValue()).isEqualTo(0.0);
+            assertThatThrownBy(() -> chargeRepository.getByYearAndMonth(localDate.getYear(), localDate.getMonthValue()))
+                    .isInstanceOf(GssException.class)
+                    .hasMessage(ErrorCode.AI_CHARGE_NOT_FOUND.getMessage());
         }
+
     }
 
     @Nested
