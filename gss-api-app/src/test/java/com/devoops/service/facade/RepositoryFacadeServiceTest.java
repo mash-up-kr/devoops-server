@@ -1,6 +1,7 @@
 package com.devoops.service.facade;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
@@ -69,7 +70,7 @@ class RepositoryFacadeServiceTest extends BaseServiceTest {
         }
 
         @Test
-        void 레포지토리를_중복_저장할_수_없다() {
+        void 동일_유저가_레포지토리를_중복_저장할_수_없다() {
             User user = userGenerator.generate("김건우");
             RepositorySaveRequest request = new RepositorySaveRequest("https://github.com/octocat/Hello-World");
             mockingGithubClient();
@@ -82,23 +83,32 @@ class RepositoryFacadeServiceTest extends BaseServiceTest {
         }
 
         @Test
+        void 다른_유저가_레포지토리를_중복_저장할_수_있다() {
+            User user1 = userGenerator.generate("김건우1");
+            User user2 = userGenerator.generate("김건우2");
+            RepositorySaveRequest request = new RepositorySaveRequest("https://github.com/octocat/Hello-World");
+            mockingGithubClient();
+
+            assertThatCode(() -> {
+                repositoryFacadeService.save(request, user1);
+                repositoryFacadeService.save(request, user2);
+            }).doesNotThrowAnyException();
+        }
+
+        @Test
         void 레포지토리를_재연결_할_수_있다() {
             User user = userGenerator.generate("김건우");
             GithubRepository unTrackingRepo = repoGenerator.generate(user, "연결 끊긴 레포지토리", 123L, false);
             RepositorySaveRequest request = new RepositorySaveRequest("https://github.com/octocat/Hello-World");
             mockingGithubClient();
 
-            GithubRepository reTrackingRepository = repositoryFacadeService.save(request, user);
+            repositoryFacadeService.save(request, user);
 
             GithubRepository actual = githubRepoDomainRepository.findByIdAndUserId(
                     unTrackingRepo.getId(),
                     user.getId()
             );
-
-            assertAll(
-                    () -> Mockito.verify(gitHubClient, times(1)).createWebhook(any(), any(), any(), any()),
-                    () -> assertThat(actual.isTracking()).isTrue()
-            );
+            assertThat(actual.isTracking()).isTrue();
         }
 
         private void mockingGithubClient() {

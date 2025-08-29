@@ -17,7 +17,6 @@ import com.devoops.service.GitHubService;
 import com.devoops.service.github.WebHookService;
 import com.devoops.service.repository.RepositoryService;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -36,8 +35,11 @@ public class RepositoryFacadeService {
     public GithubRepository save(RepositorySaveRequest request, User user) {
         try {
             GithubRepoUrl repoUrl = new GithubRepoUrl(request.url());
-            GithubRepository savedRepository = saveRepository(repoUrl, user);
-            webHookService.registerWebhook(user, savedRepository.getId());
+            GithubRepoInfoResponse repositoryInfo = gitHubService.getRepositoryInfo(repoUrl, user.getGithubToken());
+            GithubRepository savedRepository = repositoryService.findByUserAndExternalId(user, repositoryInfo.id())
+                            .map(alreadyRegisteredRepo -> reTrackingOrThrowException(user, alreadyRegisteredRepo))
+                            .orElseGet(() -> registerNewRepo(repositoryInfo, repoUrl, user));
+
             eventPublisher.publishEvent(new AnalyzeMyPrEvent(repoUrl, user, this));
             return savedRepository;
         } catch (GithubNotFoundException githubNotFoundException) {
@@ -45,15 +47,11 @@ public class RepositoryFacadeService {
         }
     }
 
-    private GithubRepository saveRepository(GithubRepoUrl url, User user) {
-        GithubRepoInfoResponse repositoryInfo = gitHubService.getRepositoryInfo(url, user.getGithubToken());
-        long externalId = repositoryInfo.id();
-        Optional<GithubRepository> alreadyRegisteredRepo = repositoryService.findByUserAndExternalId(user, externalId);
-
-        if(alreadyRegisteredRepo.isPresent()) {
-            return reTrackingOrThrowException(user, alreadyRegisteredRepo.get());
-        }
-
+    private GithubRepository registerNewRepo(
+            GithubRepoInfoResponse repositoryInfo,
+            GithubRepoUrl url,
+            User user
+    ) {
         RepositoryCreateCommand createCommand = new RepositoryCreateCommand(
                 user.getId(),
                 repositoryInfo.name(),
@@ -62,7 +60,9 @@ public class RepositoryFacadeService {
                 INITIAL_PULL_REQUEST_COUNT,
                 repositoryInfo.id()
         );
-        return repositoryService.save(createCommand);
+        GithubRepository savedRepository = repositoryService.save(createCommand);
+        webHookService.registerWebhook(user, savedRepository.getId());
+        return savedRepository;
     }
 
     private GithubRepository reTrackingOrThrowException(User user, GithubRepository registeredRepo) {

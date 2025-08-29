@@ -36,6 +36,7 @@ public enum OpenAiModel implements AiModel {
         return currentUsage >= min && currentUsage <= max;
     }
 
+    @Override
     public double getCharge(int promptToken, int completionTokens) {
         double inputCharge = CurrencyUtil.usdToKrw(inputTokenCharge * promptToken);
         double outputCharge = CurrencyUtil.usdToKrw(outputTokenCharge * completionTokens);
