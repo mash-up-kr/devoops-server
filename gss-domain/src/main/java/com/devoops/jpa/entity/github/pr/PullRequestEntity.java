@@ -87,6 +87,7 @@ public class PullRequestEntity extends BaseTimeEntity {
     }
 
     public void updateAnalyzeResult(String summary, String summaryDetail) {
+        this.processingStatus = ProcessingStatus.DONE;
         this.summary = summary;
         this.summaryDetail = summaryDetail;
     }
