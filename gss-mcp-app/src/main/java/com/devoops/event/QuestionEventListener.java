@@ -7,7 +7,7 @@ import com.devoops.domain.entity.github.token.GithubToken;
 import com.devoops.dto.AppWebhookEventRequest;
 import com.devoops.dto.request.AdaptedAnalyzePrResponse;
 import com.devoops.dto.response.PrAnalysis;
-import com.devoops.service.pranalysis.PrAnalysisService;
+import com.devoops.service.pranalysis.PrAnalysisFacadeService;
 import com.devoops.service.pullrequest.PullRequestService;
 import com.devoops.service.question.QuestionService;
 import java.util.List;
@@ -22,7 +22,7 @@ public class QuestionEventListener {
 
     private final PullRequestService pullRequestService;
     private final QuestionService questionService;
-    private final PrAnalysisService prAnalysisService;
+    private final PrAnalysisFacadeService prAnalysisFacadeService;
 
     @Async
     @EventListener(QuestionCreateEvent.class)
@@ -31,7 +31,7 @@ public class QuestionEventListener {
         GithubToken githubToken = questionCreateEvent.getToken();
         PullRequest readyPullRequest = questionCreateEvent.getInitializedPullRequest();
 
-        AdaptedAnalyzePrResponse adaptedAnalyzePrResponse = prAnalysisService.analyzePullRequest(request, githubToken);
+        AdaptedAnalyzePrResponse adaptedAnalyzePrResponse = prAnalysisFacadeService.analyzePullRequest(request, githubToken);
 
         PullRequest updatedPullRequest = pullRequestService.updateAnalyzeResult(
                 readyPullRequest.getId(),
