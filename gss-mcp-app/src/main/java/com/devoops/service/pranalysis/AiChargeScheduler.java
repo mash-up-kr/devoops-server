@@ -10,7 +10,7 @@ class AiChargeScheduler {
 
     private final AiChargeService aiChargeService;
 
-    @Scheduled(cron = "0 55 23 L * ?")
+    @Scheduled(cron = "0 55 23 L * ?", zone = "Asia/Seoul")
     public void createNextMonthCharge() {
         aiChargeService.initializeNextMonth();
     }
