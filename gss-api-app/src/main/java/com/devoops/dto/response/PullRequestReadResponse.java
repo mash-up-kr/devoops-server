@@ -1,5 +1,6 @@
 package com.devoops.dto.response;
 
+import com.devoops.domain.entity.github.pr.ProcessingStatus;
 import com.devoops.domain.entity.github.pr.PullRequest;
 import com.devoops.domain.entity.github.QuestionAnswer;
 import com.devoops.domain.entity.github.pr.RecordStatus;
@@ -21,6 +22,10 @@ public record PullRequestReadResponse(
         @NotNull
         @Schema(description = "회고 라밸", example = "feat")
         String tag,
+
+        @NotNull
+        @Schema(description = "질문 생성 상태", example = "PROCESSING")
+        ProcessingStatus processingStatus,
 
         @NotNull
         @Schema(description = "기록 상태", example = "PROGRESS")
@@ -56,6 +61,7 @@ public record PullRequestReadResponse(
                 pullRequest.getId(),
                 pullRequest.getTitle(),
                 pullRequest.getTag(),
+                pullRequest.getProcessingStatus(),
                 pullRequest.getRecordStatus(),
                 pullRequest.getPullRequestUrl(),
                 pullRequest.getMergedAt(),
