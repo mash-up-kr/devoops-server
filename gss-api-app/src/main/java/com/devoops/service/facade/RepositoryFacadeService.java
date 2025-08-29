@@ -73,11 +73,11 @@ public class RepositoryFacadeService {
     }
 
     public PullRequests findAllPullRequestsByRepository(User user, long repositoryId, int size, int page) {
-        return repositoryService.getPullRequestsByRepository(user, repositoryId, size, page);
+        return repositoryService.getProcessedPullRequestsByRepository(user, repositoryId, size, page);
     }
 
     public PullRequests findAllPullRequests(User user, int size, int page) {
-        return repositoryService.getPullRequests(user, size, page);
+        return repositoryService.getProcessedPullRequests(user, size, page);
     }
 
     public List<GithubRepository> findMyRepositories(User user) {

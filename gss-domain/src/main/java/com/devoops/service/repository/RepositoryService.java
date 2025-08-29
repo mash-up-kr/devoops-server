@@ -37,11 +37,11 @@ public class RepositoryService {
         return repoRepository.update(reTrackingRepo);
     }
 
-    public PullRequests getPullRequests(User user, int size, int page) {
+    public PullRequests getProcessedPullRequests(User user, int size, int page) {
         return pullRequestRepository.findProcessedUserPullRequestsOrderByMergedAt(user.getId(), size, page);
     }
 
-    public PullRequests getPullRequestsByRepository(User user, long repositoryId, int size, int page) {
+    public PullRequests getProcessedPullRequestsByRepository(User user, long repositoryId, int size, int page) {
         validateOwn(user, repositoryId);
         return pullRequestRepository.findProcessedPullRequestsByRepositoryIdOrderByMergedAt(repositoryId, size, page);
     }
