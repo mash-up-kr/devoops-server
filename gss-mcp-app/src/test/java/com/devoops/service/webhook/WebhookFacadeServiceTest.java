@@ -52,7 +52,7 @@ class WebhookFacadeServiceTest extends BaseMcpTest {
             webhookFacadeService.createQuestionWithWebhookEvent(appRequest);
             Thread.sleep(1000L); //CountDownLatch로 수정
 
-            PullRequests pullRequests = pullRequestDomainRepository.findUserPullRequestsOrderByMergedAt(user.getId(), 2,
+            PullRequests pullRequests = pullRequestDomainRepository.findProcessedUserPullRequestsOrderByMergedAt(user.getId(), 2,
                     0);
             long savedPrId = pullRequests.getValues().get(0).getId();
             List<QuestionAnswer> questions = questionDomainRepository.findAllPrQuestions(savedPrId);

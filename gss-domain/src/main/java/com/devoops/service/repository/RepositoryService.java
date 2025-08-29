@@ -38,12 +38,12 @@ public class RepositoryService {
     }
 
     public PullRequests getPullRequests(User user, int size, int page) {
-        return pullRequestRepository.findUserPullRequestsOrderByMergedAt(user.getId(), size, page);
+        return pullRequestRepository.findProcessedUserPullRequestsOrderByMergedAt(user.getId(), size, page);
     }
 
     public PullRequests getPullRequestsByRepository(User user, long repositoryId, int size, int page) {
         validateOwn(user, repositoryId);
-        return pullRequestRepository.findPullRequestsByRepositoryIdOrderByMergedAt(repositoryId, size, page);
+        return pullRequestRepository.findProcessedPullRequestsByRepositoryIdOrderByMergedAt(repositoryId, size, page);
     }
 
     private void validateOwn(User user, long repositoryId) {
