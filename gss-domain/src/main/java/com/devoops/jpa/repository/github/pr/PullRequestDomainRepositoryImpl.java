@@ -94,23 +94,4 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
                 .orElseThrow(() -> new GssException(ErrorCode.PULL_REQUEST_NOT_FOUND))
                 .toDomainEntity();
     }
-
-    @Override
-    @Transactional(readOnly = true)
-    public PullRequests findByRepositoryId(long repositoryId) {
-         return pullRequestRepository.findAllByRepositoryId(repositoryId)
-                 .stream()
-                 .map(PullRequestEntity::toDomainEntity)
-                 .collect(Collectors.collectingAndThen(Collectors.toList(), PullRequests::new));
-    }
-
-    @Override
-    @Transactional
-    public void deleteAll(PullRequests pullRequests) {
-        List<PullRequestEntity> pullRequestEntities = pullRequests.getValues()
-                .stream()
-                .map(PullRequestEntity::from)
-                .toList();
-        pullRequestRepository.deleteAll(pullRequestEntities);
-    }
 }

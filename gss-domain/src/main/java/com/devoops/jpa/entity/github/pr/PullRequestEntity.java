@@ -1,5 +1,6 @@
 package com.devoops.jpa.entity.github.pr;
 
+import com.devoops.domain.entity.github.pr.ProcessingStatus;
 import com.devoops.domain.entity.github.pr.PullRequest;
 import com.devoops.domain.entity.github.pr.RecordStatus;
 import com.devoops.jpa.entity.BaseTimeEntity;
@@ -57,6 +58,10 @@ public class PullRequestEntity extends BaseTimeEntity {
     private RecordStatus recordStatus;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
+    private ProcessingStatus processingStatus;
+
+    @NotNull
     private LocalDateTime mergedAt;
 
     public static PullRequestEntity from(PullRequest pullRequest) {
@@ -72,6 +77,7 @@ public class PullRequestEntity extends BaseTimeEntity {
                 pullRequest.getExternalId(),
                 pullRequest.getPullRequestUrl(),
                 pullRequest.getRecordStatus(),
+                pullRequest.getProcessingStatus(),
                 pullRequest.getMergedAt()
         );
     }
@@ -97,6 +103,7 @@ public class PullRequestEntity extends BaseTimeEntity {
                 this.pullRequestUrl,
                 this.githubPullRequestId,
                 this.recordStatus,
+                this.processingStatus,
                 this.mergedAt,
                 this.tag
         );

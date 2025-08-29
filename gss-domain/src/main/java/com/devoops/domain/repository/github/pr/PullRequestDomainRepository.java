@@ -18,9 +18,5 @@ public interface PullRequestDomainRepository {
 
     PullRequest findByQuestionId(long questionId);
 
-    PullRequests findByRepositoryId(long repositoryId);
-
     PullRequest updateStatus(long pullRequestId, RecordStatus status);
-
-    void deleteAll(PullRequests pullRequests);
 }

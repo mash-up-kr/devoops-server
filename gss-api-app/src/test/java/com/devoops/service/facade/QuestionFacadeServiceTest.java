@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.devoops.BaseServiceTest;
 import com.devoops.domain.entity.github.answer.Answer;
+import com.devoops.domain.entity.github.pr.ProcessingStatus;
 import com.devoops.domain.entity.github.repo.GithubRepository;
 import com.devoops.domain.entity.github.pr.PullRequest;
 import com.devoops.domain.entity.github.question.Question;
@@ -34,8 +35,12 @@ class QuestionFacadeServiceTest extends BaseServiceTest {
         void 최소_하나의_회고가_생성되면_PR상태가_progress로_변경된다() {
             User user = userGenerator.generate("김건우");
             GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
-            PullRequest pullRequest = pullRequestGenerator.generate("최초 PR", RecordStatus.PENDING, repo,
-                    LocalDateTime.now());
+            PullRequest pullRequest = pullRequestGenerator.generate("최초 PR",
+                    RecordStatus.PENDING,
+                    ProcessingStatus.DONE,
+                    repo,
+                    LocalDateTime.now()
+            );
             Question question1 = questionGenerator.generate(pullRequest, "질문1");
 
             questionFacadeService.initializeAnswer(question1.getId(), user);
@@ -48,7 +53,9 @@ class QuestionFacadeServiceTest extends BaseServiceTest {
         void 회고를_삭제할_때_PR의_회고가_남아있다면_PR은_PROGRESS를_유지한다() {
             User user = userGenerator.generate("김건우");
             GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
-            PullRequest pullRequest = pullRequestGenerator.generate("최초 PR", RecordStatus.PROGRESS, repo,
+            PullRequest pullRequest = pullRequestGenerator.generate("최초 PR", RecordStatus.PROGRESS,
+                    ProcessingStatus.DONE,
+                    repo,
                     LocalDateTime.now());
             Question question1 = questionGenerator.generate(pullRequest, "질문1");
             Question question2 = questionGenerator.generate(pullRequest, "질문2");
@@ -65,7 +72,9 @@ class QuestionFacadeServiceTest extends BaseServiceTest {
         void 마지막_회고를_삭제하면_PR은_PENDING으로_변경된다() {
             User user = userGenerator.generate("김건우");
             GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
-            PullRequest pullRequest = pullRequestGenerator.generate("최초 PR", RecordStatus.PROGRESS, repo,
+            PullRequest pullRequest = pullRequestGenerator.generate("최초 PR", RecordStatus.PROGRESS,
+                    ProcessingStatus.DONE,
+                    repo,
                     LocalDateTime.now());
             Question question1 = questionGenerator.generate(pullRequest, "질문1");
             Answer answer1 = answerGenerator.generate(question1, "대답1");
@@ -84,7 +93,7 @@ class QuestionFacadeServiceTest extends BaseServiceTest {
         void 다수_회고를_업데이트한다() {
             User user = userGenerator.generate("김건우");
             GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
-            PullRequest pr1 = pullRequestGenerator.generate("PR1", RecordStatus.PENDING, repo, LocalDateTime.now());
+            PullRequest pr1 = pullRequestGenerator.generate("PR1", RecordStatus.PENDING, ProcessingStatus.DONE, repo, LocalDateTime.now());
             Question question1 = questionGenerator.generate(pr1, "질문1");
             Question question2 = questionGenerator.generate(pr1, "질문2");
             Answer answer1 = answerGenerator.generate(question1, "answer1");
