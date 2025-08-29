@@ -7,4 +7,6 @@ public interface AiChargeRepository {
     AiCharge getByYearAndMonth(int year, int month);
 
     void addCharge(int year, int month, double charge);
+
+    AiCharge save(AiCharge charge);
 }
