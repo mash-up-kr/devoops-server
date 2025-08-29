@@ -31,9 +31,6 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
     @Override
     @Transactional
     public PullRequest save(PullRequest pullRequest) {
-        GithubRepositoryEntity githubRepositoryEntity = githubRepoRepository.findById(pullRequest.getRepositoryId())
-                .orElseThrow(() -> new GssException(ErrorCode.GITHUB_REPOSITORY_NOT_FOUND));
-        githubRepositoryEntity.plusPrCount();
         PullRequestEntity pullRequestEntity = PullRequestEntity.from(pullRequest);
         PullRequestEntity savedPullRequest = pullRequestRepository.save(pullRequestEntity);
         return savedPullRequest.toDomainEntity();
@@ -82,6 +79,9 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
         PullRequestEntity pullRequest = pullRequestRepository.findById(pullRequestId)
                 .orElseThrow(() -> new GssException(ErrorCode.PULL_REQUEST_NOT_FOUND));
         pullRequest.updateAnalyzeResult(summary, detailSummary);
+        GithubRepositoryEntity githubRepositoryEntity = githubRepoRepository.findById(pullRequest.getRepositoryId())
+                .orElseThrow(() -> new GssException(ErrorCode.GITHUB_REPOSITORY_NOT_FOUND));
+        githubRepositoryEntity.plusPrCount();
         return pullRequest.toDomainEntity();
     }
 
