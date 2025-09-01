@@ -7,6 +7,7 @@ import com.devoops.BaseServiceTest;
 import com.devoops.domain.entity.github.answer.Answer;
 import com.devoops.domain.entity.github.answer.AnswerRanking;
 import com.devoops.domain.entity.github.answer.AnswerRankings;
+import com.devoops.domain.entity.github.pr.ProcessingStatus;
 import com.devoops.domain.entity.github.repo.GithubRepository;
 import com.devoops.domain.entity.github.pr.PullRequest;
 import com.devoops.domain.entity.github.question.Question;
@@ -35,8 +36,8 @@ class AnswerRankingServiceTest extends BaseServiceTest {
         void PR_랭킹을_저장한다() {
             User user = userGenerator.generate("김건우");
             GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
-            PullRequest pullRequest = pullRequestGenerator.generate("최초 PR", RecordStatus.PENDING, repo,
-                    LocalDateTime.now());
+            PullRequest pullRequest = pullRequestGenerator.generate("최초 PR", RecordStatus.PENDING, ProcessingStatus.DONE,
+                    repo, LocalDateTime.now());
             Question question1 = questionGenerator.generate(pullRequest, "질문1");
             Answer answer = answerGenerator.generate(question1, "answer1");
 
@@ -50,8 +51,8 @@ class AnswerRankingServiceTest extends BaseServiceTest {
         void 유저의_PR_랭킹을_모두_가져온다() {
             User user = userGenerator.generate("김건우");
             GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
-            PullRequest pr1 = pullRequestGenerator.generate("PR1", RecordStatus.PENDING, repo, LocalDateTime.now());
-            PullRequest pr2 = pullRequestGenerator.generate("PR2", RecordStatus.PENDING, repo, LocalDateTime.now());
+            PullRequest pr1 = pullRequestGenerator.generate("PR1", RecordStatus.PENDING, ProcessingStatus.DONE, repo, LocalDateTime.now());
+            PullRequest pr2 = pullRequestGenerator.generate("PR2", RecordStatus.PENDING, ProcessingStatus.DONE, repo, LocalDateTime.now());
             Question question1 = questionGenerator.generate(pr1, "질문1");
             Question question2 = questionGenerator.generate(pr2, "질문2");
             Answer answer1 = answerGenerator.generate(question1, "answer1");
@@ -72,7 +73,7 @@ class AnswerRankingServiceTest extends BaseServiceTest {
         void 랭킹_PR에_존재하는_질문의_경우_랭킹내역을_업데이트한다() {
             User user = userGenerator.generate("김건우");
             GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
-            PullRequest pr1 = pullRequestGenerator.generate("PR1", RecordStatus.PENDING, repo, LocalDateTime.now());
+            PullRequest pr1 = pullRequestGenerator.generate("PR1", RecordStatus.PENDING, ProcessingStatus.DONE, repo, LocalDateTime.now());
             Question question1 = questionGenerator.generate(pr1, "질문1");
             Question question2 = questionGenerator.generate(pr1, "질문2");
             Answer answer1 = answerGenerator.generate(question1, "answer1");
@@ -93,10 +94,10 @@ class AnswerRankingServiceTest extends BaseServiceTest {
         void 랭킹_PR이_꽉_찼을_경우_가장_오래된_pr을_삭제하고_새로운_pr을_갱신한다() {
             User user = userGenerator.generate("김건우");
             GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
-            PullRequest pr1 = pullRequestGenerator.generate("PR1", RecordStatus.PENDING, repo, LocalDateTime.now());
-            PullRequest pr2 = pullRequestGenerator.generate("PR2", RecordStatus.PENDING, repo, LocalDateTime.now());
-            PullRequest pr3 = pullRequestGenerator.generate("PR3", RecordStatus.PENDING, repo, LocalDateTime.now());
-            PullRequest pr4 = pullRequestGenerator.generate("PR4", RecordStatus.PENDING, repo, LocalDateTime.now());
+            PullRequest pr1 = pullRequestGenerator.generate("PR1", RecordStatus.PENDING, ProcessingStatus.DONE, repo, LocalDateTime.now());
+            PullRequest pr2 = pullRequestGenerator.generate("PR2", RecordStatus.PENDING, ProcessingStatus.DONE, repo, LocalDateTime.now());
+            PullRequest pr3 = pullRequestGenerator.generate("PR3", RecordStatus.PENDING, ProcessingStatus.DONE, repo, LocalDateTime.now());
+            PullRequest pr4 = pullRequestGenerator.generate("PR4", RecordStatus.PENDING, ProcessingStatus.DONE, repo, LocalDateTime.now());
             Question question1 = questionGenerator.generate(pr1, "질문1");
             Question question2 = questionGenerator.generate(pr2, "질문2");
             Question question3 = questionGenerator.generate(pr3, "질문3");

@@ -1,5 +1,6 @@
 package com.devoops.generator;
 
+import com.devoops.domain.entity.github.pr.ProcessingStatus;
 import com.devoops.domain.entity.github.repo.GithubRepository;
 import com.devoops.domain.entity.github.pr.PullRequest;
 import com.devoops.domain.entity.github.pr.RecordStatus;
@@ -15,7 +16,13 @@ public class PullRequestGenerator {
     @Autowired
     private PullRequestDomainRepository pullRequestDomainRepository;
 
-    public PullRequest generate(String title, RecordStatus status, GithubRepository githubRepository, LocalDateTime mergedAt) {
+    public PullRequest generate(
+            String title,
+            RecordStatus status,
+            ProcessingStatus processingStatus,
+            GithubRepository githubRepository,
+            LocalDateTime mergedAt
+    ) {
         PullRequest pullRequest = new PullRequest(
             null,
             githubRepository.getId(),
@@ -27,6 +34,7 @@ public class PullRequestGenerator {
             "https://github.com/owner/repo/pull/2",
             1L,
             status,
+            processingStatus,
             mergedAt,
             "tag"
         );

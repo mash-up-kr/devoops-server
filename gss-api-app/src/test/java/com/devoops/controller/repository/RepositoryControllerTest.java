@@ -1,6 +1,7 @@
 package com.devoops.controller.repository;
 
 import com.devoops.BaseControllerTest;
+import com.devoops.domain.entity.github.pr.ProcessingStatus;
 import com.devoops.domain.entity.github.repo.GithubRepository;
 import com.devoops.domain.entity.github.pr.PullRequest;
 import com.devoops.domain.entity.github.pr.RecordStatus;
@@ -27,9 +28,9 @@ class RepositoryControllerTest extends BaseControllerTest {
             AccessToken accessToken = tokenManager.createAccessToken(user.getId());
             GithubRepository repo = repoGenerator.generate(user, "김건우의 레포지토리");
 
-            PullRequest pr1 = pullRequestGenerator.generate("5분전 PR", RecordStatus.PENDING, repo, now.minusMinutes(5L));
-            PullRequest pr2 = pullRequestGenerator.generate("3분전 PR", RecordStatus.PENDING, repo, now.minusMinutes(3L));
-            PullRequest pr3 = pullRequestGenerator.generate("3분전 PR", RecordStatus.PENDING, repo, now.minusMinutes(1L));
+            PullRequest pr1 = pullRequestGenerator.generate("5분전 PR", RecordStatus.PENDING,  ProcessingStatus.DONE, repo, now.minusMinutes(5L));
+            PullRequest pr2 = pullRequestGenerator.generate("3분전 PR", RecordStatus.PENDING,  ProcessingStatus.DONE, repo, now.minusMinutes(3L));
+            PullRequest pr3 = pullRequestGenerator.generate("3분전 PR", RecordStatus.PENDING,  ProcessingStatus.DONE, repo, now.minusMinutes(1L));
 
             RestAssured.given()
                     .contentType(ContentType.JSON)
@@ -49,7 +50,7 @@ class RepositoryControllerTest extends BaseControllerTest {
             AccessToken accessToken = tokenManager.createAccessToken(seonwoo.getId());
             GithubRepository repo = repoGenerator.generate(beomgeun, "범근형의 레포지토리");
 
-            PullRequest pr1 = pullRequestGenerator.generate("5분전 PR", RecordStatus.PENDING, repo, now.minusMinutes(5L));
+            PullRequest pr1 = pullRequestGenerator.generate("5분전 PR", RecordStatus.PENDING,  ProcessingStatus.DONE, repo, now.minusMinutes(5L));
 
             RestAssured.given()
                     .contentType(ContentType.JSON)

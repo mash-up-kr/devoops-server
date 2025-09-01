@@ -1,17 +1,17 @@
 package com.devoops.jpa.repository.github.pr;
 
+import com.devoops.domain.entity.github.pr.ProcessingStatus;
 import com.devoops.domain.entity.github.pr.PullRequest;
 import com.devoops.domain.entity.github.pr.PullRequests;
 import com.devoops.domain.entity.github.pr.RecordStatus;
 import com.devoops.domain.repository.github.pr.PullRequestDomainRepository;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
-import com.devoops.jpa.entity.github.repo.GithubRepositoryEntity;
 import com.devoops.jpa.entity.github.pr.PullRequestEntity;
 import com.devoops.jpa.entity.github.question.QuestionEntity;
+import com.devoops.jpa.entity.github.repo.GithubRepositoryEntity;
 import com.devoops.jpa.repository.github.question.QuestionJpaRepository;
 import com.devoops.jpa.repository.github.repo.GithubRepoJpaRepository;
-import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -31,9 +31,6 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
     @Override
     @Transactional
     public PullRequest save(PullRequest pullRequest) {
-        GithubRepositoryEntity githubRepositoryEntity = githubRepoRepository.findById(pullRequest.getRepositoryId())
-                .orElseThrow(() -> new GssException(ErrorCode.GITHUB_REPOSITORY_NOT_FOUND));
-        githubRepositoryEntity.plusPrCount();
         PullRequestEntity pullRequestEntity = PullRequestEntity.from(pullRequest);
         PullRequestEntity savedPullRequest = pullRequestRepository.save(pullRequestEntity);
         return savedPullRequest.toDomainEntity();
@@ -49,20 +46,20 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
 
     @Override
     @Transactional(readOnly = true)
-    public PullRequests findPullRequestsByRepositoryIdOrderByMergedAt(long repositoryId, int size, int page) {
+    public PullRequests findProcessedPullRequestsByRepositoryIdOrderByMergedAt(long repositoryId, int size, int page) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "mergedAt"));
-        return pullRequestRepository.findByRepositoryId(repositoryId, pageable)
-                .get()
+        return pullRequestRepository.findByRepositoryIdAndProcessingStatus(repositoryId, ProcessingStatus.DONE, pageable)
+                .stream()
                 .map(PullRequestEntity::toDomainEntity)
                 .collect(Collectors.collectingAndThen(Collectors.toList(), PullRequests::new));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public PullRequests findUserPullRequestsOrderByMergedAt(long userId, int size, int page) {
+    public PullRequests findProcessedUserPullRequestsOrderByMergedAt(long userId, int size, int page) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "mergedAt"));
-        return pullRequestRepository.findByUserId(userId, pageable)
-                .get()
+        return pullRequestRepository.findByUserIdAndProcessingStatus(userId, ProcessingStatus.DONE, pageable)
+                .stream()
                 .map(PullRequestEntity::toDomainEntity)
                 .collect(Collectors.collectingAndThen(Collectors.toList(), PullRequests::new));
     }
@@ -82,6 +79,9 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
         PullRequestEntity pullRequest = pullRequestRepository.findById(pullRequestId)
                 .orElseThrow(() -> new GssException(ErrorCode.PULL_REQUEST_NOT_FOUND));
         pullRequest.updateAnalyzeResult(summary, detailSummary);
+        GithubRepositoryEntity githubRepositoryEntity = githubRepoRepository.findById(pullRequest.getRepositoryId())
+                .orElseThrow(() -> new GssException(ErrorCode.GITHUB_REPOSITORY_NOT_FOUND));
+        githubRepositoryEntity.plusPrCount();
         return pullRequest.toDomainEntity();
     }
 
@@ -93,24 +93,5 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
         return pullRequestRepository.findById(questionEntity.getPullRequestId())
                 .orElseThrow(() -> new GssException(ErrorCode.PULL_REQUEST_NOT_FOUND))
                 .toDomainEntity();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public PullRequests findByRepositoryId(long repositoryId) {
-         return pullRequestRepository.findAllByRepositoryId(repositoryId)
-                 .stream()
-                 .map(PullRequestEntity::toDomainEntity)
-                 .collect(Collectors.collectingAndThen(Collectors.toList(), PullRequests::new));
-    }
-
-    @Override
-    @Transactional
-    public void deleteAll(PullRequests pullRequests) {
-        List<PullRequestEntity> pullRequestEntities = pullRequests.getValues()
-                .stream()
-                .map(PullRequestEntity::from)
-                .toList();
-        pullRequestRepository.deleteAll(pullRequestEntities);
     }
 }

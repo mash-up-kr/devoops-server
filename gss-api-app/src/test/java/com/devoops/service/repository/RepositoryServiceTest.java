@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.devoops.BaseServiceTest;
 import com.devoops.command.request.RepositoryCreateCommand;
+import com.devoops.domain.entity.github.pr.ProcessingStatus;
 import com.devoops.domain.entity.github.pr.PullRequest;
 import com.devoops.domain.entity.github.pr.RecordStatus;
 import com.devoops.domain.entity.github.repo.GithubRepository;
@@ -58,14 +59,14 @@ class RepositoryServiceTest extends BaseServiceTest {
             LocalDateTime now = LocalDateTime.now();
             User user = userGenerator.generate("김건우");
             GithubRepository repo = repoGenerator.generate(user, "김건우의 레포지토리");
-            PullRequest fiveMinutesAgoPR = pullRequestGenerator.generate("5분전 PR", RecordStatus.PENDING, repo,
-                    now.minusMinutes(5L));
-            PullRequest threeMinutesAgoPR = pullRequestGenerator.generate("3분전 PR", RecordStatus.PENDING, repo,
-                    now.minusMinutes(3L));
-            PullRequest oneMinutesAgoPR = pullRequestGenerator.generate("1분전 PR", RecordStatus.PENDING, repo,
-                    now.minusMinutes(1L));
+            PullRequest fiveMinutesAgoPR = pullRequestGenerator.generate("5분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo, now.minusMinutes(5L));
+            PullRequest threeMinutesAgoPR = pullRequestGenerator.generate("3분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo, now.minusMinutes(3L));
+            PullRequest oneMinutesAgoPR = pullRequestGenerator.generate("1분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo, now.minusMinutes(1L));
 
-            List<Long> pullRequestsId = repositoryService.getPullRequestsByRepository(user, repo.getId(), 6, 0)
+            List<Long> pullRequestsId = repositoryService.getProcessedPullRequestsByRepository(user, repo.getId(), 6, 0)
                     .getValues()
                     .stream()
                     .map(PullRequest::getId)
@@ -76,24 +77,46 @@ class RepositoryServiceTest extends BaseServiceTest {
         }
 
         @Test
-        void 레포지토리_풀_리퀘스트_목록에_페이지네이션을_적용한다() {
+        void 질문_생성이_완료된_풀_리퀘스트만_가져온다() {
             LocalDateTime now = LocalDateTime.now();
             User user = userGenerator.generate("김건우");
             GithubRepository repo = repoGenerator.generate(user, "김건우의 레포지토리");
-            PullRequest fiveMinutesAgoPR = pullRequestGenerator.generate("5분전 PR", RecordStatus.PENDING, repo,
-                    now.minusMinutes(5L));
-            PullRequest threeMinutesAgoPR = pullRequestGenerator.generate("3분전 PR", RecordStatus.PENDING, repo,
-                    now.minusMinutes(3L));
-            PullRequest oneMinutesAgoPR = pullRequestGenerator.generate("1분전 PR", RecordStatus.PENDING, repo,
-                    now.minusMinutes(1L));
+            PullRequest fiveMinutesAgoPR = pullRequestGenerator.generate("5분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo, now.minusMinutes(5L));
+            pullRequestGenerator.generate("3분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.PROCESSING, repo, now.minusMinutes(3L));
+            PullRequest oneMinutesAgoPR = pullRequestGenerator.generate("1분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo, now.minusMinutes(1L));
 
-            List<Long> pageOneIds = repositoryService.getPullRequestsByRepository(user, repo.getId(), 2, 0)
+            List<Long> pullRequestsId = repositoryService.getProcessedPullRequestsByRepository(user, repo.getId(), 6, 0)
                     .getValues()
                     .stream()
                     .map(PullRequest::getId)
                     .toList();
 
-            List<Long> pageTwoIds = repositoryService.getPullRequestsByRepository(user, repo.getId(), 2, 1)
+            assertThat(pullRequestsId)
+                    .containsExactly(oneMinutesAgoPR.getId(), fiveMinutesAgoPR.getId());
+        }
+
+        @Test
+        void 레포지토리_풀_리퀘스트_목록에_페이지네이션을_적용한다() {
+            LocalDateTime now = LocalDateTime.now();
+            User user = userGenerator.generate("김건우");
+            GithubRepository repo = repoGenerator.generate(user, "김건우의 레포지토리");
+            PullRequest fiveMinutesAgoPR = pullRequestGenerator.generate("5분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo, now.minusMinutes(5L));
+            PullRequest threeMinutesAgoPR = pullRequestGenerator.generate("3분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo, now.minusMinutes(3L));
+            PullRequest oneMinutesAgoPR = pullRequestGenerator.generate("1분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo, now.minusMinutes(1L));
+
+            List<Long> pageOneIds = repositoryService.getProcessedPullRequestsByRepository(user, repo.getId(), 2, 0)
+                    .getValues()
+                    .stream()
+                    .map(PullRequest::getId)
+                    .toList();
+
+            List<Long> pageTwoIds = repositoryService.getProcessedPullRequestsByRepository(user, repo.getId(), 2, 1)
                     .getValues()
                     .stream()
                     .map(PullRequest::getId)
@@ -106,14 +129,44 @@ class RepositoryServiceTest extends BaseServiceTest {
         }
 
         @Test
+        void 질문_생성이_완료된_레포지토리_풀_리퀘스트_목록에_페이지네이션을_적용한다() {
+            LocalDateTime now = LocalDateTime.now();
+            User user = userGenerator.generate("김건우");
+            GithubRepository repo = repoGenerator.generate(user, "김건우의 레포지토리");
+            PullRequest fiveMinutesAgoPR = pullRequestGenerator.generate("5분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo, now.minusMinutes(5L));
+            PullRequest threeMinutesAgoPR = pullRequestGenerator.generate("3분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo, now.minusMinutes(3L));
+            PullRequest oneMinutesAgoPR = pullRequestGenerator.generate("1분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.PROCESSING, repo, now.minusMinutes(1L));
+
+            List<Long> pageOneIds = repositoryService.getProcessedPullRequestsByRepository(user, repo.getId(), 1, 0)
+                    .getValues()
+                    .stream()
+                    .map(PullRequest::getId)
+                    .toList();
+
+            List<Long> pageTwoIds = repositoryService.getProcessedPullRequestsByRepository(user, repo.getId(), 1, 1)
+                    .getValues()
+                    .stream()
+                    .map(PullRequest::getId)
+                    .toList();
+
+            assertAll(
+                    () -> assertThat(pageOneIds).containsOnly(threeMinutesAgoPR.getId()),
+                    () -> assertThat(pageTwoIds).containsOnly(fiveMinutesAgoPR.getId())
+            );
+        }
+
+        @Test
         void 주인이_아니라면_레포지토리_풀_리퀘스트_목록에_접근할_수_없다() {
             LocalDateTime now = LocalDateTime.now();
             User user = userGenerator.generate("김건우");
             User seonwoo = userGenerator.generate("선우 누나");
             GithubRepository repo = repoGenerator.generate(user, "김건우의 레포지토리");
-            pullRequestGenerator.generate("5분전 PR", RecordStatus.PENDING, repo, now);
+            pullRequestGenerator.generate("5분전 PR", RecordStatus.PENDING, ProcessingStatus.DONE, repo, now);
 
-            assertThatThrownBy(() -> repositoryService.getPullRequestsByRepository(seonwoo, repo.getId(), 6, 0))
+            assertThatThrownBy(() -> repositoryService.getProcessedPullRequestsByRepository(seonwoo, repo.getId(), 6, 0))
                     .isInstanceOf(GssException.class)
                     .hasMessage(ErrorCode.REPOSITORY_NOT_FOUND.getMessage());
         }
@@ -128,15 +181,15 @@ class RepositoryServiceTest extends BaseServiceTest {
             User user = userGenerator.generate("김건우");
             GithubRepository repo1 = repoGenerator.generate(user, "김건우의 레포지토리1");
             GithubRepository repo2 = repoGenerator.generate(user, "김건우의 레포지토리2");
-            PullRequest fiveMinutesAgoPR = pullRequestGenerator.generate("5분전 PR", RecordStatus.PENDING, repo1,
-                    now.minusMinutes(5L));
-            PullRequest threeMinutesAgoPR = pullRequestGenerator.generate("3분전 PR", RecordStatus.PENDING, repo1,
-                    now.minusMinutes(3L));
-            PullRequest oneMinutesAgoPR = pullRequestGenerator.generate("1분전 PR", RecordStatus.PENDING, repo2,
-                    now.minusMinutes(1L));
-            PullRequest nowPr = pullRequestGenerator.generate("1분전 PR", RecordStatus.PENDING, repo2, now);
+            PullRequest fiveMinutesAgoPR = pullRequestGenerator.generate("5분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo1, now.minusMinutes(5L));
+            PullRequest threeMinutesAgoPR = pullRequestGenerator.generate("3분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo1, now.minusMinutes(3L));
+            PullRequest oneMinutesAgoPR = pullRequestGenerator.generate("1분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo2, now.minusMinutes(1L));
+            PullRequest nowPr = pullRequestGenerator.generate("1분전 PR", RecordStatus.PENDING, ProcessingStatus.DONE, repo2, now);
 
-            List<Long> pullRequestsId = repositoryService.getPullRequests(user, 4, 0)
+            List<Long> pullRequestsId = repositoryService.getProcessedPullRequests(user, 4, 0)
                     .getValues()
                     .stream()
                     .map(PullRequest::getId)
@@ -148,26 +201,50 @@ class RepositoryServiceTest extends BaseServiceTest {
         }
 
         @Test
-        void 회원의_풀_리퀘스트_목록에_페이지네이션을_적용한다() {
+        void 회원의_전체_풀_리퀘스트_목록_중_질문_생성이_완료된_것만_머지_최신순으로_가져온다() {
             LocalDateTime now = LocalDateTime.now();
             User user = userGenerator.generate("김건우");
             GithubRepository repo1 = repoGenerator.generate(user, "김건우의 레포지토리1");
             GithubRepository repo2 = repoGenerator.generate(user, "김건우의 레포지토리2");
-            PullRequest fiveMinutesAgoPR = pullRequestGenerator.generate("5분전 PR", RecordStatus.PENDING, repo1,
-                    now.minusMinutes(5L));
-            PullRequest threeMinutesAgoPR = pullRequestGenerator.generate("3분전 PR", RecordStatus.PENDING, repo1,
-                    now.minusMinutes(3L));
-            PullRequest oneMinutesAgoPR = pullRequestGenerator.generate("1분전 PR", RecordStatus.PENDING, repo2,
-                    now.minusMinutes(1L));
-            PullRequest nowPr = pullRequestGenerator.generate("1분전 PR", RecordStatus.PENDING, repo2, now);
+            PullRequest fiveMinutesAgoPR = pullRequestGenerator.generate("5분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo1, now.minusMinutes(5L));
+            PullRequest threeMinutesAgoPR = pullRequestGenerator.generate("3분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.PROCESSING, repo1, now.minusMinutes(3L));
+            PullRequest oneMinutesAgoPR = pullRequestGenerator.generate("1분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo2, now.minusMinutes(1L));
+            PullRequest nowPr = pullRequestGenerator.generate("1분전 PR", RecordStatus.PENDING, ProcessingStatus.DONE, repo2, now);
 
-            List<Long> pageOneIds = repositoryService.getPullRequests(user, 2, 0)
+            List<Long> pullRequestsId = repositoryService.getProcessedPullRequests(user, 4, 0)
                     .getValues()
                     .stream()
                     .map(PullRequest::getId)
                     .toList();
 
-            List<Long> pageTwoIds = repositoryService.getPullRequests(user, 2, 1)
+            assertThat(pullRequestsId)
+                    .containsExactly(nowPr.getId(), oneMinutesAgoPR.getId(), fiveMinutesAgoPR.getId());
+        }
+
+        @Test
+        void 회원의_풀_리퀘스트_목록에_페이지네이션을_적용한다() {
+            LocalDateTime now = LocalDateTime.now();
+            User user = userGenerator.generate("김건우");
+            GithubRepository repo1 = repoGenerator.generate(user, "김건우의 레포지토리1");
+            GithubRepository repo2 = repoGenerator.generate(user, "김건우의 레포지토리2");
+            PullRequest fiveMinutesAgoPR = pullRequestGenerator.generate("5분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo1, now.minusMinutes(5L));
+            PullRequest threeMinutesAgoPR = pullRequestGenerator.generate("3분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo1, now.minusMinutes(3L));
+            PullRequest oneMinutesAgoPR = pullRequestGenerator.generate("1분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo2, now.minusMinutes(1L));
+            PullRequest nowPr = pullRequestGenerator.generate("1분전 PR", RecordStatus.PENDING, ProcessingStatus.DONE, repo2, now);
+
+            List<Long> pageOneIds = repositoryService.getProcessedPullRequests(user, 2, 0)
+                    .getValues()
+                    .stream()
+                    .map(PullRequest::getId)
+                    .toList();
+
+            List<Long> pageTwoIds = repositoryService.getProcessedPullRequests(user, 2, 1)
                     .getValues()
                     .stream()
                     .map(PullRequest::getId)
@@ -178,7 +255,42 @@ class RepositoryServiceTest extends BaseServiceTest {
                     () -> assertThat(pageTwoIds).containsOnly(threeMinutesAgoPR.getId(), fiveMinutesAgoPR.getId())
             );
         }
+
+        @Test
+        void 질문_생성이_완료된_풀_리퀘스트_목록에_페이지네이션을_적용한다() {
+            LocalDateTime now = LocalDateTime.now();
+            User user = userGenerator.generate("김건우");
+            GithubRepository repo1 = repoGenerator.generate(user, "김건우의 레포지토리1");
+            GithubRepository repo2 = repoGenerator.generate(user, "김건우의 레포지토리2");
+            PullRequest fiveMinutesAgoPR = pullRequestGenerator.generate("5분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo1, now.minusMinutes(5L));
+            PullRequest threeMinutesAgoPR = pullRequestGenerator.generate("3분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo1, now.minusMinutes(3L));
+            PullRequest oneMinutesAgoPR = pullRequestGenerator.generate("1분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.DONE, repo2, now.minusMinutes(1L));
+            PullRequest nowPr = pullRequestGenerator.generate("1분전 PR", RecordStatus.PENDING,
+                    ProcessingStatus.PROCESSING, repo2, now);
+
+            List<Long> pageOneIds = repositoryService.getProcessedPullRequests(user, 2, 0)
+                    .getValues()
+                    .stream()
+                    .map(PullRequest::getId)
+                    .toList();
+
+            List<Long> pageTwoIds = repositoryService.getProcessedPullRequests(user, 2, 1)
+                    .getValues()
+                    .stream()
+                    .map(PullRequest::getId)
+                    .toList();
+
+            assertAll(
+                    () -> assertThat(pageOneIds).containsOnly(oneMinutesAgoPR.getId(), threeMinutesAgoPR.getId()),
+                    () -> assertThat(pageTwoIds).containsOnly(fiveMinutesAgoPR.getId())
+            );
+        }
     }
+
+
 
     @Nested
     class StopTracking {

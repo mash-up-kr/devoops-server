@@ -1,22 +1,22 @@
 package com.devoops.command.request;
 
+import com.devoops.domain.entity.github.pr.ProcessingStatus;
 import com.devoops.domain.entity.github.pr.PullRequest;
 import com.devoops.domain.entity.github.pr.RecordStatus;
-
 import java.time.LocalDateTime;
 
 public record PullRequestCreateCommand(
-    long repositoryId,
-    long userId,
-    String title,
-    String description,
-    String summary,
-    String summaryDetail,
-    String pullRequestUrl,
-    long externalId,
-    RecordStatus recordStatus,
-    LocalDateTime mergedAt,
-    String tag
+        long repositoryId,
+        long userId,
+        String title,
+        String description,
+        String summary,
+        String summaryDetail,
+        String pullRequestUrl,
+        long externalId,
+        RecordStatus recordStatus,
+        LocalDateTime mergedAt,
+        String tag
 ) {
 
     public PullRequestCreateCommand(
@@ -29,39 +29,25 @@ public record PullRequestCreateCommand(
             String tag,
             LocalDateTime mergedAt
     ) {
-        this(repositoryId, userId, title, description, "", "", pullRequestUrl, externalId, RecordStatus.PENDING, mergedAt, tag);
-    }
-
-
-    public PullRequestCreateCommand(
-            long repositoryId,
-            long userId,
-            String title,
-            String description,
-            String summary,
-            String summaryDetail,
-            String pullRequestUrl,
-            long externalId,
-            String tag,
-            LocalDateTime mergedAt
-    ) {
-        this(repositoryId, userId, title, description, summary, summaryDetail, pullRequestUrl, externalId, RecordStatus.PENDING, mergedAt, tag);
+        this(repositoryId, userId, title, description, "", "", pullRequestUrl, externalId, RecordStatus.PENDING,
+                mergedAt, tag);
     }
 
     public PullRequest toDomainEntity() {
         return new PullRequest(
-            null,
-            repositoryId,
-            userId,
-            title,
-            description,
-            summary,
-            summaryDetail,
-            pullRequestUrl,
-            externalId,
-            RecordStatus.PENDING,
-            mergedAt,
-            tag
+                null,
+                repositoryId,
+                userId,
+                title,
+                description,
+                summary,
+                summaryDetail,
+                pullRequestUrl,
+                externalId,
+                recordStatus,
+                ProcessingStatus.PROCESSING,
+                mergedAt,
+                tag
         );
     }
 }
