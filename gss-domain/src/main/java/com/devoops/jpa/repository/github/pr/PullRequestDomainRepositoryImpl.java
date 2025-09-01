@@ -49,7 +49,7 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
     public PullRequests findProcessedPullRequestsByRepositoryIdOrderByMergedAt(long repositoryId, int size, int page) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "mergedAt"));
         return pullRequestRepository.findByRepositoryIdAndProcessingStatus(repositoryId, ProcessingStatus.DONE, pageable)
-                .get()
+                .stream()
                 .map(PullRequestEntity::toDomainEntity)
                 .collect(Collectors.collectingAndThen(Collectors.toList(), PullRequests::new));
     }
@@ -59,7 +59,7 @@ public class PullRequestDomainRepositoryImpl implements PullRequestDomainReposit
     public PullRequests findProcessedUserPullRequestsOrderByMergedAt(long userId, int size, int page) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "mergedAt"));
         return pullRequestRepository.findByUserIdAndProcessingStatus(userId, ProcessingStatus.DONE, pageable)
-                .get()
+                .stream()
                 .map(PullRequestEntity::toDomainEntity)
                 .collect(Collectors.collectingAndThen(Collectors.toList(), PullRequests::new));
     }
