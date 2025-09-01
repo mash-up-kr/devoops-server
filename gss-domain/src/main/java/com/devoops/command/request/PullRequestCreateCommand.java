@@ -44,7 +44,7 @@ public record PullRequestCreateCommand(
                 summaryDetail,
                 pullRequestUrl,
                 externalId,
-                RecordStatus.PENDING,
+                recordStatus,
                 ProcessingStatus.PROCESSING,
                 mergedAt,
                 tag
