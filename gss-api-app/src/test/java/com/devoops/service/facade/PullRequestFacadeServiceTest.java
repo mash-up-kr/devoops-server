@@ -38,6 +38,7 @@ class PullRequestFacadeServiceTest extends BaseServiceTest {
 
             assertAll(
                     () -> assertThat(response.id()).isEqualTo(pullRequest.getId()),
+                    () -> assertThat(response.processingStatus()).isEqualTo(ProcessingStatus.DONE),
                     () -> assertThat(response.questions()).hasSize(2),
                     () -> assertThat(response.questions().get(0).createdAt()).isNotNull(),
                     () -> assertThat(response.questions().get(1).createdAt()).isNull()
