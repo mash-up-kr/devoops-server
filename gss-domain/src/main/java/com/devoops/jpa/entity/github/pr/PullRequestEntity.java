@@ -18,6 +18,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
@@ -59,6 +60,7 @@ public class PullRequestEntity extends BaseTimeEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    @ColumnDefault("DONE")
     private ProcessingStatus processingStatus;
 
     @NotNull
