@@ -60,7 +60,7 @@ public class PullRequestEntity extends BaseTimeEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("DONE")
+    @ColumnDefault("'DONE'")
     private ProcessingStatus processingStatus;
 
     @NotNull
