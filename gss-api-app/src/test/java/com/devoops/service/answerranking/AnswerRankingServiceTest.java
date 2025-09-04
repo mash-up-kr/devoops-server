@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class AnswerRankingServiceTest extends BaseServiceTest {
@@ -45,6 +47,21 @@ class AnswerRankingServiceTest extends BaseServiceTest {
 
             AnswerRankings userRanking = answerRankingDomainRepository.findAllByUserId(user.getId());
             assertThat(userRanking.getRankings()).hasSize(1);
+        }
+
+        @Test
+        void 답변내용이_비어있으면_랭킹에_반영하지_않는다() {
+            User user = userGenerator.generate("김건우");
+            GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
+            PullRequest pullRequest = pullRequestGenerator.generate("최초 PR", RecordStatus.PENDING, ProcessingStatus.DONE,
+                    repo, LocalDateTime.now());
+            Question question1 = questionGenerator.generate(pullRequest, "질문1");
+            Answer answer = answerGenerator.generate(question1, "");
+
+            answerRankingService.push(answer, user.getId());
+
+            AnswerRankings userRanking = answerRankingDomainRepository.findAllByUserId(user.getId());
+            assertThat(userRanking.getRankings()).isEmpty();
         }
 
         @Test

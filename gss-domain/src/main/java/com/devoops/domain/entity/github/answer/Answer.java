@@ -1,5 +1,6 @@
 package com.devoops.domain.entity.github.answer;
 
+import io.micrometer.common.util.StringUtils;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -15,5 +16,9 @@ public class Answer {
 
     public static Answer initialize(long questionId) {
         return new Answer(null, questionId, INITIALIZED_ANSWER_CONTENT);
+    }
+
+    public boolean isBlank() {
+        return StringUtils.isBlank(content);
     }
 }
