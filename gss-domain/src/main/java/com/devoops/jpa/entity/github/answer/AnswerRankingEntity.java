@@ -26,7 +26,7 @@ public class AnswerRankingEntity {
     private long questionId;
 
     @NotBlank
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "TEXT")
     private String questionContent;
 
     @Column(name = "pull_request_id")

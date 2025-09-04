@@ -22,6 +22,9 @@ public class AnswerRankingService {
     }
 
     public void push(Answer answer, long userId) {
+        if(answer.isBlank()) {
+            return;
+        }
         AnswerRankings answerRankings = findUserRanking(userId);
         Question question = questionDomainRepository.findById(answer.getQuestionId());
 
