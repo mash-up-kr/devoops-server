@@ -14,11 +14,15 @@ import com.devoops.domain.entity.user.User;
 import com.devoops.domain.repository.github.pr.PullRequestDomainRepository;
 import com.devoops.dto.request.AnswerPutRequest;
 import com.devoops.dto.request.AnswerPutRequests;
+import com.devoops.event.UpdateAnswerEvent;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
 
 class QuestionFacadeServiceTest extends BaseServiceTest {
 
@@ -111,6 +115,35 @@ class QuestionFacadeServiceTest extends BaseServiceTest {
                     () -> assertThat(responses.get(0).getContent()).isEqualTo("new answer1"),
                     () -> assertThat(responses.get(1).getContent()).isEqualTo("new answer2")
             );
+        }
+    }
+
+    @Nested
+    @RecordApplicationEvents
+    class UpdateAnswers {
+
+        @Autowired
+        private ApplicationEvents applicationEvents;
+
+        @BeforeEach
+        void setUp() {
+            applicationEvents.clear();
+        }
+
+        @Test
+        void 회고를_업데이트_시_랭킹_갱신_이벤트를_발행한다() {
+            User user = userGenerator.generate("김건우");
+            GithubRepository repo = repoGenerator.generate(user, "건우의 레포");
+            PullRequest pr1 = pullRequestGenerator.generate("PR1", RecordStatus.PENDING, ProcessingStatus.DONE, repo, LocalDateTime.now());
+            Question question1 = questionGenerator.generate(pr1, "질문1");
+            Answer answer1 = answerGenerator.generate(question1, "answer1");
+
+            questionFacadeService.updateAnswer(answer1.getId(), "updateContent", user.getId());
+
+            assertThat(applicationEvents.stream(UpdateAnswerEvent.class))
+                    .hasSize(1)
+                    .allMatch(event -> event.getAnswer().getId().equals(answer1.getId()))
+                    .allMatch(event -> event.getUserId() == user.getId());
         }
     }
 }

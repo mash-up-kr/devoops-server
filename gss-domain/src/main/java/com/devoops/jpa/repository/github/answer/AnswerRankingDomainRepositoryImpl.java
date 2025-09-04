@@ -74,16 +74,6 @@ public class AnswerRankingDomainRepositoryImpl implements AnswerRankingDomainRep
         answerRankingJpaRepository.deleteById(id);
     }
 
-    @Override
-    @Transactional
-    public void deleteAllInPullRequests(PullRequests pullRequests) {
-        List<Long> pullRequestIds = pullRequests.getValues()
-                .stream()
-                .map(PullRequest::getId)
-                .toList();
-        answerRankingJpaRepository.deleteByPullRequestIdIn(pullRequestIds);
-    }
-
     private QuestionEntity findQuestionById(long questionId) {
         return questionJpaRepository.findById(questionId)
                 .orElseThrow(() -> new GssException(ErrorCode.QUESTION_NOT_FOUND));

@@ -14,6 +14,4 @@ public interface AnswerRankingDomainRepository {
     AnswerRanking update(long pullRequestId, long questionId);
 
     void deleteById(long id);
-
-    void deleteAllInPullRequests(PullRequests pullRequests);
 }

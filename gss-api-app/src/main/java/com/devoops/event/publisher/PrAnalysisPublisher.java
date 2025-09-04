@@ -2,11 +2,6 @@ package com.devoops.event.publisher;
 
 
 import com.devoops.dto.AppWebhookEventRequest;
-import com.devoops.exception.custom.GssException;
-import com.devoops.exception.errorcode.ErrorCode;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.PostConstruct;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -19,15 +14,9 @@ public class PrAnalysisPublisher {
 
     private final RedisTemplate<String, Object> redisTemplate;
     private final ChannelTopic channelTopic;
-    private final ObjectMapper objectMapper;
 
     public void publish(List<AppWebhookEventRequest> eventList) {
-//        try {
-//            String message = objectMapper.writeValueAsString(eventList);
-            redisTemplate.convertAndSend(channelTopic.getTopic(), eventList);
-//        } catch (JsonProcessingException e) {
-//            throw new GssException(ErrorCode.REDIS_PUBLISH_ERROR);
-//        }
+        redisTemplate.convertAndSend(channelTopic.getTopic(), eventList);
     }
 }
 
