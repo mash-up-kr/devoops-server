@@ -1,5 +1,6 @@
 package com.devoops.client;
 
+import com.devoops.exception.GithubForbiddenException;
 import com.devoops.exception.GithubNotFoundException;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
@@ -29,6 +30,9 @@ public class GithubExchangeFilterFunction {
                             ));
                             if (response.statusCode().isSameCodeAs(HttpStatusCode.valueOf(404))) {
                                 return Mono.error(new GithubNotFoundException("깃허브에서 자원을 찾을 수 없습니다."));
+                            }
+                            if(response.statusCode().isSameCodeAs(HttpStatusCode.valueOf(403))) {
+                                return Mono.error(new GithubForbiddenException("깃허브 자원의 접근 권한이 없습니다"));
                             }
                             return Mono.error(new GssException(ErrorCode.GITHUB_CLIENT_ERROR));
                         });
