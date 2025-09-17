@@ -10,6 +10,7 @@ import com.devoops.dto.request.GithubRepoUrl;
 import com.devoops.dto.request.RepositorySaveRequest;
 import com.devoops.dto.response.GithubRepoInfoResponse;
 import com.devoops.event.AnalyzeMyPrEvent;
+import com.devoops.exception.GithubForbiddenException;
 import com.devoops.exception.GithubNotFoundException;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
@@ -42,7 +43,7 @@ public class RepositoryFacadeService {
 
             eventPublisher.publishEvent(new AnalyzeMyPrEvent(repoUrl, user, this));
             return savedRepository;
-        } catch (GithubNotFoundException githubNotFoundException) {
+        } catch (GithubNotFoundException | GithubForbiddenException githubException) {
             throw new GssException(ErrorCode.REGISTRY_GITHUB_REPOSITORY_NOT_FOUND);
         }
     }

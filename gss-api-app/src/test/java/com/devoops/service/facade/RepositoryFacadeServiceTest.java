@@ -18,6 +18,7 @@ import com.devoops.dto.request.RepositorySaveRequest;
 import com.devoops.dto.response.GithubRepoInfoResponse;
 import com.devoops.dto.response.OwnerResponse;
 import com.devoops.dto.response.WebHookCreateResponse;
+import com.devoops.exception.GithubForbiddenException;
 import com.devoops.exception.GithubNotFoundException;
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
@@ -59,10 +60,21 @@ class RepositoryFacadeServiceTest extends BaseServiceTest {
         }
 
         @Test
-        void 웹훅_등록_실패_시_애플리케이션_에러로_전환한다() {
+        void 웹훅_등록_시_404_에러가_발생하면_애플리케이션_에러로_전환한다() {
             User user = userGenerator.generate("김건우");
             RepositorySaveRequest request = new RepositorySaveRequest("https://github.com/octocat/Hello-World");
-            mockingErrorWhenCreateWebHook();
+            mockingErrorWhenCreateWebHook(new GithubNotFoundException("mocking error"));
+
+            assertThatThrownBy(() -> repositoryFacadeService.save(request, user))
+                    .isInstanceOf(GssException.class)
+                    .hasMessage(ErrorCode.REGISTRY_GITHUB_REPOSITORY_NOT_FOUND.getMessage());
+        }
+
+        @Test
+        void 웹훅_등록_시_403_에러가_발생하면_애플리케이션_에러로_전환한다() {
+            User user = userGenerator.generate("김건우");
+            RepositorySaveRequest request = new RepositorySaveRequest("https://github.com/octocat/Hello-World");
+            mockingErrorWhenCreateWebHook(new GithubForbiddenException("mocking error"));
 
             assertThatThrownBy(() -> repositoryFacadeService.save(request, user))
                     .isInstanceOf(GssException.class)
@@ -121,14 +133,14 @@ class RepositoryFacadeServiceTest extends BaseServiceTest {
                     .thenReturn(mockWebHookCreateResponse);
         }
 
-        private void mockingErrorWhenCreateWebHook() {
+        private void mockingErrorWhenCreateWebHook(Exception exception) {
             GithubRepoInfoResponse mockResponse = new GithubRepoInfoResponse(123, "testName", "testUrl",
                     new OwnerResponse("김건우"));
             WebHookCreateResponse mockWebHookCreateResponse = new WebHookCreateResponse(123);
             Mockito.when(gitHubClient.getRepositoryInfo(anyString(), anyString(), anyString()))
                     .thenReturn(mockResponse);
             Mockito.when(gitHubClient.createWebhook(any(), any(), any(), any()))
-                    .thenThrow(new GithubNotFoundException("mocking error"));
+                    .thenThrow(exception);
         }
     }
 
