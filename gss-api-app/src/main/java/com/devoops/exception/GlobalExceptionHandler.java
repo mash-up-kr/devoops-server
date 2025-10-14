@@ -2,6 +2,7 @@ package com.devoops.exception;
 
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;
+import com.devoops.domain.notifier.ErrorNotifier;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,8 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
+
+    private final ErrorNotifier errorNotifier;
 
     @ExceptionHandler(BindException.class)
     public ResponseEntity<ErrorResponse> handleBindingException(BindException exception) {
@@ -69,6 +72,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(GssException.class)
     public ResponseEntity<ErrorResponse> handleGssException(GssException exception) {
         log.error("Custom GssException occurred: {}", exception.getMessage(), exception);
+        errorNotifier.notify(exception);
         return toResponse(exception.getErrorCode());
     }
 
@@ -80,6 +84,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception exception) {
         log.error("Unhandled exception occurred", exception);
+        errorNotifier.notify(exception);
         return toResponse(ErrorCode.INTERNAL_SERVER_ERROR);
     }
 

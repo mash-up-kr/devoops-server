@@ -1,4 +1,4 @@
-package com.devoops.notifier;
+package com.devoops.domain.notifier;
 
 import com.devoops.exception.custom.GssException;
 import com.devoops.exception.errorcode.ErrorCode;

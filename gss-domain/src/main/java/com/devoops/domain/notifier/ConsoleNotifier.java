@@ -1,5 +1,7 @@
-package com.devoops.notifier;
+package com.devoops.domain.notifier;
 
+
+import com.devoops.exception.notifier.NotifyPort;
 
 public class ConsoleNotifier implements NotifyPort {
 

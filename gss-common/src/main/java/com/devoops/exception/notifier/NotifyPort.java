@@ -1,4 +1,4 @@
-package com.devoops.notifier;
+package com.devoops.exception.notifier;
 
 public interface NotifyPort {
 

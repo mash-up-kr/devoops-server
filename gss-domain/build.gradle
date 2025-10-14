@@ -20,6 +20,9 @@ dependencies {
 	implementation("com.fasterxml.jackson.core:jackson-databind")
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
+	//Discord
+	implementation 'net.dv8tion:JDA:5.0.0-beta.24'
+
 	// testFixtures
 	testFixturesImplementation 'org.springframework.boot:spring-boot-starter-data-jpa' // includes EntityManager, TX
 	testFixturesImplementation 'org.springframework.boot:spring-boot-starter-test' // includes SpringExtension, DataJpaTest, etc.

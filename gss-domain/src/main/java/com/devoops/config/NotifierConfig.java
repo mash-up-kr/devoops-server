@@ -1,9 +1,9 @@
 package com.devoops.config;
 
-import com.devoops.notifier.ConsoleNotifier;
-import com.devoops.notifier.DiscordNotifier;
-import com.devoops.notifier.DiscordProperties;
-import com.devoops.notifier.NotifyPort;
+import com.devoops.exception.notifier.NotifyPort;
+import com.devoops.domain.notifier.ConsoleNotifier;
+import com.devoops.domain.notifier.DiscordNotifier;
+import com.devoops.domain.notifier.DiscordProperties;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

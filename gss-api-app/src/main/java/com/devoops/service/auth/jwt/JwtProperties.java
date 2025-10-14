@@ -24,7 +24,6 @@ public class JwtProperties {
         this.refreshTokenExpiration = refreshTokenExpiration;
     }
 
-
     public Duration getExpirationByTokenType(TokenType type) {
         if(type == TokenType.ACCESS_TOKEN) {
             return accessTokenExpiration;
