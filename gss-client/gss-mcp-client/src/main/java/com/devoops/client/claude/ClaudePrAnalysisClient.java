@@ -14,10 +14,8 @@ import org.springframework.ai.chat.metadata.Usage;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.converter.BeanOutputConverter;
-import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component
 public class ClaudePrAnalysisClient implements PrAnalysisClient {
 
     private static final McpClientType CLIENT_VENDOR = McpClientType.CLAUDE;

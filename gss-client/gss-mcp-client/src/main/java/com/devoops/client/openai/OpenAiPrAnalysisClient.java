@@ -18,10 +18,8 @@ import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.ResponseFormat;
 import org.springframework.ai.openai.api.ResponseFormat.Type;
 import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
 
 @Primary
-@Component
 @Slf4j
 public class OpenAiPrAnalysisClient implements PrAnalysisClient {
 
