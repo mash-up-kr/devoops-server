@@ -1,21 +1,4 @@
 spring:
-  profiles:
-    active: test
-
-jwt:
-  secret_key: testtesttesttesttesttesttesttest
-  access_token_expiration: 1h
-  refresh_token_expiration: 1d
-
-cors:
-  origin: http://localhost:8080
-
----
-
-spring:
-  config:
-    activate:
-      on-profile: test
   data:
     redis:
       host: localhost
@@ -36,6 +19,14 @@ spring:
   flyway:
     enabled: false
 
+jwt:
+  secret_key: testtesttesttesttesttesttesttest
+  access_token_expiration: 1h
+  refresh_token_expiration: 1d
+
+cors:
+  origin: http://localhost:8080
+
 dev-oops:
   mcp:
     webhook-url: https://test.dev-oops.kr/api/webhooks
@@ -44,3 +35,7 @@ dev-oops:
       url: https://api.github.com
       connect-timeout: 3000
       read-timeout: 3000
+
+discord:
+  token: testToken
+  channel-id: testChannel

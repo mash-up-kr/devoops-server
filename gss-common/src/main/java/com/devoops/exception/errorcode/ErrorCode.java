@@ -41,7 +41,9 @@ public enum ErrorCode {
     GITHUB_CLIENT_ERROR(500, "깃허브 클라이언트 소통과정에 문제가 발생했습니다"),
     AI_RESPONSE_PARSING_ERROR(500, "AI로부터 온 질문 생성을 파싱하는 과정에 오류가 발생했습니다"),
     AI_CREATE_QUESTION_ERROR(500, "AI 질문 생성과정에 오류가 발생했습니다"),
-    AI_CHARGE_NOT_FOUND(500, "당월 AI 비용을 찾을 없습니다.")
+    AI_CHARGE_NOT_FOUND(500, "당월 AI 비용을 찾을 수 없습니다."),
+    DISCORD_PROPERTIES_EMPTY(500, "디스코드 채널 id와 키를 찾을 수 없습니다"),
+    DISCORD_JDA_EXCEPTION(500, "디스코드 JDA 초기화에 실패하였습니다"),
     ;
 
     private final int statusCode;
